@@ -1,0 +1,55 @@
+<script type="text/javascript">
+	jQuery(document).ready(function(){
+
+		jQuery("#inline_login_form_container #login_form").submit(function(){
+				jQuery("#inline_login_form_container #login_form_submit").hide();
+				jQuery("#inline_login_form_container #login_form_submit_spinner").fadeIn();
+				jQuery.post(jQuery("#inline_login_form_container #login_form").attr("action"), jQuery("#inline_login_form_container #login_form").serialize(),
+					function(response) {
+						if (response['success']) {
+							window.location.reload();
+						} else {
+							jQuery("#inline_login_form_container #login_form_error_container").text("{{ 'ایمیل یا کلمه عبور اشتباه است.' }}").fadeIn();
+							jQuery("#inline_login_form_container #login_form_submit_spinner").hide();
+							jQuery("#inline_login_form_container #login_form_submit").fadeIn();
+						}
+				}, "json");
+				return false;
+		});
+				
+		
+	});
+
+</script>
+
+<div id="inline_login_form_container" class="transition2" style="margin:30px 50px 50px;" title="{{ 'ورود' }}">
+
+	<div id="login_form_error_container" class="form_error_container" style="display: none;">{{ error|trans({}, 'FOSUserBundle') }}</div>
+	
+	<form id="login_form" action="{{ path("fos_user_security_check") }}" method="post">
+	    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
+	
+		<div>
+		    <label for="username">{{ 'ایمیل' }}</label><br>
+		    <input type="email" id="username" name="_username" value="{{ last_username }}" required="required" placeholder="{{ 'name@example.com' }}" />
+	    </div>
+	
+		<div>
+		    <label for="password">{{ 'کلمه عبور' }}</label><br>
+		    <input type="password" id="password" name="_password" required="required" placeholder="{{ 'کلمه عبور' }}" />
+	    </div>
+	
+		<div style="margin: 10px 0;">
+		    <input type="checkbox" id="remember_me" name="_remember_me" value="on" />
+		    <label for="remember_me">{{ 'مرا به خاطر بسپار' }}</label>
+	    </div>
+	
+	    <div>
+	    	<input type="submit" id="login_form_submit" name="_submit" value="{{ 'ورود' }}" class="big_blue_button" />
+	    	<span id="login_form_submit_spinner" style="display: none;"><img src="{{ asset('public/images/spinner24.gif') }}" style="vertical-align: middle; padding: 5px;" /></span>
+	    </div>
+		<div style="margin-top: 10px;"><a href="{{ path('fos_user_resetting_request') }}">{{ 'کلمه عبور خود را فراموش کرده اید؟' }}</a></div>
+		<div style="margin-top: 10px;"><a href="{{ path('fos_user_registration_register') }}">{{ 'عضو نیستید؟' }}</a></div>
+	</form>
+	
+</div>

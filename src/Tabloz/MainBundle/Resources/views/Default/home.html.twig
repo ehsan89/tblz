@@ -1,0 +1,14 @@
+{% extends '::base.html.twig' %}
+
+
+{% block stylesheets %}
+	{{ parent() }}
+	{% stylesheets filter='cssrewrite' 
+       				'bundles/tablozmain/css/*' %}
+		<link rel="stylesheet" href="{{ asset_url }}" />
+	{% endstylesheets %}
+{% endblock %}
+
+{% block content %}
+	<h1>hello</h1>
+{% endblock %}

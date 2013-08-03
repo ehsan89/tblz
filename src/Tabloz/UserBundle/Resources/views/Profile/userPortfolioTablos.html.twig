@@ -1,0 +1,29 @@
+{#
+
+This file is part of the Sonata package.
+
+(c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+
+#} 
+
+<script type="text/javascript">
+
+	jQuery(document).ready(function(){
+
+
+	});
+</script>
+
+<div class="" style="padding: 50px 5%;">
+	{% for tablo in tablos %}
+		<div class="tablo_thumb transition2">
+			<a href="{{ path('view_tablo', {'id': tablo.id}) }}">
+				<img class="tablo_thumb_image" alt="{{ tablo.title }}" src="{{ media_asset(tablo.image, 'medium') }}">
+			</a>
+		</div>
+	{% endfor %}
+
+</div>

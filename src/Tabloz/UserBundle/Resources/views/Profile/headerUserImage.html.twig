@@ -1,0 +1,2 @@
+{% set user_image_path %}{% path app.user.image, 'small' %}{% endset %}
+<img id="user_thumbnail_img" src="{{ asset(user_image_path) }}" alt="{{ app.user.username }}"/>

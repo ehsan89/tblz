@@ -1,0 +1,42 @@
+{% extends '::base.html.twig' %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	{% stylesheets filter='cssrewrite' 'bundles/tablozuser/css/register.css' %}
+		<link rel="stylesheet" href="{{ asset_url }}" />
+	{% endstylesheets %}
+{% endblock %}
+
+{% block content %}
+	<div id="content_inner" class="clearfix">
+		<aside id="form_content" style="float:right">
+			<div class="transition2" style="margin:30px 50px;">
+				<form id="register_form" action="{{ path('fos_user_registration_register') }}" {{ form_enctype(form) }} method="POST" >
+					<div id="register_form_title">{{ 'عضویت' }}</div>
+					{% if (form_errors(form)) %}<div class="form_error_container">{{ form_errors(form) }}</div>{% endif %}
+				    {{ form_row(form.first_name) }}
+				    {{ form_row(form.last_name) }}
+				    {{ form_row(form.username) }}
+				    {{ form_row(form.email) }}
+{# 							{{ form_row(form.username) }}#}
+				    {{ form_row(form.plainPassword.first) }}
+				    {{ form_row(form.plainPassword.second) }}
+					{{ form_rest(form) }}
+					<div class="st_terms_text">شما با عضویت در سایت <a href="#">قوانین سایت</a> را می پذیرید.</div>
+					<div><input type="submit" value="ثبت عضــــــویت"></div>
+				</form>
+				<div style="margin: 10px 0;">{{ 'عضو هستید؟ ' }}<a href="{{ path('fos_user_security_login') }}">{{ 'وارد شوید' }}</a></div>
+			</div>
+		</aside>
+		<aside id="register_text_container" style="float:left;">
+{# 			<div style="font-size: 60px;">{{ 'با عضویت خود...' }}</div>#}
+{# 			<div style="font-size: 25px;">#}
+{# 				{{ 'از آخرین رویدادها باخبر شوید!' }}<br>#}
+{# 				{{ 'رویدادهای جدید را به دیگران اطلاع بدهید!' }}<br>#}
+{# 				{{ 'در مورد رویدادها نظر بدهید!' }}<br>#}
+{# 				{{ 'اگر در رویدادی شرکت می کنید به دیگران اعلام کنید!' }}<br>#}
+{# 				{{ 'و...' }}#}
+{# 			</div>#}
+		</aside>
+	</div>
+{% endblock %}

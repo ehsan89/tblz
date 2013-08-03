@@ -1,0 +1,28 @@
+#tablo_description {
+    min-height: 200px;
+}
+
+.tablo_uploader {
+    float: right;
+    margin-bottom: 50px;
+}
+
+.droppable_uploader {
+    float: none !important;
+}
+
+.upload_thumbnail_caption {
+    background: black;
+    left: 0;
+    top: 0;
+    opacity: 0.5;
+}
+
+.upload_thumbnail_caption:hover {
+    opacity: 1;
+}
+
+.delete.thumbnail-action.btn {
+    display: inline-block;
+    padding: 10px;
+}

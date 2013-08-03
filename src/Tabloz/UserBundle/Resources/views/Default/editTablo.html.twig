@@ -1,0 +1,67 @@
+
+{% extends '::base.html.twig' %}
+
+{# {% block stylesheets %}#}
+{# 	{{ parent() }}#}
+{# 	{% stylesheets filter='cssrewrite' 'bundles/tablozuser/css/profile.css' %}#}
+		
+{# 	{% endstylesheets %}#}
+{# {% endblock %}#}
+
+{% block content %}	
+
+<link rel="stylesheet" href="{{ asset('bundles/tablozuser/css/profile.css') }}" />
+<link rel="stylesheet" href="{{ asset('bundles/tablozuser/css/new_work.css') }}" />
+<script type="text/javascript">
+
+	
+	function saveTabloImage(){
+	    jQuery(".upload_thumbnail_caption").hide();
+	    jQuery("#tablo_form_container select").data("selectBox-selectBoxIt").disable();
+	    jQuery("#tablo_form_container select").prop("disabled", false);
+	    jQuery('#tablo_form_container input, #tablo_form_container textarea, #tablo_form_container select').addClass('disabled');
+	    jQuery('#tablo_form_container input, #tablo_form_container textarea, #tablo_form_container select').attr('readonly', 'readonly');
+	    jQuery(".save_spinner").fadeIn();
+	    jQuery.post(jQuery('#new_work_form').attr('action'), jQuery('#new_work_form').serialize(), function(response){
+	    }); 
+	    return false;
+	}
+	
+	jQuery(document).ready(function(){
+
+		var select = jQuery("select").data("selectBox-selectBoxIt");
+		//select.disable();
+	});
+</script>
+
+
+<div class="edit_tablo_container">
+
+    <h1>{{ 'ویرایش مشخصات اثر' }}</h1>
+
+	{% if (form_errors(form)) %}<div class="form_error_container">{{ form_errors(form) }}</div>{% endif %}
+	<div style="width: 100%">
+	    <form id="edit_tablo_form" action="" method="POST" class="form-horizontal">
+	    
+	    	<div style="float: right;"><img src="{{ media_asset(tablo.image, 'large') }}" alt="{{ tablo.title }}" title="{{ tablo.title }}" /></div>
+			
+			<div id="tablo_form_container" style="float: right; margin: 0 5% 5%;">
+				<div style="float: right; width: 100%;">
+					<div style="float: right;">
+						{{ form_row(form.title) }}
+						{{ form_row(form.description) }}
+						{{ form_row(form.category) }}
+	        			{{ form_rest(form) }}
+						<input id="tablo_submit" type="submit" value="{{ 'ذخیره' }}" onclick="saveTabloImage();" style="margin: 20px 0;"/>
+					</div>
+	        	</div>
+			</div>
+			
+			<div class="clearfix"></div>
+			
+	
+	    </form>
+    </div>
+</div>
+
+{% endblock %}

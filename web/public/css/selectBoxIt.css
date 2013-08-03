@@ -1,0 +1,151 @@
+/* div surrounding the Select Box */
+.selectboxit-container {
+    font-size: 12px;
+    color: #AAA;
+    margin-left: 3px;
+    /*background: transparent;*/
+    /*  -webkit-appearance: textfield; */
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+    vertical-align: middle;
+    /*    -webkit-box-shadow: 0px 1px 4px 0px rgba(168, 168, 168, 0.4) inset;
+     -moz-box-shadow: 0px 1px 4px 0px rgba(168, 168, 168, 0.4) inset;
+     box-shadow: 0px 1px 4px 0px rgba(168, 168, 168, 0.4) inset;*/
+    -moz-background-clip: padding;
+    -webkit-background-clip: padding;
+    background-clip: padding-box;
+    -webkit-box-sizing: content-box;
+    vertical-align: middle;
+    display: inline-block;
+    *display: inline;
+    zoom: 1;
+}
+
+.selectboxit-container, .selectboxit-container *:not(.selectboxit-list) {
+    -webkit-transition: all 0.2s linear;
+    -moz-transition: all 0.2s linear;
+    -o-transition: all 0.2s linear;
+    transition: all 0.2s linear;
+}    
+
+/* Select Box */
+.selectboxit {
+    height: 25px; /* Height of the select box */
+    width: 20em;
+    padding: 5px;
+    /*cursor: pointer;*/
+    white-space: nowrap;
+    background: url(../images/icons/down8.png) no-repeat 8px center;
+    background-color: rgba(21, 21, 21, 0.01);
+    border: 1px solid #AAA;
+    /* Provide a background image here if you want to use an image for the down arrow */
+}
+
+.selectboxit:focus {
+    background-color: rgba(50, 50, 50, 0.6);
+    border-color: #CCC;
+}
+
+.selectboxit:hover {
+    background-color: rgba(50, 50, 50, 0.6);
+}
+
+.selectboxit-option-icon {
+    border: none;
+}
+
+.selectboxit-option-icon-container {
+    display: none;
+}
+
+.selectboxit-option {
+
+}
+
+.selectboxit-option-anchor {
+    cursor: default;
+    display: inline-block;
+    color: #999;
+    padding: 3px 5px 3px 40px;
+    width: 100%;
+    text-decoration: none !important;
+}
+
+.selectboxit-option-anchor:hover {
+    color: #EEE;
+    background-color: rgba(107, 181, 153, 0.8);
+}
+
+/* Select Box Options List*/
+.selectboxit-options {
+    max-height: 180px; /* A vertical scrollbar appears if your select box options are taller than this */
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    position: absolute;
+    overflow: auto;
+    /*cursor: pointer;*/
+    display: none;
+    z-index: 99999;
+    outline: none;
+}
+
+/* Select Box Individual Options */
+.selectboxit-options li {
+    /*line-height: 30px; /* Height of Individual Select Box Options */
+    /*text-indent: 5px;*/ /* Horizontal Positioning of the select box option text */
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.selectboxit-list {
+	min-width: 20em;
+    border: 1px solid #CCC;
+    background-color: rgba(50, 50, 50, 0.95);
+}
+
+.selectboxit-enabled {
+    
+}
+
+.selectboxit-disabled, .selectboxit-disabled:hover, .selectboxit-disabled:focus {
+    border-color: #444;
+    background: #333;
+    color: #666;
+    opacity: 0.5;    
+}
+
+.selectboxit-btn {
+    display: inline-block;
+    vertical-align: middle;
+    outline: none;
+}
+
+/* Select Box Text */
+.selectboxit-text {
+    text-indent: 5px;
+    line-height: 25px;
+    margin-left: 20px;
+    overflow: hidden;
+    float: right;
+    white-space: nowrap;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: -moz-none;
+    ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
+
+/* Select Box Down Arrow Container (if an image is not used) */
+.selectboxit-arrow-container {
+    /*width: 30px; /* Positions the down arrow */*/
+    /*float: right;*/
+}
+
+/* Select Box Down Arrow */
+.selectboxit-arrow {
+	
+}

@@ -1,0 +1,35 @@
+.checkbox, .radio {
+    display: inline-block;
+    width: 1em; 
+    height: 1em; 
+    line-height: 1em;
+    margin: 0 8px;
+    background-color: rgba(21, 21, 21, 0.01); 
+    border: 1px solid #AAA;   
+    vertical-align: middle;
+    text-align: center;
+    -webkit-transition: all 0.2s linear;
+    -moz-transition: all 0.2s linear;
+    -o-transition: all 0.2s linear;
+    transition: all 0.2s linear;
+}
+
+.checkbox:hover, .radio:hover, input[type="checkbox"]:checked+.checkbox:hover {
+    background-color: rgba(50, 50, 50, 0.6); 
+}
+
+input[type="checkbox"]:checked+.checkbox  {
+    background: url(../../public/images/icons/check10.png) no-repeat center rgba(30, 30, 30, 0.5); 
+}
+
+.radio, input[type="radio"]:checked+.radio span {
+    -webkit-border-radius: 50%;
+    border-radius: 50%;
+}
+
+input[type="radio"]:checked+.radio span  {
+    background-color: #AAA; 
+    display: inline-block;
+    height: 0.5em;
+    width: 0.5em;
+}

@@ -1,0 +1,80 @@
+
+{% extends '::base.html.twig' %}
+
+{# {% block stylesheets %}#}
+{# 	{{ parent() }}#}
+{# 	{% stylesheets filter='cssrewrite' 'bundles/tablozuser/css/profile.css' %}#}
+		
+{# 	{% endstylesheets %}#}
+{# {% endblock %}#}
+
+
+{% block stylesheets %}
+	{{ parent() }}
+    {% stylesheets filter='cssrewrite' 
+    				'bundles/tablozuser/css/profile.css' 
+    				'bundles/tablozuser/css/manage_works.css' %}
+    	<link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block content %}	
+
+<script type="text/javascript">
+
+	
+	jQuery(document).ready(function(){
+		
+		jQuery(".tablo_box_private").on("click", function(){
+			var tablo_id_str = jQuery(this).attr("id");
+			var tablo_id_arr = tablo_id_str.split('_');
+			var tablo_id = tablo_id_arr[3];
+			var tablo_private = jQuery(this).hasClass("tablo_box_private_off")?1:0;
+			jQuery(this).toggleClass("tablo_box_private_off");
+			
+			jQuery.ajax({
+			    type: 'POST',
+			    data: { id: tablo_id, private: tablo_private },
+			    url: "{{ path('toggle_tablo_private') }}",
+			    success: function(){
+			    },
+			    error: function(){
+			       jQuery(this).toggleClass("tablo_box_private_off");
+			    }
+			});
+			
+			return false;
+		});
+
+
+	});
+</script>
+
+<div class="manage_works_container">
+
+    <h1>{{ 'مدیریت آثار' }}</h1>
+
+			
+	<div id="tablo_form_container" style="margin: 0 5% 5%;">
+		{% for tablo in tablos %}
+		<div class="tablo_box transition2">
+			<a href="{{ path('edit_tablo', {'id': tablo.id}) }}">
+				<div class="tablo_box_image_container">
+					<div id="tablo_box_private_{{ tablo.id }}" class="tablo_box_private {{ tablo.private ? '' : 'tablo_box_private_off' }}" title="{{ 'خصوصی' }}"></div>
+					<img alt="{{ tablo.title }}" src="{{ media_asset(tablo.image, 'medium') }}">
+				</div>
+			</a>
+			<div class="tablo_box_info">
+				<span class="tablo_box_info_comments" title="{{ 'تعداد نظرات' }}">{{ tablo.commentCount }}</span>
+				<span class="tablo_box_info_sales" title="{{ 'تعداد فروش' }}">{{ tablo.buyCount }}</span>
+				<span class="tablo_box_info_favorites" title="{{ 'تعداد علاقه مندی ها' }}">{{ tablo.favoriteCount }}</span>
+				<span class="tablo_box_info_views" title="{{ 'تعداد مشاهده ها' }}">{{ tablo.viewCount }}</span>
+			</div>
+		</div>
+		{% endfor %}
+	</div>
+	
+</div>
+
+
+{% endblock %}

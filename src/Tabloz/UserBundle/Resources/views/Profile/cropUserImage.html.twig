@@ -1,0 +1,8 @@
+<img alt="{{ app.user.username }}" src="../..{% path app.user.image, 'big' %}" style="background-color: #333; position: absolute;">
+<div id="user_profile_image_delete" class="transition2">
+	<div class="spinner" style="display: none; position: absolute; top: 45%; width: 100%; text-align: center;">
+		<span>{{ 'در حال حذف...' }}</span>
+		<div class="uploader_delete_progressbar"><div class="uploader_progressbar_overlay"></div></div>
+	</div>
+	<div id="user_profile_image_delete_button" title="{{ 'حذف' }}" onclick="deleteUserImage();"></div>
+</div>

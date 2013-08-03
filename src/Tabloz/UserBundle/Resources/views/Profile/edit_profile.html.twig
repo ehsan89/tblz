@@ -1,0 +1,160 @@
+{#
+
+This file is part of the Sonata package.
+
+(c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+
+#} 
+
+{% extends '::base.html.twig' %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	{% stylesheets filter='cssrewrite' 
+					'bundles/tablozuser/css/profile.css'
+					'bundles/tablozuser/css/imgareaselect-default.css'
+					'bundles/tablozuser/css/imgareaselect-animated.css'
+	 %}
+		<link rel="stylesheet" href="{{ asset_url }}" />
+		
+	{% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+	{% javascripts  'bundles/punkavefileuploader/js/jquery.fileupload.js'
+        			'bundles/tablozuser/js/UserImageFileUploader.js'
+        			'bundles/tablozuser/js/jquery.imgareaselect.pack.js' 
+	%}
+		<script type="text/javascript" src="{{ asset_url }}"></script>
+		<script type="text/javascript">
+
+			function deleteUserImage(){
+				jQuery("#user_profile_image_delete_button").hide();
+				jQuery("#user_profile_image_delete").addClass('user_profile_image_delete_overlay');
+				jQuery("#user_profile_image_delete .spinner").show();
+				jQuery.post("{{ path('delete_user_image') }}", function(response){
+					jQuery("#user_profile_image_container").html(response).hide().fadeIn();	
+				    updateHeaderUserImage();	
+				});
+			}
+			
+			function saveUserImage(){
+			    jQuery(".crop_form").hide();
+			    jQuery(".croppable_image").imgAreaSelect( {remove: true} );
+			    jQuery(".save_spinner").fadeIn();
+			    jQuery.post(jQuery('.crop_form').attr('action'), jQuery('.crop_form').serialize(), function(response){
+			        jQuery('#user_profile_image_container').html(response); 
+			        jQuery('.croppable_image').imgAreaSelect( {remove: true} ); 
+			        jQuery('#inline-image-upload').dialog('close'); 
+			        jQuery(".crop_form").closest('[data-name]').remove();
+			        jQuery('.uploader').addClass('droppable_uploader');
+			        jQuery('[data-dropzone="1"]').fadeIn();
+				    jQuery(".save_spinner").hide();
+				    updateHeaderUserImage();
+			    }); 
+			    return false;
+			}
+		
+			function updateHeaderUserImage(){
+			    jQuery.post("{{ path('header_user_image') }}", function(response){
+			        jQuery('#user_thumbnail_img').replaceWith(response); 
+			    }); 
+			}
+			
+			jQuery(document).ready(function(){
+		
+				jQuery( "#inline-image-upload" ).dialog({
+					autoOpen: false,
+					modal: true,
+					width: "auto",
+					show: {
+				        effect: "drop",
+				        direction: "up"
+				      },
+		            hide: "fade",
+		            close: function() {
+		            }
+				});
+				
+				new PunkAveUserImageFileUploader({ 
+					'uploadUrl': {{ path('upload_user_image', { editId: editId }) | json_encode | raw }},
+					'viewUrl': {{ asset('uploads/users/tmp/images/' ~ editId) | json_encode | raw }},
+					'el': '.file-uploader',
+					'delaySubmitWhileUploading': '#profile_edit_form'
+				});
+		
+			});
+		</script>			
+	{% endjavascripts %}
+{% endblock %}
+
+{% block content %}	
+
+
+{# Underscore templates for the uploader #}
+{% include "TablozUserBundle:Profile:image_uploader.html.twig" %}
+
+<div class="sonata-user-edit-profile">
+
+    <h1>{{ 'اطلاعات شخصی' }}</h1>
+
+	{% if (form_errors(form)) %}<div class="form_error_container">{{ form_errors(form) }}</div>{% endif %}
+	<div style="width: 100%">
+	    <form id="profile_edit_form" action="{{ path('sonata_user_profile_edit') }}" method="POST" class="form-horizontal">
+	    
+	    	<div id="user_profile_image_container">
+		    	{% set user_image_path %}{% path app.user.image, 'big' %}{% endset %}
+	    		<img alt="{{ app.user.username }}" src="{{ asset(user_image_path) }}" style="background-color: #333; position: absolute;">
+	    		{% if (app.user.image.name == 'default-user-image') %}
+			    	<div id="user_profile_add_image" class="transition2" onclick="jQuery('#inline-image-upload').dialog('open');">
+			    		<span style="font-size: 100px; margin-left: 10px; vertical-align: top;">+</span><span>{{ 'افزودن عکس' }}</span>
+			    	</div>
+			    {% else %}
+			    	<div id="user_profile_image_delete" class="transition2">
+						<div class="spinner" style="display: none; position: absolute; top: 45%; width: 100%; text-align: center;">
+							<span>{{ 'در حال حذف...' }}</span>
+							<div class="uploader_delete_progressbar"><div class="uploader_progressbar_overlay"></div></div>
+						</div>
+			    		<div id="user_profile_image_delete_button" title="{{ 'حذف' }}" onclick="deleteUserImage();"></div>
+			    	</div>
+			    {% endif %}
+		    </div>
+			<div id="inline-image-upload" title="{{ 'عکس' }}" style="margin: 20px;">
+				{# Hydrated by javascript #}
+	    		<div class="file-uploader"></div>
+			</div>
+			
+			<div style="overflow: auto;">
+				<div style="float: right; width: 100%;">
+					<div style="float: right; margin: 0 5%;">
+						{{ form_row(form.firstname) }}
+						{{ form_row(form.lastname) }}
+						{{ form_row(form.gender) }}
+						{{ form_row(form.dateOfBirth) }}
+						{{ form_row(form.phone) }}
+						{{ form_row(form.mobile) }}
+						{{ form_row(form.address, { 'attr': {'class': 'address_textarea'} }) }}
+						{{ form_row(form.postalCode) }}
+					</div>
+					<div style="float: right; margin: 0 5%;">
+						{{ form_row(form.email) }}
+						{{ form_row(form.website) }}
+						{{ form_row(form.biography, { 'attr': {'class': 'biography_textarea'} }) }}
+					</div>
+	        	</div>
+				<div style="float: right; margin: 0 5%;">
+		        	<input type="submit" name="submit" value="{{ 'ذخیره' }}" style="margin: 40px 0;"/>
+				</div>
+			</div>
+			<div class="clearfix"></div>
+			
+	
+	        {{ form_rest(form) }}
+	    </form>
+    </div>
+</div>
+{% endblock %}

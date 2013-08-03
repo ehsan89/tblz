@@ -1,0 +1,33 @@
+parameters:
+    tabloz_security.authentication_handler: Tabloz\UserBundle\Handler\AuthenticationHandler
+#    tabloz_user.example.class: Tabloz\UserBundle\Example
+
+services:
+     tabloz_user.registration.form.type:
+        class: Tabloz\UserBundle\Form\Type\RegistrationFormType
+        arguments: [%fos_user.model.user.class%]
+        tags:
+            - { name: form.type, alias: tabloz_user_registration }
+     tabloz_user.profile.form.type:
+        class: Tabloz\UserBundle\Form\Type\ProfileFormType
+        arguments: [%fos_user.model.user.class%]
+        tags:
+            - { name: form.type, alias: tabloz_user_profile }
+     authentication_handler:
+        class:  %tabloz_security.authentication_handler%
+        arguments:  [@router]
+        tags:
+            - { name: 'monolog.logger', channel: 'security' }
+#     sonata.admin.user:
+#        class: Tabloz\UserBundle\Admin\UserAdmin
+#        tags:
+#            - { name: sonata.admin, manager_type: orm, group: "Users", label: "User" }
+#        arguments: [ null, Tabloz\UserBundle\Entity\User, SonataAdminBundle:CRUD ]
+
+#        calls:
+#            - [ setTranslationDomain, [ YourNSAdminBundle ] ]
+
+
+#    tabloz_user.example:
+#        class: %tabloz_user.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

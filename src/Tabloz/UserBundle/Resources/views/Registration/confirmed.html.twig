@@ -1,0 +1,14 @@
+{% extends '::base.html.twig' %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	{% stylesheets filter='cssrewrite' 'bundles/tablozuser/css/register.css' %}
+		<link rel="stylesheet" href="{{ asset_url }}" />
+	{% endstylesheets %}
+{% endblock %}
+
+{% block content %}
+	<div id="content_inner">
+		<div class="confirmed_text" style="font-size: 5em; margin: 150px 50px;" >{{ app.user.getFirstName }}، <br> {{ 'خوش آمدید...' }}</div>
+	</div>
+{% endblock %}

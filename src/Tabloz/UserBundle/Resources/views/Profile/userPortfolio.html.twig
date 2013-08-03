@@ -1,0 +1,71 @@
+{#
+
+This file is part of the Sonata package.
+
+(c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+
+#} 
+
+{% extends '::base.html.twig' %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	{% stylesheets filter='cssrewrite' 'bundles/tablozuser/css/portfolio.css' %}
+		<link rel="stylesheet" href="{{ asset_url }}" />
+	{% endstylesheets %}
+{% endblock %}
+
+{% block content %}	
+
+<script type="text/javascript">
+
+	jQuery(document).ready(function(){
+
+		jQuery(".portfolio_link").on("click", function(){
+			
+
+		});
+		/*jQuery(".tablo_thumb_image").on("mouseenter", function(){
+			Pixastic.process(jQuery(this), "blurfast", {
+				amount : 3
+			});
+		});
+
+		jQuery(".tablo_thumb_image").on("mouseleave", function(){
+			Pixastic.process(jQuery(this)[0], "blurfast", {
+				amount : 0
+			});
+		});*/
+
+	});
+</script>
+
+<div class="">
+	<div id="user_info_container">
+		<div style="float: right; margin-left: 3%;">
+			<img alt="{{ user.fullname }}" src="{{ media_asset(user.image, 'big') }}">
+		</div>
+		<div>
+			<h1>{{ user.fullname }}</h1>
+			<div>{{ user.biography|nl2br }}</div>
+		</div>
+	</div>
+	
+	<div class="clearfix"></div>
+	
+	<div id="user_links_container" class="transition2">
+		<div id="user_tablos_link" class="portfolio_link portfolio_link_active">{{ 'عکس ها' }}</div>
+		<div id="user_collections_link" class="portfolio_link">{{ 'مجموعه ها' }}</div>
+	</div>
+	
+	<div id="user_link_contents">
+		{{ render(controller('TablozUserBundle:Profile:userPortfolioTablos', {
+        'username': user.username, 'page': 1
+    })) }}
+	</div>
+
+</div>
+{% endblock %}

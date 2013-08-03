@@ -1,0 +1,232 @@
+#user_profile_image_container {
+    float: right;
+    margin: 0 5%;
+    width: 250px;
+    height: 250px;
+    position: relative;
+    background-color: #111;
+}
+
+#user_profile_add_image {
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 250px;
+    height: 250px;
+    z-index: 2;
+    line-height: 250px;
+    text-align: center;
+    background: rgba(51, 51, 51, 0.9);
+    font-family: tablozlight;
+    font-size: 25px;
+    cursor: pointer;
+}
+
+#user_profile_add_image:hover {
+    opacity: 1;
+}
+
+#user_profile_image_delete {
+    opacity: 0;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+}
+
+#user_profile_image_delete:hover {
+    opacity: 1;
+}
+
+#user_profile_image_delete_button {
+    height: 40px;
+    width: 40px;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    opacity: 0.8;
+    cursor: pointer;
+    background: url(../../bundles/tablozuser/images/garbage.png) no-repeat center #444;
+}
+
+#user_profile_image_delete_button:hover {
+    opacity: 1;
+}
+
+.user_profile_image_delete_overlay {
+    background-color: rgba(51, 51, 51, 0.9); 
+    opacity: 1 !important;
+}
+
+.uploader {
+    min-width: 400px;
+    min-height: 400px;
+    /*    overflow: hidden;*/
+}
+
+/*.uploader * {
+ -webkit-transition: none;
+ -moz-transition: none;
+ -o-transition: none;
+ transition: none;
+ }*/
+
+.uploader .thumbnails .thumbnail {
+    /*border: 3px solid #333;*/
+}
+
+.uploader .thumbnail_image {
+    /*height: 100%;*/
+    /*max-width: 400px;*/
+}
+
+.droppable_uploader {
+    background: #444;
+    border: 2px dashed #AAA;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    margin: auto;
+}
+
+.droppable_uploader:hover {
+    border-color: #777;
+}
+
+.uploader .controls {
+    background: url(../../bundles/tablozuser/images/drag-and-drop.png) no-repeat scroll center center #444;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.uploader_input {
+    position: relative;
+    height: 0;
+    opacity: 0;
+    -moz-opacity: 0;
+    filter: progid:DXImageTransform.Microsoft.Alpha(opacity=0);
+}
+
+.upload_thumbnail_caption {
+    position: absolute;
+    left: 10px;
+    top: 10px;
+}
+
+.upload_thumbnail_caption .ui-icon-closethick:hover {
+    background-image: url("../../bundles/tablozuser/images/jquery-ui/ui-icons_454545_256x240.png");
+}
+
+.drag_and_drop_text {
+    width: 100%;
+    text-align: center;
+    color: #AAAAAA;
+    position: absolute;
+    top: 240px;
+}
+
+.uploader_progressbar, .uploader_delete_progressbar {
+    height: 3px;
+    width: 90%;
+    margin: 10px auto;
+}
+.uploader_progressbar {
+    background: #6BB598;
+}
+.uploader_delete_progressbar {
+    background: #999;
+}
+
+.uploader_progressbar_overlay {
+    background: url("../../bundles/tablozuser/images/animated-overlay.gif") repeat-x;
+    opacity: 0.5;
+    height: 100%;
+}
+
+
+/*
+ * imgAreaSelect default style
+ */
+
+.imgareaselect-border1 {
+	background: url(../../bundles/tablozuser/css/border-v.gif) repeat-y left top;
+}
+
+.imgareaselect-border2 {
+    background: url(../../bundles/tablozuser/css/border-h.gif) repeat-x left top;
+}
+
+.imgareaselect-border3 {
+    background: url(../../bundles/tablozuser/css/border-v.gif) repeat-y right top;
+}
+
+.imgareaselect-border4 {
+    background: url(../../bundles/tablozuser/css/border-h.gif) repeat-x left bottom;
+}
+
+.imgareaselect-border1, .imgareaselect-border2,
+.imgareaselect-border3, .imgareaselect-border4 {
+    filter: alpha(opacity=50);
+	opacity: 0.5;
+}
+
+.imgareaselect-handle {
+    background-color: #fff;
+    border: solid 1px #000;
+    filter: alpha(opacity=50);
+    opacity: 0.5;
+}
+
+.imgareaselect-outer {
+    background-color: #000;
+    filter: alpha(opacity=50);
+    opacity: 0.5;
+}
+
+.imgareaselect-selection {  
+}
+/*
+ * imgAreaSelect animated border style
+ */
+
+.imgareaselect-border1 {
+	background: url(../../bundles/tablozuser/css/border-anim-v.gif) repeat-y left top;
+}
+
+.imgareaselect-border2 {
+    background: url(../../bundles/tablozuser/css/border-anim-h.gif) repeat-x left top;
+}
+
+.imgareaselect-border3 {
+    background: url(../../bundles/tablozuser/css/border-anim-v.gif) repeat-y right top;
+}
+
+.imgareaselect-border4 {
+    background: url(../../bundles/tablozuser/css/border-anim-h.gif) repeat-x left bottom;
+}
+
+.imgareaselect-border1, .imgareaselect-border2,
+.imgareaselect-border3, .imgareaselect-border4 {
+    filter: alpha(opacity=50);
+	opacity: 0.5;
+}
+
+.imgareaselect-handle {
+    background-color: #fff;
+	border: solid 1px #000;
+    filter: alpha(opacity=50);
+	opacity: 0.5;
+}
+
+.imgareaselect-outer {
+	background-color: #000;
+    filter: alpha(opacity=50);
+	opacity: 0.5;
+}
+
+.imgareaselect-selection {
+}

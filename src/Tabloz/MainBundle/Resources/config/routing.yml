@@ -1,0 +1,3 @@
+tabloz_main_homepage:
+    resource: "@TablozMainBundle/Controller"
+    type:     annotation

@@ -1,0 +1,62 @@
+<script type="text/javascript">
+	function openLoginDialog(){
+		jQuery("#inline_login_form_container #login_form_error_container").hide();
+		jQuery("#inline_login_form_container").dialog("open");
+	}
+	
+	jQuery(document).ready(function(){
+
+		jQuery( "#inline_login_form_container" ).dialog({
+			autoOpen: false,
+			modal: true,
+			width: 450,
+			show: {
+		        effect: "drop",
+		        direction: "up"
+		      },
+            hide: "fade",
+            close: function() {
+            }
+		});
+
+		jQuery(".login_link").on("click", function(){
+			openLoginDialog();
+		});
+
+	});
+
+</script>
+
+<header id="main_header">
+	<div id="main_header_top_logo"><a href="{{ path('tabloz_main_homepage') }}" style="height: 100%; width: 100%; display: block;"></a></div>
+	<nav id="main_header_nav" class="transition2">
+		<a>{{ 'آثـــــــــار' }}</a>
+	</nav>
+	{% if (app.user) %}
+		<div id="user_menu_container" class="transition2">
+			<div id="user_button">
+			<div id="user_thumbnail_container">
+				<a href="{{ path('user_portfolio', { 'username': app.user.username }) }}">
+					<img src="{{ media_asset( app.user.image, 'small' ) }}" id="user_thumbnail_img" alt="{{ app.user.username }}" title="{{ app.user.username }}" />
+				</a>
+			</div>		
+	{# 		{{ app.user.getFirstName }}#}
+	{# 		<span class="top_user_button_arrow"></span>#}
+			
+			</div>
+			<div id="user_drop_down_list">
+				<div class="main_header_user_fullname">{{ app.user.fullname }}</div>
+				<ul>
+					<li><a href="{{ path('sonata_user_profile_edit') }}">{{ 'تنظیمات' }}</a></li>
+					<li><a href="{{ path('manage_works') }}">{{ 'مدیریت آثار' }}</a></li>
+					<li><a href="{{ path('add_new_work') }}">{{ 'اثر جدید' }}</a></li>
+{# 					<li><a href="{{ path('user_statistics') }}">{{ 'آمار و گزارش ها' }}</a></li>#}
+					<li><a href="{{ path('fos_user_security_logout') }}">{{ 'خروج' }}</a></li>
+				</ul>
+			</div>
+		</div>
+	{% else %}
+		{% render url('tabloz_login_form') %}
+		<div id="top_login_register" class="transition2"><a href="#" class="login_link">{{ 'ورود' }}</a> | <a href="{{ path('fos_user_registration_register') }}">{{ 'عضویت' }}</a></div>
+	{% endif %}
+</header>

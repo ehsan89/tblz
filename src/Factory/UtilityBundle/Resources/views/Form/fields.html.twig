@@ -1,0 +1,175 @@
+{% block gender_widget %}
+    {% spaceless %}
+        {% if expanded %}
+            <ul {{ block('widget_container_attributes') }}>
+            {% for child in form %}
+                <li class="gender_option">
+                    {{ form_widget(child) }}
+                    {{ form_label(child) }}
+                </li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            {# just let the choice widget render the select tag #}
+            {{ block('choice_widget') }}
+        {% endif %}
+    {% endspaceless %}
+{% endblock %}
+
+{% block jalali_date_picker_widget %}
+    {% spaceless %}
+    	<input type="text" class="ui_datepicker" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
+    	
+    {% endspaceless %}
+{% endblock %}
+
+{% block time_widget %}
+{% spaceless %}
+    {% if widget == 'single_text' %}
+        {{ block('form_widget_simple') }}
+    {% elseif widget == 'choice' %}
+    	<div {{ block('widget_container_attributes') }} dir="ltr" >
+            {{ form_widget(form.hour, { 'attr': { 'size': '1' } }) }}:{{ form_widget(form.minute, { 'attr': { 'size': '1' } }) }}{% if with_seconds %}:{{ form_widget(form.second, { 'attr': { 'size': '1' } }) }}{% endif %}
+        </div>
+    {% else %}
+        <div {{ block('widget_container_attributes') }} dir="ltr" >
+            {{ form_widget(form.hour, { 'attr': { 'size': '1', 'class': 'hour_spinner' } }) }}&nbsp;:&nbsp;{{ form_widget(form.minute, { 'attr': { 'size': '1', 'class': 'minute_spinner' } }) }}{% if with_seconds %}:{{ form_widget(form.second, { 'attr': { 'size': '1', 'class': 'second_spinner' } }) }}{% endif %}
+        </div>
+        <script type="text/javascript">
+        jQuery(function() {
+            jQuery( ".hour_spinner" ).spinner({
+                spin: function( event, ui ) {
+                    if ( ui.value > 23 ) {
+                        jQuery( this ).spinner( "value", 00 );
+                        return false;
+                    } else if ( ui.value < 00 ) {
+                        jQuery( this ).spinner( "value", 23 );
+                        return false;
+                    }
+                }
+            });
+            jQuery( ".minute_spinner,.second_spinner" ).spinner({
+                spin: function( event, ui ) {
+                    if ( ui.value > 59 ) {
+                        jQuery( this ).spinner( "value", 00 );
+                        return false;
+                    } else if ( ui.value < 00 ) {
+                        jQuery( this ).spinner( "value", 59 );
+                        return false;
+                    }
+                }
+            });
+        });
+</script>
+    {% endif %}
+{% endspaceless %}
+{% endblock time_widget %}
+
+{% block checkbox_widget %}
+{% spaceless %}
+    <input type="checkbox" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} />
+{% endspaceless %}
+{% endblock checkbox_widget %}
+
+{% block radio_widget %}
+{% spaceless %}
+    <input type="radio" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} />
+{% endspaceless %}
+{% endblock radio_widget %}
+
+{% block form_row %}
+{% spaceless %}
+    <div>
+        {{ form_label(form, label|default(null)) }}<br>
+        {{ form_errors(form) }}
+        {{ form_widget(form) }}
+    </div>
+{% endspaceless %}
+{% endblock form_row %}
+
+{% block form_errors %}
+{% spaceless %}
+    {% if errors|length > 0 %}
+    <ul class="form_field_error_list">
+        {% for error in errors %}
+            <li>{{ ' * ' ~ error.message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+{% endspaceless %}
+{% endblock form_errors %}
+
+{% block jalali_date_choice_widget %}
+{% spaceless %}
+        <div {{ block('widget_container_attributes') }}>
+            {{ form_widget(form.day, { 'attr': {'class': 'date_select'} }) }}
+            {{ form_widget(form.month, { 'attr': {'class': 'date_select'} }) }}
+            {{ form_widget(form.year, { 'attr': {'class': 'date_select'} }) }}
+        </div>
+{% endspaceless %}
+{% endblock jalali_date_choice_widget %}
+
+{# {% block sonata_image_type_list_widget %}#}
+{#     <div id="field_container_{{ id }}" class="field-container">#}
+{#         <span id="field_actions_{{ id }}" class="field-actions">#}
+{#             <span id="field_widget_{{ id }}" class="field-short-description">#}
+{#                 {% if sonata_admin.field_description.associationadmin.id(sonata_admin.value) %}#}
+{#                 	<img src="{{ app.request.baseUrl~'/..' }}{% path sonata_admin.value %}" />#}
+{#                     {% render url('sonata_admin_short_object_information',{#}
+{#                             'code':     sonata_admin.field_description.associationadmin.code,#}
+{#                             'objectId': sonata_admin.field_description.associationadmin.id(sonata_admin.value),#}
+{#                             'uniqid':   sonata_admin.field_description.associationadmin.uniqid#}
+{#                         }#}
+{#                     )%}#}
+{#                 {% endif %}#}
+{#             </span>#}
+
+{#             <span class="btn-group">#}
+{#                 {% if sonata_admin.field_description.associationadmin.hasroute('list') and sonata_admin.field_description.associationadmin.isGranted('LIST') %}#}
+{#                     <a  href="{{ sonata_admin.field_description.associationadmin.generateUrl('list') }}"#}
+{#                         onclick="return start_field_dialog_form_list_{{ id }}(this);"#}
+{#                         class="btn sonata-ba-action"#}
+{#                         title="{{ 'link_list'|trans({}, 'SonataAdminBundle') }}"#}
+{#                             >#}
+{#                         <i class="icon-list"></i>#}
+{#                         {{ 'link_list'|trans({}, 'SonataAdminBundle') }}#}
+{#                     </a>#}
+{#                 {% endif %}#}
+
+{#                 {% if sonata_admin.field_description.associationadmin.hasroute('create') and sonata_admin.field_description.associationadmin.isGranted('CREATE') %}#}
+{#                     <a  href="{{ sonata_admin.field_description.associationadmin.generateUrl('create') }}"#}
+{#                         onclick="return start_field_dialog_form_add_{{ id }}(this);"#}
+{#                         class="btn sonata-ba-action"#}
+{#                         title="{{ 'link_add'|trans({}, 'SonataAdminBundle') }}"#}
+{#                             >#}
+{#                         <i class="icon-plus"></i>#}
+{#                         {{ 'link_add'|trans({}, 'SonataAdminBundle') }}#}
+{#                     </a>#}
+{#                 {% endif %}#}
+{#             </span>#}
+
+{#             <span class="btn-group">#}
+{#                 {% if sonata_admin.field_description.associationadmin.hasRoute('delete') and sonata_admin.field_description.associationadmin.isGranted('DELETE') %}#}
+{#                     <a  href=""#}
+{#                         onclick="return remove_selected_element_{{ id }}(this);"#}
+{#                         class="btn sonata-ba-action"#}
+{#                         title="{{ 'link_delete'|trans({}, 'SonataAdminBundle') }}"#}
+{#                             >#}
+{#                         <i class="icon-off"></i>#}
+{#                         {{ 'link_delete'|trans({}, 'SonataAdminBundle') }}#}
+{#                     </a>#}
+{#                 {% endif %}#}
+{#             </span>#}
+{#         </span>#}
+
+{#         <span style="display: none" >#}
+{#             {{ form_widget(form) }}#}
+{#         </span>#}
+
+{#         <div class="container sonata-ba-modal sonata-ba-modal-edit-one-to-one" style="display: none" id="field_dialog_{{ id }}">#}
+
+{#         </div>#}
+{#     </div>#}
+
+{#     {% include 'SonataDoctrineORMAdminBundle:CRUD:edit_orm_many_association_script.html.twig' %}#}
+{# {% endblock %}#}

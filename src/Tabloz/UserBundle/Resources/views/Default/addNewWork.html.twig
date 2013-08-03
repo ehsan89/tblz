@@ -1,0 +1,84 @@
+
+{% extends '::base.html.twig' %}
+
+{# {% block stylesheets %}#}
+{# 	{{ parent() }}#}
+{# 	{% stylesheets filter='cssrewrite' 'bundles/tablozuser/css/profile.css' %}#}
+		
+{# 	{% endstylesheets %}#}
+{# {% endblock %}#}
+
+{% block content %}	
+
+<link rel="stylesheet" href="{{ asset('bundles/tablozuser/css/profile.css') }}" />
+<link rel="stylesheet" href="{{ asset('bundles/tablozuser/css/new_work.css') }}" />
+<script type="text/javascript" src="{{ asset('bundles/punkavefileuploader/js/jquery.fileupload.js') }}"></script>
+<script type="text/javascript" src="{{ asset('bundles/tablozuser/js/TabloImageFileUploader.js') }}"></script>
+<script type="text/javascript">
+
+	
+	function saveTabloImage(){
+	    jQuery(".upload_thumbnail_caption").hide();
+	    jQuery("#tablo_form_container select").data("selectBox-selectBoxIt").disable();
+	    jQuery("#tablo_form_container select").prop("disabled", false);
+	    jQuery('#tablo_form_container input, #tablo_form_container textarea, #tablo_form_container select').addClass('disabled');
+	    jQuery('#tablo_form_container input, #tablo_form_container textarea, #tablo_form_container select').attr('readonly', 'readonly');
+	    jQuery(".save_spinner").fadeIn();
+	    jQuery.post(jQuery('#new_work_form').attr('action'), jQuery('#new_work_form').serialize(), function(response){
+	    }); 
+	    return false;
+	}
+	
+	jQuery(document).ready(function(){
+
+		new PunkAveTabloImageFileUploader({ 
+			'uploadUrl': {{ path('upload_new_work', { editId: editId }) | json_encode | raw }},
+			'viewUrl': {{ ('uploads/tablos/tmp/images/' ~ editId) | json_encode | raw }},
+			'el': '.file-uploader',
+			'delaySubmitWhileUploading': '#new_work_form'
+		});
+
+	});
+</script>
+
+
+{# Underscore templates for the uploader #}
+{% include "TablozUserBundle:Default:tablo_image_uploader.html.twig" %}
+
+<div class="add_new_work_container">
+
+    <h1>{{ 'افزودن اثر جدید' }}</h1>
+
+	{% if (form_errors(form)) %}<div class="form_error_container">{{ form_errors(form) }}</div>{% endif %}
+	<div style="width: 100%">
+	    <form id="new_work_form" action="{{ path('add_new_work') }}" method="POST" class="form-horizontal">
+	    
+			<div id="inline-image-upload" style="margin: 20px;">
+				{# Hydrated by javascript #}
+	    		<div class="file-uploader"></div>
+			</div>
+			
+			<div id="uploaded_tablo_image" style="float: right;">
+			</div>
+			
+			<div id="tablo_form_container" style="float: right; margin: 0 5% 5%; display: none;">
+				<div style="float: right; width: 100%;">
+					<div style="float: right;">
+						{{ form_row(form.title) }}
+						{{ form_row(form.description) }}
+						{{ form_row(form.category) }}
+	        			{{ form_rest(form) }}
+						<input id="tablo_submit" type="submit" value="{{ 'ذخیره' }}" onclick="saveTabloImage();" style="margin: 20px 0;"/>
+					</div>
+	        	</div>
+			</div>
+			
+			<div class="clearfix"></div>
+			
+	
+	    </form>
+    </div>
+</div>
+
+
+{% endblock %}

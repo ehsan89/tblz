@@ -1,0 +1,36 @@
+parameters:
+#    factory_utility.example.class: Factory\UtilityBundle\Example
+
+services:
+    sonata.media.provider.tablo:
+        class: Application\Sonata\MediaBundle\Provider\TabloProvider
+        arguments: 
+            - sonata.media.provider.tablo
+            - @sonata.media.filesystem.local
+            - @sonata.media.cdn.server
+            - @sonata.media.generator.default
+            - @sonata.media.thumbnail.format
+            - []
+            - []
+            - @sonata.media.adapter.image.gd
+            - @sonata.media.metadata.proxy
+        calls:
+            - [setTemplates, [helper_thumbnail: SonataMediaBundle:Provider:thumbnail.html.twig, helper_view: SonataMediaBundle:Provider:view_image.html.twig]]
+            - [setContainer, [@service_container]]
+            - [setResizer, [@sonata.media.resizer.simple]]
+        tags:
+            - { name: sonata.media.provider }
+            
+    sonata.media.twig.application_extension:
+        class: Application\Sonata\MediaBundle\Twig\Extension\ApplicationMediaExtension
+        arguments: 
+            - @sonata.media.pool
+            - @sonata.media.manager.media
+        tags:
+            - { name: twig.extension }
+        
+#    factory_utility.example:
+#        class: %factory_utility.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]
+
+

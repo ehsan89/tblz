@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>{% block title %}tabloz.com | نمایش و فروش آثار عکاسان {% endblock %}</title>
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+        {% block stylesheets %}
+	        {% stylesheets filter='cssrewrite' 
+	        				'public/css/main.css' 
+	        				'public/css/*' %}
+	        	<link rel="stylesheet" href="{{ asset_url }}" />
+	        {% endstylesheets %}
+        {% endblock %}
+        {% block javascripts %}
+{#             <script type="text/javascript" src="{{ asset('/public/js/*') }}"></script><!-- just for the dev env!!!!!!!!!!!!!!!!!!!!!!!!! -->#}
+	        {% javascripts  'public/js/jquery.min.js'
+	        				'public/js/jquery-ui.min.js'
+	        				'public/js/*' %}
+			    <script type="text/javascript" src="{{ asset_url }}"></script>
+			    <script>
+				    jQuery(document).ready(function () {
+
+				    	// replaces the checkboxes and radio buttons
+				    	replaceCheckables();
+
+				    	jQuery("select").selectBoxIt({ autoWidth: false, showEffect: "fadeIn", showEffectSpeed: "fast", hideEffect: "fadeOut", hideEffectSpeed: "fast" });
+		
+						jQuery(".bottom_tooltip").tooltip({
+				            position: {
+				                my: "center top",
+				                at: "center bottom+10",
+				                using: function( position, feedback ) {
+				                    jQuery( this ).css( position );
+				                    jQuery( "<div>" )
+				                        .addClass( "arrow" )
+				                        .addClass( feedback.vertical )
+				                        .addClass( feedback.horizontal )
+				                        .appendTo( this );
+				                }
+				            }
+				        });
+				    });
+		        </script>
+			{% endjavascripts %}
+		{% endblock %}
+    </head>
+    
+    {% block body %}
+	    <body>
+	    	{% block header %}
+	    		{% include '::main_header.html.twig' %}
+	    	{% endblock %}
+	    	{% block content_section %}
+		    	<section id="main">
+					<div id="content">
+		    			{% block content %}{% endblock %}
+		    		</div>
+		    	</section>
+		    {% endblock %}
+	        {% block footer %}
+	        	{% include '::main_footer.html.twig' %}
+	        {% endblock %}
+	    </body>
+    {% endblock %}
+    
+</html>

@@ -1,0 +1,7 @@
+tabloz_user_main:
+    resource: "@TablozUserBundle/Controller"
+    type:     annotation
+    
+tabloz_login_form:
+    pattern:  /login_form
+    defaults: { _controller: TablozUserBundle:Security:loginForm }

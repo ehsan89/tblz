@@ -1,0 +1,41 @@
+parameters:
+#    factory_utility.example.class: Factory\UtilityBundle\Example
+
+services:
+    util:
+        class: Factory\UtilityBundle\Utils\Util
+        arguments: [@service_container]
+    form.type.gender:
+        class: Factory\UtilityBundle\Form\Type\GenderType
+        tags:
+            - { name: form.type, alias: gender }
+    form.type.jalali_date_choice:
+        class: Factory\UtilityBundle\Form\Type\JalaliDateChoiceType
+        tags:
+            - { name: form.type, alias: jalali_date_choice }
+    form.type.jalali_date_picker:
+        class: Factory\UtilityBundle\Form\Type\JalaliDatePickerType
+        tags:
+            - { name: form.type, alias: jalali_date_picker }
+    form.type.jalali_birthday:
+        class: Factory\UtilityBundle\Form\Type\JalaliBirthdayType
+        tags:
+            - { name: form.type, alias: jalali_birthday }
+    form.type.sonata_type_image_list:
+        class: Factory\UtilityBundle\Form\Type\ImageTypeList
+        tags:
+            - { name: form.type, alias: sonata_type_image_list }
+    util.twig.jalali_extension:
+        class: Factory\UtilityBundle\Twig\JalaliExtension
+        tags:
+            - { name: twig.extension }
+    util.twig.utility_extension:
+        class: Factory\UtilityBundle\Twig\UtilityExtension
+        tags:
+            - { name: twig.extension }
+        
+#    factory_utility.example:
+#        class: %factory_utility.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]
+
+

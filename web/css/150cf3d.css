@@ -1,0 +1,43 @@
+#content {
+    padding: 0 0 30px 0;
+}
+
+#user_info_container, #link_contents {
+    padding: 30px 10% 80px 10%;
+}
+
+#user_info_container, #user_links_container {
+    background-color: #222;
+}
+
+#portfolio_links_container {
+    border-bottom: 1px solid #999;
+}
+
+#user_links_container {
+    text-align: center;
+}
+
+.portfolio_link {
+    display: inline-block;
+    cursor: pointer;
+    padding: 10px;
+    width: 12%;
+    background-color: #282828;
+    color: #AAA;
+}
+
+.portfolio_link:hover {
+    background-color: #333;
+    color: #CCC;
+}
+
+.portfolio_link_active, .portfolio_link_active:hover {
+    cursor: default;
+    background-color: #151515;
+    color: #EEE;
+}
+
+#user_link_contents {
+    background-color: #151515;
+}
