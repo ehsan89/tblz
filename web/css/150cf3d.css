@@ -2,19 +2,28 @@
     padding: 0 0 30px 0;
 }
 
-#user_info_container, #link_contents {
+#portfolio_info_container, #portfolio_link_contents {
     padding: 30px 10% 80px 10%;
 }
 
-#user_info_container, #user_links_container {
+#portfolio_info_container, #portfolio_bar {
     background-color: #222;
 }
 
-#portfolio_links_container {
-    border-bottom: 1px solid #999;
+#portfolio_bar {
+	width: 100%;
+	padding-top: 100px;
 }
 
-#user_links_container {
+#portfolio_bar_info {
+	padding: 10px 10%;
+}
+
+.hidden_portfolio_bar_info {
+	visibility: hidden;
+}
+
+#portfolio_links_container {
     text-align: center;
 }
 
@@ -38,6 +47,6 @@
     color: #EEE;
 }
 
-#user_link_contents {
+#portfolio_link_contents {
     background-color: #151515;
 }

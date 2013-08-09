@@ -17,8 +17,9 @@ body {
 }
 
 body ::selection {
-    background-color: #B6D9FF;
+    background-color: #6BB598;
     color: white;
+    text-shadow: 2px 2px 10px black;
 }
 
 ::-webkit-scrollbar {

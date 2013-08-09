@@ -17,8 +17,9 @@ body {
 }
 
 body ::selection {
-    background-color: #B6D9FF;
+    background-color: #6BB598;
     color: white;
+    text-shadow: 2px 2px 10px black;
 }
 
 ::-webkit-scrollbar {
@@ -234,11 +235,17 @@ textarea {
     width: 30em;
 }
 
-input[disabled="disabled"], textarea[disabled="disabled"], select[disabled="disabled"], input.disabled, textarea.disabled, select.disabled {
+input[disabled="disabled"], input[disabled="disabled"]:hover, input[disabled="disabled"]:focus, 
+textarea[disabled="disabled"], textarea[disabled="disabled"]:hover, textarea[disabled="disabled"]:focus, 
+select[disabled="disabled"], select[disabled="disabled"]:hover, select[disabled="disabled"]:focus, 
+input.disabled, input.disabled:hover, input.disabled:focus, 
+textarea.disabled, textarea.disabled:hover, textarea.disabled:focus, 
+select.disabled, select.disabled:hover, select.disabled:focus {
     border-color: #444;
     background: #333;
     color: #666;
     opacity: 0.5;
+    cursor: default;
 }
 
 .input_error {
@@ -1101,4 +1108,9 @@ p#copyright {
 .tablo_thumb {
     display: inline-block;
     margin: 10px;
+}
+
+.tablo_thumb_image:hover {
+    box-shadow: 0 5px 15px 5px #000;
+    -webkit-box-shadow: 0 5px 15px 1px #000;
 }

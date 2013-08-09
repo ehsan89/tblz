@@ -30,70 +30,71 @@ file that was distributed with this source code.
         			'bundles/tablozuser/js/jquery.imgareaselect.pack.js' 
 	%}
 		<script type="text/javascript" src="{{ asset_url }}"></script>
-		<script type="text/javascript">
-
-			function deleteUserImage(){
-				jQuery("#user_profile_image_delete_button").hide();
-				jQuery("#user_profile_image_delete").addClass('user_profile_image_delete_overlay');
-				jQuery("#user_profile_image_delete .spinner").show();
-				jQuery.post("{{ path('delete_user_image') }}", function(response){
-					jQuery("#user_profile_image_container").html(response).hide().fadeIn();	
-				    updateHeaderUserImage();	
-				});
-			}
-			
-			function saveUserImage(){
-			    jQuery(".crop_form").hide();
-			    jQuery(".croppable_image").imgAreaSelect( {remove: true} );
-			    jQuery(".save_spinner").fadeIn();
-			    jQuery.post(jQuery('.crop_form').attr('action'), jQuery('.crop_form').serialize(), function(response){
-			        jQuery('#user_profile_image_container').html(response); 
-			        jQuery('.croppable_image').imgAreaSelect( {remove: true} ); 
-			        jQuery('#inline-image-upload').dialog('close'); 
-			        jQuery(".crop_form").closest('[data-name]').remove();
-			        jQuery('.uploader').addClass('droppable_uploader');
-			        jQuery('[data-dropzone="1"]').fadeIn();
-				    jQuery(".save_spinner").hide();
-				    updateHeaderUserImage();
-			    }); 
-			    return false;
-			}
-		
-			function updateHeaderUserImage(){
-			    jQuery.post("{{ path('header_user_image') }}", function(response){
-			        jQuery('#user_thumbnail_img').replaceWith(response); 
-			    }); 
-			}
-			
-			jQuery(document).ready(function(){
-		
-				jQuery( "#inline-image-upload" ).dialog({
-					autoOpen: false,
-					modal: true,
-					width: "auto",
-					show: {
-				        effect: "drop",
-				        direction: "up"
-				      },
-		            hide: "fade",
-		            close: function() {
-		            }
-				});
-				
-				new PunkAveUserImageFileUploader({ 
-					'uploadUrl': {{ path('upload_user_image', { editId: editId }) | json_encode | raw }},
-					'viewUrl': {{ asset('uploads/users/tmp/images/' ~ editId) | json_encode | raw }},
-					'el': '.file-uploader',
-					'delaySubmitWhileUploading': '#profile_edit_form'
-				});
-		
-			});
-		</script>			
 	{% endjavascripts %}
 {% endblock %}
 
 {% block content %}	
 
+
+	<script type="text/javascript">
+
+		function deleteUserImage(){
+			jQuery("#user_profile_image_delete_button").hide();
+			jQuery("#user_profile_image_delete").addClass('user_profile_image_delete_overlay');
+			jQuery("#user_profile_image_delete .spinner").show();
+			jQuery.post("{{ path('delete_user_image') }}", function(response){
+				jQuery("#user_profile_image_container").html(response).hide().fadeIn();	
+			    updateHeaderUserImage();	
+			});
+		}
+		
+		function saveUserImage(){
+		    jQuery(".crop_form").hide();
+		    jQuery(".croppable_image").imgAreaSelect( {remove: true} );
+		    jQuery(".save_spinner").fadeIn();
+		    jQuery.post(jQuery('.crop_form').attr('action'), jQuery('.crop_form').serialize(), function(response){
+		        jQuery('#user_profile_image_container').html(response); 
+		        jQuery('.croppable_image').imgAreaSelect( {remove: true} ); 
+		        jQuery('#inline-image-upload').dialog('close'); 
+		        jQuery(".crop_form").closest('[data-name]').remove();
+		        jQuery('.uploader').addClass('droppable_uploader');
+		        jQuery('[data-dropzone="1"]').fadeIn();
+			    jQuery(".save_spinner").hide();
+			    updateHeaderUserImage();
+		    }); 
+		    return false;
+		}
+	
+		function updateHeaderUserImage(){
+		    jQuery.post("{{ path('header_user_image') }}", function(response){
+		        jQuery('#user_thumbnail_img').replaceWith(response); 
+		    }); 
+		}
+		
+		jQuery(document).ready(function(){
+	
+			jQuery( "#inline-image-upload" ).dialog({
+				autoOpen: false,
+				modal: true,
+				width: "auto",
+				show: {
+			        effect: "drop",
+			        direction: "up"
+			      },
+	            hide: "fade",
+	            close: function() {
+	            }
+			});
+			
+			new PunkAveUserImageFileUploader({ 
+				'uploadUrl': {{ path('upload_user_image', { editId: editId }) | json_encode | raw }},
+				'viewUrl': {{ asset('uploads/users/tmp/images/' ~ editId) | json_encode | raw }},
+				'el': '.file-uploader',
+				'delaySubmitWhileUploading': '#profile_edit_form'
+			});
+	
+		});
+	</script>			
 
 {# Underscore templates for the uploader #}
 {% include "TablozUserBundle:Profile:image_uploader.html.twig" %}

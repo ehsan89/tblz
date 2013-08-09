@@ -17,8 +17,9 @@ body {
 }
 
 body ::selection {
-    background-color: #B6D9FF;
+    background-color: #6BB598;
     color: white;
+    text-shadow: 2px 2px 10px black;
 }
 
 ::-webkit-scrollbar {
@@ -234,11 +235,17 @@ textarea {
     width: 30em;
 }
 
-input[disabled="disabled"], textarea[disabled="disabled"], select[disabled="disabled"], input.disabled, textarea.disabled, select.disabled {
+input[disabled="disabled"], input[disabled="disabled"]:hover, input[disabled="disabled"]:focus, 
+textarea[disabled="disabled"], textarea[disabled="disabled"]:hover, textarea[disabled="disabled"]:focus, 
+select[disabled="disabled"], select[disabled="disabled"]:hover, select[disabled="disabled"]:focus, 
+input.disabled, input.disabled:hover, input.disabled:focus, 
+textarea.disabled, textarea.disabled:hover, textarea.disabled:focus, 
+select.disabled, select.disabled:hover, select.disabled:focus {
     border-color: #444;
     background: #333;
     color: #666;
     opacity: 0.5;
+    cursor: default;
 }
 
 .input_error {
@@ -1101,6 +1108,11 @@ p#copyright {
 .tablo_thumb {
     display: inline-block;
     margin: 10px;
+}
+
+.tablo_thumb_image:hover {
+    box-shadow: 0 5px 15px 5px #000;
+    -webkit-box-shadow: 0 5px 15px 1px #000;
 }
 
 .checkbox, .radio {
@@ -2700,175 +2712,6 @@ body .ui-tooltip {
 	border-left:1px solid rgba(0,0,0,0.8);
 	border-right:1px solid rgba(255,255,255,0.2);
 }
-@CHARSET "UTF-8";
-.sbHolder{
-	border: solid 1px #515151;
-	font-family: inherit;
-	font-size: 12px;
-	font-weight: normal;
-	height: 30px;
-	position: relative;
-	border-radius: 3px;
-/*	width: 200px;*/
-}
-.sbHolder:focus .sbSelector{
-	
-}
-.sbSelector{
-	display: block;
-	height: 30px;
-	left: 0;
-	line-height: 30px;
-	outline: none;
-	overflow: hidden;
-	position: absolute;
-	text-indent: 10px;
-	top: 0;
-	width: 170px;
-}
-.sbSelector:link, .sbSelector:visited, .sbSelector:hover{
-	color: #EBB52D;
-	outline: none;
-	text-decoration: none;
-}
-.sbToggle{
-	background: url(../../public/images/jquery-ui/ui-icons_222222_256x240.png) no-repeat;
-	background-position: -64px -16px;
-	display: block;
-	height: 16px;
-	outline: none;
-	position: absolute;
-	left: 0;
-	top: 0;
-	width: 16px;
-	margin: 7px;
-}
-.sbToggle:hover{
-/*	background: url(../../public/img/select-icons.png) 0 -167px no-repeat;*/
-}
-.sbToggleOpen{
-/*	background: url(../../public/img/select-icons.png) 0 -16px no-repeat;*/
-}
-.sbToggleOpen:hover{
-/*	background: url(../../public/img/select-icons.png) 0 -66px no-repeat;*/
-}
-.sbHolderDisabled{
-	background-color: #3C3C3C;
-	border: solid 1px #515151;
-}
-.sbHolderDisabled .sbHolder{
-	
-}
-.sbHolderDisabled .sbToggle{
-	
-}
-.sbOptions{
-	background-color: #eee;
-	border: solid 1px #515151;
-	list-style: none;
-	left: -1px;
-	margin: 0;
-	padding: 0;
-	position: absolute;
-	top: 30px;
-	width: 200px;
-	z-index: 1;
-	overflow-y: auto;
-}
-.sbOptions li{
-	padding: 0 7px;
-}
-.sbOptions a{
-	border-bottom: dotted 1px #515151;
-	display: block;
-	outline: none;
-	padding: 7px 0 7px 3px;
-}
-.sbOptions a:link, .sbOptions a:visited{
-	color: #ddd;
-	text-decoration: none;
-}
-.sbOptions a:hover,
-.sbOptions a:focus,
-.sbOptions a.sbFocus{
-	color: #333;
-}
-.sbOptions li.last a{
-	border-bottom: none;
-}
-.sbOptions .sbDisabled{
-	border-bottom: dotted 1px #515151;
-	color: #999;
-	display: block;
-	padding: 7px 0 7px 3px;
-}
-.sbOptions .sbGroup{
-	border-bottom: dotted 1px #515151;
-	color: #333;
-	display: block;
-	font-weight: bold;
-	padding: 7px 0 7px 3px;
-}
-.sbOptions .sbSub{
-	padding-left: 17px;
-}
-.clearfix:before, .clearfix:after {
-  content: "";
-  display: table;
-}
-
-.clearfix:after {clear: both;}
-
-.clearfix {*zoom: 1;}
-
-.prettycheckbox,
-.prettyradio {
-    display: inline-block;
-    padding:0;
-    margin:0;
-}
-
-.prettycheckbox a,
-.prettyradio a{
-    width: 30px;
-    height: 30px;
-    background: url(../../public/css/prettyCheckable-blue.png) top left no-repeat;
-    display: block;
-    float: left;
-    cursor: pointer;
-    margin:0;
-}
-
-.prettycheckbox.green a,
-.prettyradio.green a{ background-image: url(../../public/css/prettyCheckable-green.png);}
-
-.prettycheckbox.red a,
-.prettyradio.red a{ background-image: url(../../public/css/prettyCheckable-red.png);}
-
-.prettycheckbox.yellow a,
-.prettyradio.yellow a{ background-image: url(../../public/css/prettyCheckable-yellow.png);}
-
-.prettyradio a {background-position: 0 -120px;}
-
-.prettycheckbox a:focus,
-.prettyradio a:focus {outline: 0 none;}
-
-.prettycheckbox a:focus{background-position: 0 -30px;}
-.prettyradio a:focus{background-position: 0 -150px;}
-
-.prettycheckbox a.checked{ background-position: 0 -60px; }
-.prettyradio a.checked { background-position: 0 -180px; }
-
-.prettycheckbox a.checked:focus{ background-position: 0 -90px; }
-.prettyradio a.checked:focus { background-position: 0 -210px; }
-
-.prettycheckbox label,
-.prettyradio label {
-  display: block;
-  float: left;
-  margin: 6px 5px;
-  cursor: pointer;
-}
 /* div surrounding the Select Box */
 .selectboxit-container {
     font-size: 12px;
@@ -2977,7 +2820,14 @@ body .ui-tooltip {
 }
 
 .selectboxit-enabled {
-	
+    
+}
+
+.selectboxit-disabled, .selectboxit-disabled:hover, .selectboxit-disabled:focus {
+    border-color: #444;
+    background: #333;
+    color: #666;
+    opacity: 0.5;    
 }
 
 .selectboxit-btn {

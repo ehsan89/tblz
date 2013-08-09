@@ -106,7 +106,14 @@
 }
 
 .selectboxit-enabled {
-	
+    
+}
+
+.selectboxit-disabled, .selectboxit-disabled:hover, .selectboxit-disabled:focus {
+    border-color: #444;
+    background: #333;
+    color: #666;
+    opacity: 0.5;    
 }
 
 .selectboxit-btn {

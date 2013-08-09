@@ -28,6 +28,22 @@ file that was distributed with this source code.
 			
 
 		});
+		
+		
+	var links_top = jQuery('#portfolio_links_container').offset().top - 190;
+	 
+	jQuery(window).scroll(function(){
+		if( jQuery(window).scrollTop() > links_top ) {
+			//jQuery('#portfolio_links_container').css({position: 'fixed', top: '190px'});
+			jQuery('#portfolio_bar').fadeIn(0, function(){jQuery('#portfolio_bar_info').fadeIn();});
+			
+		} else {
+			//jQuery('#portfolio_links_container').css({position: 'static', top: '0px'});
+			jQuery('#portfolio_bar, #portfolio_bar_info').fadeOut(0);
+			
+		}
+	});
+	
 		/*jQuery(".tablo_thumb_image").on("mouseenter", function(){
 			Pixastic.process(jQuery(this), "blurfast", {
 				amount : 3
@@ -44,7 +60,7 @@ file that was distributed with this source code.
 </script>
 
 <div class="">
-	<div id="user_info_container">
+	<div id="portfolio_info_container">
 		<div style="float: right; margin-left: 3%;">
 			<img alt="{{ user.fullname }}" src="{{ media_asset(user.image, 'big') }}">
 		</div>
@@ -56,12 +72,28 @@ file that was distributed with this source code.
 	
 	<div class="clearfix"></div>
 	
-	<div id="user_links_container" class="transition2">
-		<div id="user_tablos_link" class="portfolio_link portfolio_link_active">{{ 'عکس ها' }}</div>
-		<div id="user_collections_link" class="portfolio_link">{{ 'مجموعه ها' }}</div>
+	<div id="portfolio_links_container" class="transition2 portfolio_links_container">
+		<div id="portfolio_tablos_link" class="portfolio_tablos_link portfolio_link portfolio_link_active">{{ 'عکس ها' }}</div>
+		<div id="portfolio_collections_link" class="portfolio_collections_link portfolio_link">{{ 'مجموعه ها' }}</div>
+	</div>
+		
+	<div id="portfolio_bar" style="display: none;">
+		<div id="portfolio_bar_info">
+			<div style="float: right; margin-left: 3%; height: 70px;">
+				<img alt="{{ user.fullname }}" src="{{ media_asset(user.image, 'big') }}" style="height: 70px;">
+			</div>
+			<div>
+				<h1 style="margin: 0;">{{ user.fullname }}</h1>
+			</div>
+			<div class="clearfix"></div>
+		</div>
+		<div class="transition2 portfolio_links_container">
+			<div class="portfolio_tablos_link portfolio_link portfolio_link_active">{{ 'عکس ها' }}</div>
+			<div class="portfolio_collections_link portfolio_link">{{ 'مجموعه ها' }}</div>
+		</div>
 	</div>
 	
-	<div id="user_link_contents">
+	<div id="portfolio_link_contents" style="height: 1000px;">
 		{{ render(controller('TablozUserBundle:Profile:userPortfolioTablos', {
         'username': user.username, 'page': 1
     })) }}

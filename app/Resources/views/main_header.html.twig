@@ -1,4 +1,5 @@
 <script type="text/javascript">
+
 	function openLoginDialog(){
 		jQuery("#inline_login_form_container #login_form_error_container").hide();
 		jQuery("#inline_login_form_container").dialog("open");
@@ -6,6 +7,26 @@
 	
 	jQuery(document).ready(function(){
 
+    	// replaces the checkboxes and radio buttons
+    	replaceCheckables();
+
+    	jQuery("select").selectBoxIt({ autoWidth: false, showEffect: "fadeIn", showEffectSpeed: "fast", hideEffect: "fadeOut", hideEffectSpeed: "fast" });
+
+		jQuery(".bottom_tooltip").tooltip({
+            position: {
+                my: "center top",
+                at: "center bottom+10",
+                using: function( position, feedback ) {
+                    jQuery( this ).css( position );
+                    jQuery( "<div>" )
+                        .addClass( "arrow" )
+                        .addClass( feedback.vertical )
+                        .addClass( feedback.horizontal )
+                        .appendTo( this );
+                }
+            }
+        });
+        
 		jQuery( "#inline_login_form_container" ).dialog({
 			autoOpen: false,
 			modal: true,
