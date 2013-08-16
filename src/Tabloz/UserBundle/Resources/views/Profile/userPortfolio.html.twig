@@ -28,21 +28,39 @@ file that was distributed with this source code.
 			
 
 		});
-		
-		
-	var links_top = jQuery('#portfolio_links_container').offset().top - 190;
-	 
-	jQuery(window).scroll(function(){
-		if( jQuery(window).scrollTop() > links_top ) {
-			//jQuery('#portfolio_links_container').css({position: 'fixed', top: '190px'});
-			jQuery('#portfolio_bar').fadeIn(0, function(){jQuery('#portfolio_bar_info').fadeIn();});
+
+		jQuery(".user_follow_button").on("click", function(){
+			jQuery.post("{{ path('follow_user', {'id': user.id}) }}", function(){
+				jQuery(".user_follow_container").hide();
+				jQuery(".user_unfollow_container").fadeIn();
+			});
+		});
+
+		jQuery(".user_unfollow_button").on("click", function(){
+			jQuery.post("{{ path('unfollow_user', {'id': user.id}) }}", function(){
+				jQuery(".user_unfollow_container").hide();
+				jQuery(".user_follow_container").fadeIn();
+			});
+		});
+
+		jQuery(".user_unfollow_container").on("mouseenter", function(){ jQuery(this).find(".user_following").hide(); jQuery(this).find(".user_unfollow_button").show(); });
+		jQuery(".user_unfollow_container").on("mouseleave", function(){ jQuery(this).find(".user_unfollow_button").hide(); jQuery(this).find(".user_following").fadeIn(); });
 			
-		} else {
-			//jQuery('#portfolio_links_container').css({position: 'static', top: '0px'});
-			jQuery('#portfolio_bar, #portfolio_bar_info').fadeOut(0);
-			
-		}
-	});
+		var links_top = jQuery('#portfolio_links_container').offset().top - 170;
+		 
+		jQuery(window).scroll(function(){
+			if( jQuery(window).scrollTop() > links_top ) {
+				//jQuery('#portfolio_links_container').css({position: 'fixed', top: '190px'});
+				jQuery('#portfolio_bar').fadeIn(0, function(){jQuery('#portfolio_bar_info').fadeIn();});
+				
+			} else {
+				//jQuery('#portfolio_links_container').css({position: 'static', top: '0px'});
+				jQuery('#portfolio_bar, #portfolio_bar_info').fadeOut(0);
+				
+			}
+		});
+
+	
 	
 		/*jQuery(".tablo_thumb_image").on("mouseenter", function(){
 			Pixastic.process(jQuery(this), "blurfast", {
@@ -65,7 +83,15 @@ file that was distributed with this source code.
 			<img alt="{{ user.fullname }}" src="{{ media_asset(user.image, 'big') }}">
 		</div>
 		<div>
-			<h1>{{ user.fullname }}</h1>
+			<div style="margin-bottom: 50px;">
+				<h1 style="display: inline-block; margin-left: 50px;">{{ user.fullname }}</h1>
+				{% if app.user %}
+					<span style="display: inline-block;">
+						<span class="user_follow_container" style="{{ following ? 'display:none;' : '' }}"><input class="user_follow_button" type="button" value="{{ 'دنبال کن' }}"></span>
+						<span class="user_unfollow_container" style="{{ following ? '' : 'display:none;' }} width: 120px;"><span class="user_following">{{ 'در حال دنبال کردن' }}</span><input class="user_unfollow_button grey_button" type="button" value="{{ 'دنبال نکن' }}" style="display: none;"></span>
+					</span>
+				{% endif %}
+			</div>
 			<div>{{ user.biography|nl2br }}</div>
 		</div>
 	</div>
@@ -73,22 +99,28 @@ file that was distributed with this source code.
 	<div class="clearfix"></div>
 	
 	<div id="portfolio_links_container" class="transition2 portfolio_links_container">
-		<div id="portfolio_tablos_link" class="portfolio_tablos_link portfolio_link portfolio_link_active">{{ 'عکس ها' }}</div>
+		<div id="portfolio_tablos_link" class="portfolio_tablos_link portfolio_link portfolio_link_active">{{ 'آثـــــــار' }}</div>
 		<div id="portfolio_collections_link" class="portfolio_collections_link portfolio_link">{{ 'مجموعه ها' }}</div>
 	</div>
 		
 	<div id="portfolio_bar" style="display: none;">
 		<div id="portfolio_bar_info">
-			<div style="float: right; margin-left: 3%; height: 70px;">
-				<img alt="{{ user.fullname }}" src="{{ media_asset(user.image, 'big') }}" style="height: 70px;">
+			<div style="float: right; margin-left: 3%; height: 50px;">
+				<img alt="{{ user.fullname }}" src="{{ media_asset(user.image, 'big') }}" style="height: 50px;">
 			</div>
-			<div>
-				<h1 style="margin: 0;">{{ user.fullname }}</h1>
+			<div style="height: 50px;">
+				<h1 style="display: inline-block; margin: 0 0 0 40px; font-size: 40px;">{{ user.fullname }}</h1>
+				{% if app.user %}
+					<span style="display: inline-block;">
+						<span class="user_follow_container" style="{{ following ? 'display:none;' : '' }}"><input class="user_follow_button" type="button" value="{{ 'دنبال کن' }}"></span>
+						<span class="user_unfollow_container" style="{{ following ? '' : 'display:none;' }} width: 120px;"><span class="user_following">{{ 'در حال دنبال کردن' }}</span><input class="user_unfollow_button grey_button" type="button" value="{{ 'دنبال نکن' }}" style="display: none;"></span>
+					</span>
+				{% endif %}
 			</div>
 			<div class="clearfix"></div>
 		</div>
 		<div class="transition2 portfolio_links_container">
-			<div class="portfolio_tablos_link portfolio_link portfolio_link_active">{{ 'عکس ها' }}</div>
+			<div class="portfolio_tablos_link portfolio_link portfolio_link_active">{{ 'آثـــــــار' }}</div>
 			<div class="portfolio_collections_link portfolio_link">{{ 'مجموعه ها' }}</div>
 		</div>
 	</div>

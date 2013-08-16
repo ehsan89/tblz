@@ -11,6 +11,8 @@
 
 namespace Tabloz\UserBundle\Controller;
 
+use Tabloz\UserBundle\Entity\UserFollow;
+
 use Tabloz\UserBundle\Entity\User;
 
 use Imagine\Gd\Imagine;
@@ -201,7 +203,7 @@ class ProfileController extends BaseController
 	 * 
 	 * @param Request $request
 	 */
-	public function HeaderUserImageAction(Request $request) {
+	public function headerUserImageAction(Request $request) {
 		$util = $this->container->get('util');
 		if( !$util->isAuthenticated() ){
 			throw new AccessDeniedException();
@@ -214,11 +216,70 @@ class ProfileController extends BaseController
      * @Template()
      */
     public function userPortfolioAction(User $user){
-		
+    	$following = 0;
+    	$util = $this->container->get('util');
+    	if( $util->isAuthenticated() ){
+	    	$current_user = $util->getCurrentUser();
+	    	
+	    	$repository = $this->getDoctrine()->getRepository('TablozUserBundle:UserFollow');
+	    	 
+	    	$query = $repository->createQueryBuilder('f')
+	    	->select('count(f.id)')
+	    	->where('f.follower = :follower')->setParameter('follower', $current_user)
+	    	->andwhere('f.followee = :followee')->setParameter('followee', $user)
+	    	->getQuery();
+	    	 
+	    	$following = $query->getSingleScalarResult();
+    	}
+    	
     	return array(
-    			'user' => $user
+    			'user' => $user,
+    			'following' => ($following == 0)?false:true
     			);
     }
+	
+	/**
+	 * @Route("/follow_user/{id}", name="follow_user")
+     * @ParamConverter("user", class="TablozUserBundle:User")
+	 */
+	public function followUserAction(User $user) {
+    	$util = $this->container->get('util');
+    	if( !$util->isAuthenticated() ){
+    		throw new AccessDeniedException();
+    	}
+    	$current_user = $util->getCurrentUser();
+
+    	$user_follow = new UserFollow();
+    	$user_follow->setFollowee($user);
+    	$user_follow->setFollower($current_user);
+    	
+    	$em = $this->getDoctrine()->getManager();
+    	$em->persist($user_follow);
+    	$em->flush();
+    	
+    	return new Response('success');
+	}
+	
+	/**
+	 * @Route("/unfollow_user/{id}", name="unfollow_user")
+     * @ParamConverter("user", class="TablozUserBundle:User")
+	 */
+	public function unfollowUserAction(User $user) {
+    	$util = $this->container->get('util');
+    	if( !$util->isAuthenticated() ){
+    		throw new AccessDeniedException();
+    	}
+    	$current_user = $util->getCurrentUser();
+    	
+    	$repository = $this->getDoctrine()->getRepository('TablozUserBundle:UserFollow');
+    	$user_follow = $repository->findOneBy(array('followee' => $user, 'follower' => $current_user));
+    	
+    	$em = $this->getDoctrine()->getManager();
+    	$em->remove($user_follow);
+    	$em->flush();
+		
+    	return new Response('success');
+	}
 
     /**
      * @Route("/people/{username}/tablos", name="user_portfolio_tablos")

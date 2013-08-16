@@ -1,0 +1,34 @@
+#tablos_filter_container {
+	height: 67px;
+}
+
+.tablos_filter {
+	background: rgba(21, 21, 21, 0.95);
+}
+
+.tablos_filter_bar {
+	position: fixed;
+	z-index: 40;
+	top: 0;
+	right: 0;
+	width: 100%;
+	padding-top: 100px;
+	box-shadow: 0 20px 20px 0 rgba(16, 16, 16, 0.8);
+	-webkit-box-shadow: 0 20px 20px 0 rgba(16, 16, 16, 0.8);
+}
+
+.tablos_filter form {
+	padding: 15px 0;
+}
+
+.tablos_filter_bar form {
+	padding: 15px 10%;
+}
+
+.tablos_filter_select_container {
+	margin-right: 50px;
+}
+
+.tablos_container {
+	margin-top: 50px;
+}

@@ -1,0 +1,60 @@
+{% extends '::base.html.twig' %}
+
+
+{% block stylesheets %}
+	{{ parent() }}
+	{% stylesheets filter='cssrewrite' 
+       				'bundles/tablozmain/css/tablos.css' %}
+		<link rel="stylesheet" href="{{ asset_url }}" />
+	{% endstylesheets %}
+{% endblock %}
+
+{% block content %}
+
+	<script type="text/javascript">
+	
+		jQuery(document).ready(function(){
+	
+			jQuery(".tablos_category_select").on("change", function(){
+				jQuery(this).closest("form").submit();	
+			});
+
+			var filter_container_top = jQuery('#tablos_filter_container').offset().top - 100;
+			 
+			jQuery(window).scroll(function(){
+				if( jQuery(window).scrollTop() > filter_container_top ) {
+					jQuery('.tablos_filter').addClass('tablos_filter_bar');
+					
+				} else {
+					//jQuery('#portfolio_links_container').css({position: 'static', top: '0px'});
+					jQuery('.tablos_filter').removeClass('tablos_filter_bar');
+					
+				}
+			});
+	
+		});
+	</script>
+	
+	<div>
+		<h1>{{ 'آثــــــــار' }}</h1>
+		<div id="tablos_filter_container">
+			<div class="tablos_filter">
+				<form action="">
+					<span class="tablos_filter_select_container">
+						<select name="category" class="tablos_category_select">
+							<option value="all">{{ 'همه دسته بندی ها' }}</option>
+							{% for category in categories %}
+								<option value="{{ category.descriptor }}" {{ (app.request.get('category') == category.descriptor) ? ' selected="selected" ' : '' }}>{{ category.title }}</option>
+							{% endfor %}
+						</select>
+					</span>
+				</form>
+			</div>
+		</div>
+		<div class="tablos_container">
+			{% for tablo in tablos %}
+				{{ include('TablozMainBundle:Default:tablo_medium.html.twig', { 'tablo': tablo }) }}
+			{% endfor %}
+		</div>
+	</div>
+{% endblock %}

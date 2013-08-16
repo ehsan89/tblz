@@ -42,7 +42,7 @@ class TabloProvider extends ImageProvider
 
         if ($media->getBinaryContent()) {
             $image = $this->imagineAdapter->open($media->getBinaryContent()->getPathname());
-            $watermark_path = $this->container->get('kernel')->getRootDir().'/../..'.$this->container->get('templating.helper.assets')->getUrl('public/images/watermark.png');
+            $watermark_path = $this->container->get('kernel')->getRootDir().'/../../..'.$this->container->get('templating.helper.assets')->getUrl('public/images/watermark.png');
             $watermark = $this->imagineAdapter->open($watermark_path);
             $image->paste($watermark, new Point(0, 0));
             $size  = $image->getSize();
@@ -96,7 +96,7 @@ class TabloProvider extends ImageProvider
     			if ($box->getHeight() > 500 || $box->getWidth() > 500){
 
     				// adding watermark
-    				$watermark_path = $this->container->get('kernel')->getRootDir().'/../..'.$this->container->get('templating.helper.assets')->getUrl('public/images/watermark.png');
+    				$watermark_path = $this->container->get('kernel')->getRootDir().'/../../..'.$this->container->get('templating.helper.assets')->getUrl('public/images/watermark.png');
     				$watermark = $this->imagineAdapter->open($watermark_path);
     				$image->paste($watermark, new Point(50, 50));
     				 

@@ -1,0 +1,11 @@
+<div class="tablo_medium transition3">
+	<a href="{{ path('view_tablo', {'id': tablo.id}) }}">
+		<div class="tablo_medium_image_container">
+			<img class="tablo_medium_image" alt="{{ tablo.title ~ ' - ' ~ tablo.user.fullname }}" src="{{ media_asset(tablo.image, 'medium') }}" title="{{ '© ' ~ tablo.user.fullname }}">
+			<div class="tablo_medium_overlay" title="{{ ' © ' ~ tablo.user.fullname }}">
+				<div class="tablo_medium_title">{{ tablo.title }}</div>
+				<div class="tablo_medium_copyright">{{ ' © ' ~ tablo.user.fullname }}</div>
+			</div>
+		</div>
+	</a>
+</div>

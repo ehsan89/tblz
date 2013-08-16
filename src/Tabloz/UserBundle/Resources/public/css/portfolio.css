@@ -12,9 +12,12 @@
 
 #portfolio_bar {
 	position: fixed;
+	z-index: 40;
 	top: 0;
 	width: 100%;
 	padding-top: 100px;
+	box-shadow: 0 20px 20px 0 #151515;
+	-webkit-box-shadow: 0 20px 20px 0 #151515;
 }
 
 .portfolio_bar_hidden {
@@ -56,3 +59,19 @@
 #portfolio_link_contents {
     background-color: #151515;
 }
+
+.user_following {
+	display: inline-block;
+	height: 25px;
+	border: 1px solid #999;
+	font-family: "TablozLight";
+    font-size: 14px;
+    padding: 4px 10px;
+    vertical-align: middle;
+}
+
+.user_follow_container, .user_unfollow_container {
+	display: inline-block;
+}
+
+
