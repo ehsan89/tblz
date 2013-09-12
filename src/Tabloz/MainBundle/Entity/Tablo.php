@@ -102,6 +102,11 @@ class Tablo
      **/
     protected $favorite_users;
     
+    /**
+     * @ORM\OneToMany(targetEntity="Tabloz\MainBundle\Entity\TabloTellFriend", mappedBy="tablo")
+     */
+    protected $tell_firends;
+    
 
     public function __construct()
     {
@@ -497,5 +502,38 @@ class Tablo
     public function getFavoriteCount()
     {
     	return count($this->favorite_users);
+    }
+
+    /**
+     * Add tell_firends
+     *
+     * @param \Tabloz\MainBundle\Entity\TabloTellFriend $tellFirends
+     * @return Tablo
+     */
+    public function addTellFirend(\Tabloz\MainBundle\Entity\TabloTellFriend $tellFirends)
+    {
+        $this->tell_firends[] = $tellFirends;
+    
+        return $this;
+    }
+
+    /**
+     * Remove tell_firends
+     *
+     * @param \Tabloz\MainBundle\Entity\TabloTellFriend $tellFirends
+     */
+    public function removeTellFirend(\Tabloz\MainBundle\Entity\TabloTellFriend $tellFirends)
+    {
+        $this->tell_firends->removeElement($tellFirends);
+    }
+
+    /**
+     * Get tell_firends
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getTellFirends()
+    {
+        return $this->tell_firends;
     }
 }

@@ -28,24 +28,7 @@ file that was distributed with this source code.
 			
 
 		});
-
-		jQuery(".user_follow_button").on("click", function(){
-			jQuery.post("{{ path('follow_user', {'id': user.id}) }}", function(){
-				jQuery(".user_follow_container").hide();
-				jQuery(".user_unfollow_container").fadeIn();
-			});
-		});
-
-		jQuery(".user_unfollow_button").on("click", function(){
-			jQuery.post("{{ path('unfollow_user', {'id': user.id}) }}", function(){
-				jQuery(".user_unfollow_container").hide();
-				jQuery(".user_follow_container").fadeIn();
-			});
-		});
-
-		jQuery(".user_unfollow_container").on("mouseenter", function(){ jQuery(this).find(".user_following").hide(); jQuery(this).find(".user_unfollow_button").show(); });
-		jQuery(".user_unfollow_container").on("mouseleave", function(){ jQuery(this).find(".user_unfollow_button").hide(); jQuery(this).find(".user_following").fadeIn(); });
-			
+		
 		var links_top = jQuery('#portfolio_links_container').offset().top - 170;
 		 
 		jQuery(window).scroll(function(){
@@ -85,12 +68,7 @@ file that was distributed with this source code.
 		<div>
 			<div style="margin-bottom: 50px;">
 				<h1 style="display: inline-block; margin-left: 50px;">{{ user.fullname }}</h1>
-				{% if app.user %}
-					<span style="display: inline-block;">
-						<span class="user_follow_container" style="{{ following ? 'display:none;' : '' }}"><input class="user_follow_button" type="button" value="{{ 'دنبال کن' }}"></span>
-						<span class="user_unfollow_container" style="{{ following ? '' : 'display:none;' }} width: 120px;"><span class="user_following">{{ 'در حال دنبال کردن' }}</span><input class="user_unfollow_button grey_button" type="button" value="{{ 'دنبال نکن' }}" style="display: none;"></span>
-					</span>
-				{% endif %}
+				{{ render(controller('TablozUserBundle:Profile:userFollow', {'user': user})) }}
 			</div>
 			<div>{{ user.biography|nl2br }}</div>
 		</div>
@@ -110,12 +88,7 @@ file that was distributed with this source code.
 			</div>
 			<div style="height: 50px;">
 				<h1 style="display: inline-block; margin: 0 0 0 40px; font-size: 40px;">{{ user.fullname }}</h1>
-				{% if app.user %}
-					<span style="display: inline-block;">
-						<span class="user_follow_container" style="{{ following ? 'display:none;' : '' }}"><input class="user_follow_button" type="button" value="{{ 'دنبال کن' }}"></span>
-						<span class="user_unfollow_container" style="{{ following ? '' : 'display:none;' }} width: 120px;"><span class="user_following">{{ 'در حال دنبال کردن' }}</span><input class="user_unfollow_button grey_button" type="button" value="{{ 'دنبال نکن' }}" style="display: none;"></span>
-					</span>
-				{% endif %}
+				{{ render(controller('TablozUserBundle:Profile:userFollow', {'user': user})) }}
 			</div>
 			<div class="clearfix"></div>
 		</div>

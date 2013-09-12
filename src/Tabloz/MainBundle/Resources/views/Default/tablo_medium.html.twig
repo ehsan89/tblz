@@ -1,11 +1,17 @@
 <div class="tablo_medium transition3">
-	<a href="{{ path('view_tablo', {'id': tablo.id}) }}">
-		<div class="tablo_medium_image_container">
-			<img class="tablo_medium_image" alt="{{ tablo.title ~ ' - ' ~ tablo.user.fullname }}" src="{{ media_asset(tablo.image, 'medium') }}" title="{{ '© ' ~ tablo.user.fullname }}">
-			<div class="tablo_medium_overlay" title="{{ ' © ' ~ tablo.user.fullname }}">
-				<div class="tablo_medium_title">{{ tablo.title }}</div>
-				<div class="tablo_medium_copyright">{{ ' © ' ~ tablo.user.fullname }}</div>
-			</div>
-		</div>
-	</a>
+	<div class="tablo_medium_image_container">
+		<img class="tablo_medium_image" alt="{{ tablo.title ~ ' - ' ~ tablo.user.fullname }}" src="{{ media_asset(tablo.image, 'medium') }}" title="{{ '© ' ~ tablo.user.fullname }}">
+	</div>
+	<div class="tablo_medium_overlay" title="{{ '© ' ~ tablo.user.fullname }}">
+		<a href="{{ path('view_tablo', {'id': tablo.id}) }}" style="display: block; width: 100%; height: 100%;">
+		</a>
+	</div>
+	<div class="tablo_medium_overlay_title" title="{{ '© ' ~ tablo.user.fullname }}">
+		<a href="{{ path('view_tablo', {'id': tablo.id}) }}" class="tablo_medium_title_link">
+			{{ tablo.title }}
+		</a>
+		<a href="{{ path('user_portfolio', {'username': tablo.user.username}) }}" class="tablo_medium_copyright_link transition2" >
+			{{ ' © ' ~ tablo.user.fullname }}
+		</a>
+	</div>
 </div>

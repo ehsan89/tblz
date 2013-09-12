@@ -2,8 +2,10 @@
 <html>
     <head>
         <meta charset="UTF-8" />
-        <title>{% block title %}tabloz.com | نمایش و فروش آثار عکاسان {% endblock %}</title>
+        <title>{% block title %}{{ 'tabloz.com | نمایش و فروش آثار عکاسان' }}{% endblock %}</title>
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+        {% block meta_tags %}
+        {% endblock %}
         {% block stylesheets %}
 	        {% stylesheets filter='cssrewrite' 
 	        				'public/css/main.css' 

@@ -60,18 +60,4 @@
     background-color: #151515;
 }
 
-.user_following {
-	display: inline-block;
-	height: 25px;
-	border: 1px solid #999;
-	font-family: "TablozLight";
-    font-size: 14px;
-    padding: 4px 10px;
-    vertical-align: middle;
-}
-
-.user_follow_container, .user_unfollow_container {
-	display: inline-block;
-}
-
 

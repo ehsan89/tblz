@@ -1,0 +1,40 @@
+{# user#}
+{# following#}
+
+{% if app.user %}
+
+	<script type="text/javascript">
+	
+		jQuery(document).ready(function(){
+	
+			jQuery(".user_follow_button").on("click", function(){
+				jQuery.post("{{ path('follow_user', {'id': user.id}) }}", function(){
+					jQuery(".user_follow_container").hide();
+					jQuery(".user_unfollow_container").fadeIn();
+				});
+			});
+	
+			jQuery(".user_unfollow_button").on("click", function(){
+				jQuery.post("{{ path('unfollow_user', {'id': user.id}) }}", function(){
+					jQuery(".user_unfollow_container").hide();
+					jQuery(".user_follow_container").fadeIn();
+				});
+			});
+	
+			jQuery(".user_unfollow_container").on("mouseover", function(){ jQuery(this).find(".user_following").hide(); jQuery(this).find(".user_unfollow_button").show(); });
+			jQuery(".user_unfollow_container").on("mouseleave", function(){ jQuery(this).find(".user_unfollow_button").hide(); jQuery(this).find(".user_following").fadeIn(); });
+	
+		});
+	</script>
+
+	<span style="display: inline-block;">
+		<span class="user_follow_container" style="{{ following ? 'display:none;' : '' }}">
+			<input class="user_follow_button" type="button" value="{{ 'دنبال کن' }}">
+		</span>
+		<span class="user_unfollow_container" style="{{ following ? '' : 'display:none;' }} width: 120px;">
+			<span class="user_following">{{ 'در حال دنبال کردن' }}</span>
+			<input class="user_unfollow_button grey_button" type="button" value="{{ 'دنبال نکن' }}" style="display: none;">
+		</span>
+	</span>
+
+{% endif %}

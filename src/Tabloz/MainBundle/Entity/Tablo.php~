@@ -9,7 +9,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 /**
  * @ORM\Entity
  * @ORM\Table(name="tablo")
- * @ORM\Entity(repositoryClass="Tabloz\MainBundle\Entity\TabloRepository")
  */
 class Tablo
 {
@@ -24,7 +23,7 @@ class Tablo
      * @ORM\Column(type="string", length=1000)
      *
      * @Assert\NotBlank(message="عنوان اثر را وارد کنید.")
-     * @Assert\MaxLength(limit="1000", message="عنوان طولانی است.")
+     * @Assert\Length(max="1000", maxMessage="عنوان طولانی است.")
      */
     private $title;
     
@@ -61,6 +60,11 @@ class Tablo
     private $enable = true;
     
     /**
+     * @ORM\Column(type="boolean")
+     */
+    private $private = true;
+    
+    /**
      * @ORM\Column(type="integer")
      */
     private $view_count = 0;
@@ -91,6 +95,11 @@ class Tablo
      * @ORM\OneToMany(targetEntity="Tabloz\MainBundle\Entity\TabloComment", mappedBy="tablo")
      */
     protected $comments;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Tabloz\MainBundle\Entity\TabloTellFriend", mappedBy="tablo")
+     */
+    protected $tell_firends;
 
     /**
      * @ORM\ManyToMany(targetEntity="Tabloz\UserBundle\Entity\User", inversedBy="favorite_tablos")
@@ -102,6 +111,13 @@ class Tablo
     public function __construct()
     {
         // your own logic
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function __toString(){
+    	return $this->title.'';
     }
 
 
@@ -205,6 +221,29 @@ class Tablo
     public function getEnable()
     {
         return $this->enable;
+    }
+
+    /**
+     * Set private
+     *
+     * @param boolean $private
+     * @return Tablo
+     */
+    public function setPrivate($private)
+    {
+        $this->private = $private;
+
+        return $this;
+    }
+
+    /**
+     * Get private
+     *
+     * @return boolean 
+     */
+    public function getPrivate()
+    {
+        return $this->private;
     }
 
     /**
@@ -455,5 +494,13 @@ class Tablo
     public function getFavoriteUsers()
     {
         return $this->favorite_users;
+    }
+    
+    /**
+     * Get the count of the favorite users
+     */
+    public function getFavoriteCount()
+    {
+    	return count($this->favorite_users);
     }
 }

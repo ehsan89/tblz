@@ -12,19 +12,21 @@
 
     	jQuery("select").selectBoxIt({ autoWidth: false, showEffect: "fadeIn", showEffectSpeed: "fast", hideEffect: "fadeOut", hideEffectSpeed: "fast" });
 
+		jQuery(".top_tooltip").tooltip({
+            position: { my: 'center bottom', at: 'center top-10', collision : 'none' },
+            tooltipClass: 'top'
+        });
 		jQuery(".bottom_tooltip").tooltip({
-            position: {
-                my: "center top",
-                at: "center bottom+10",
-                using: function( position, feedback ) {
-                    jQuery( this ).css( position );
-                    jQuery( "<div>" )
-                        .addClass( "arrow" )
-                        .addClass( feedback.vertical )
-                        .addClass( feedback.horizontal )
-                        .appendTo( this );
-                }
-            }
+            position: { my: 'center top', at: 'center bottom+10', collision : 'none' },
+            tooltipClass: 'bottom'
+        });
+		jQuery(".right_tooltip").tooltip({
+            position: { my: 'left center', at: 'right+10 center', collision : 'none' },
+            tooltipClass: 'right'
+        });
+		jQuery(".left_tooltip").tooltip({
+            position: { my: 'right center', at: 'left-10 center', collision : 'none' },
+            tooltipClass: 'left'
         });
         
 		jQuery( "#inline_login_form_container" ).dialog({

@@ -1,5 +1,13 @@
 {% extends '::base.html.twig' %}
 
+{% block title %}{{ 'tabloz.com | ' ~ tablo.title ~ ' از ' ~ tablo.user.fullname }}{% endblock %}
+
+{% block meta_tags %}
+	<meta property="og:title" content="{{ tablo.title ~ ' از ' ~ tablo.user.fullname }}" />
+	<meta property="og:description" content="{{ tablo.description|truncate(200) }}" />
+	<meta property="og:url" content="{{ url('view_tablo', {'id': tablo.id}) }}" />
+	<meta property="og:image" content="{{ app.request.getBaseURL() ~ media_asset(tablo.image, 'square-thumb') }}" />
+{% endblock %}
 
 {% block stylesheets %}
 	{{ parent() }}
@@ -9,6 +17,314 @@
 	{% endstylesheets %}
 {% endblock %}
 
-{% block content %}
-	<h1>hello</h1>
+{% block javascripts %}
+	{{ parent() }}
+	{% javascripts 'bundles/tablozmain/js/fullscreen.js' %}
+		<script type="text/javascript" src="{{ asset_url }}"></script>
+	{% endjavascripts %}
+{% endblock %}
+
+
+{% block content_section %}
+
+
+
+<script type="text/javascript">
+
+	function styleFullscreen(){
+		if (fullScreenApi.isFullScreen()) {
+			jQuery('.tablo_fullscreen').hide();
+			jQuery('.tablo_fullscreen_collapse').show();
+		} else {
+			jQuery('.tablo_fullscreen').show();
+			jQuery('.tablo_fullscreen_collapse').hide();
+		}
+	}
+	
+	jQuery(document).ready(function(){
+
+		var fullscreen_element = jQuery('#main_tablo_container')[0];
+		var fullscreen_button = jQuery('.tablo_fullscreen')[0];
+		var fullscreen_collapse_button = jQuery('.tablo_fullscreen_collapse')[0];
+		if (fullScreenApi.supportsFullScreen) {
+			fullscreen_button.addEventListener('click', function() {
+		        fullScreenApi.requestFullScreen(fullscreen_element);
+		    }, true);
+			fullscreen_collapse_button.addEventListener('click', function() {
+		        fullScreenApi.cancelFullScreen(fullscreen_element);
+		    }, true);
+		}
+
+		fullscreen_element.addEventListener(fullScreenApi.fullScreenEventName, function() {
+			styleFullscreen();
+		}, true);
+
+		document.addEventListener(fullScreenApi.fullScreenEventName, function() {
+			styleFullscreen();
+		}, true);
+		
+		
+		jQuery(".user_follow_button").on("click", function(){
+			jQuery.post("{{ path('follow_user', {'id': tablo.user.id}) }}", function(){
+				jQuery(".user_follow_container").hide();
+				jQuery(".user_unfollow_container").fadeIn();
+			});
+		});
+
+		jQuery(".user_unfollow_button").on("click", function(){
+			jQuery.post("{{ path('unfollow_user', {'id': tablo.user.id}) }}", function(){
+				jQuery(".user_unfollow_container").hide();
+				jQuery(".user_follow_container").fadeIn();
+			});
+		});
+
+		jQuery(".user_unfollow_container").on("mouseenter", function(){ jQuery(this).find(".user_following").hide(); jQuery(this).find(".user_unfollow_button").show(); });
+		jQuery(".user_unfollow_container").on("mouseleave", function(){ jQuery(this).find(".user_unfollow_button").hide(); jQuery(this).find(".user_following").fadeIn(); });
+
+		jQuery(".tablo_favorite").on("click", function(){
+			jQuery(".tablo_favorite").addClass("tablo_favorite_waiting");
+			jQuery.post("{{ path('unfavorite_tablo', {'id': tablo.id}) }}", function(){
+				jQuery(".tablo_favorite").hide().removeClass("tablo_favorite_waiting");
+				jQuery(".tablo_not_favorite").show();
+			});
+		});
+
+		jQuery(".tablo_not_favorite").on("click", function(){
+			jQuery(".tablo_not_favorite").addClass("tablo_favorite_waiting");
+			jQuery.post("{{ path('favorite_tablo', {'id': tablo.id}) }}", function(){
+				jQuery(".tablo_not_favorite").hide().removeClass("tablo_favorite_waiting");
+				jQuery(".tablo_favorite").show();
+			});
+		});
+
+		var last_scroll_position = 0;
+		jQuery(window).scroll(function(){
+			jQuery('#fixed_side_tablo_container').fadeIn('slow');
+			var tablo_info_top = jQuery('#tablo_info_section').offset().top;
+			var tablo_comments_top = jQuery('#tablo_comments_section').offset().top;
+			var tablo_comments_bottom = tablo_comments_top + jQuery('#tablo_comments_section').outerHeight();
+			var document_height = jQuery(window).height();
+			var current_position = jQuery(window).scrollTop();
+			if( current_position < (tablo_info_top - 100) ) {
+				jQuery('#tablo_sidebar_main_link').addClass('tablo_sidebar_link_active'); 
+				jQuery('#tablo_sidebar_main_link').siblings('.tablo_sidebar_link').removeClass('tablo_sidebar_link_active'); 
+				// setting side tablo containers
+				jQuery('#fixed_side_tablo_container').css({
+					top: tablo_info_top - current_position,
+					bottom: current_position - tablo_info_top + 100
+				    });
+				jQuery('#tablo_cart_wall').hide();
+			} else if( current_position < (tablo_comments_top - 100) ) {
+				jQuery('#tablo_sidebar_info_link').addClass('tablo_sidebar_link_active'); 
+				jQuery('#tablo_sidebar_info_link').siblings('.tablo_sidebar_link').removeClass('tablo_sidebar_link_active'); 
+				jQuery('#fixed_side_tablo_container').show();
+				// setting side tablo containers
+				jQuery('#fixed_side_tablo_container').css({
+					top: 100,
+					bottom: 0
+				    });
+				jQuery('#tablo_cart_wall').hide();
+			} else if( current_position < (tablo_comments_bottom - 100) ) {
+				jQuery('#tablo_sidebar_comments_link').addClass('tablo_sidebar_link_active'); 
+				jQuery('#tablo_sidebar_comments_link').siblings('.tablo_sidebar_link').removeClass('tablo_sidebar_link_active'); 
+				// setting side tablo containers
+				if ( current_position > (tablo_comments_bottom - document_height)) {
+					jQuery('#fixed_side_tablo_container').css({
+						top: tablo_comments_bottom - current_position - document_height + 100,
+						bottom: current_position + document_height - tablo_comments_bottom 
+					    });
+				}
+				jQuery('#tablo_cart_wall').show();
+			} else {
+				jQuery('#tablo_sidebar_cart_link').addClass('tablo_sidebar_link_active'); 
+				jQuery('#tablo_sidebar_cart_link').siblings('.tablo_sidebar_link').removeClass('tablo_sidebar_link_active');
+				// setting side tablo containers
+				jQuery('#fixed_side_tablo_container').css({
+					top: 100 - document_height,
+					bottom: document_height
+				    });
+				jQuery('#tablo_cart_wall').show();
+			}
+			last_scroll_position = current_position;
+		});
+
+		var scrolling = false;
+		jQuery(window).on('DOMMouseScroll mousewheel', function (e) {
+			var tablo_info_top = jQuery('#tablo_info_section').offset().top;
+			var tablo_comments_top = jQuery('#tablo_comments_section').offset().top;
+			var tablo_comments_bottom = tablo_comments_top + jQuery('#tablo_comments_section').outerHeight();
+			var document_height = jQuery(window).height();
+			var current_position = jQuery(window).scrollTop();
+			if(e.originalEvent.detail > 0 || e.originalEvent.wheelDelta < 0) { //alternative options for wheelData: wheelDeltaX & wheelDeltaY
+				//scroll down
+				//console.log('Mouse Down');
+				if (!scrolling) {
+					if( current_position < tablo_info_top-100) {
+						scrolling = true;
+						jQuery(window).scrollTo(jQuery('#tablo_info_section'), 500, { offset: {top:-100}, onAfter:function(){ scrolling = false; } });
+					} else if( current_position < tablo_comments_top ) {
+					} else if( current_position < (tablo_comments_top - 100) ) {
+					} else if( current_position < (tablo_comments_bottom - document_height + 200) ) {
+						scrolling = true;
+						jQuery(window).scrollTo(jQuery('#tablo_cart_section'), 500, { onAfter:function(){ scrolling = false; } });
+					} else {
+					}
+				}
+			} else {
+				//scroll up
+				//console.log('Mouse Up');
+				if (!scrolling) {
+					if( current_position < (tablo_info_top - 100)) {
+						scrolling = true;
+						jQuery(window).scrollTo(0, 500, { onAfter:function(){ scrolling = false; } });
+					} else if( current_position < tablo_comments_top ) {
+					} else if( current_position < (tablo_comments_top - 100) ) {
+					} else if( current_position < (tablo_comments_bottom - 100) ) {
+					} else {
+						scrolling = true;
+						jQuery(window).scrollTo(jQuery('#tablo_cart_section'), 500, { offset: {top:0-document_height}, onAfter:function(){ scrolling = false; } });
+					}
+				}
+			}
+			//prevent page fom scrolling
+			//return false;
+		});
+
+		jQuery("#tablo_sidebar_main_link").on("click", function(){
+			jQuery(this).tooltip( "close" );
+			jQuery(window).scrollTo(0, 500);
+		});
+		jQuery("#tablo_sidebar_info_link").on("click", function(){
+			jQuery(this).tooltip( "close" );
+			jQuery(window).scrollTo(jQuery('#tablo_info_section'), 500, {offset: {top:-100}});
+		});
+		jQuery("#tablo_sidebar_comments_link").on("click", function(){
+			jQuery(this).tooltip( "close" );
+			jQuery(window).scrollTo(jQuery('#tablo_comments_section'), 500, {offset: {top:-100}});
+		});
+		jQuery("#tablo_sidebar_cart_link").on("click", function(){
+			jQuery(this).tooltip( "close" );
+			jQuery(window).scrollTo(jQuery('#tablo_cart_section'), 500, {offset: {top:-100}});
+		});
+
+		jQuery(".tablo_mail_share").on("click", function() {
+			jQuery("#tablo_tell_friend_container #tablo_tell_friend_form_error_container").hide();
+			jQuery("#tablo_tell_friend").dialog("open");
+
+		});
+	});
+</script>
+	<section id="main">
+		<nav id="tablo_sidebar" class="transition2">
+			<div id="tablo_sidebar_main_link" class="tablo_sidebar_link tablo_sidebar_link_active left_tooltip" title="{{ 'نمایش اثر' }}"></div>
+			<div id="tablo_sidebar_info_link" class="tablo_sidebar_link left_tooltip" title="{{ 'مشخصات اثر' }}"></div>
+			<div id="tablo_sidebar_comments_link" class="tablo_sidebar_link left_tooltip" title="{{ 'نظرات' }}"></div>
+			<div id="tablo_sidebar_cart_link" class="tablo_sidebar_link left_tooltip" title="{{ 'افرودن به سبد خرید' }}"></div>
+		</nav>
+		<div id="fixed_side_tablo_container" class="side_tablo_container" style="display: none;">
+			<div class="info_tablo_image_container" style="background-image: url('{{ media_asset(tablo.image, 'x_large') }}');"></div>
+			<div class="info_tablo_bottom_bar" style="padding: 0 50px;">
+				{% if app.user %}
+					<div class="tablo_favorite_container" style="float: left;">
+						<div style="{{ is_fav_user ? '' : 'display: none;' }}" class="tablo_favorite transition2 top_tooltip" title="{{ 'حذف از علاقه مندی ها' }}" ></div>
+						<div style="{{ is_fav_user ? 'display: none;' : '' }}" class="tablo_not_favorite transition2 top_tooltip" title="{{ 'افزودن به علاقه مندی ها' }}" ></div>
+					</div>
+				{% endif %}
+				<div class="tablo_share_container">
+					<div class="tablo_share transition2"></div>
+					<div class="tablo_share_buttons transition2">
+						<div class="tablo_mail_share tablo_share_button top_tooltip" title="{{ 'به اشتراک گذاری با ایمیل' }}"></div>
+						<div class="tablo_facebook_share tablo_share_button top_tooltip" title="{{ 'به اشتراک گذاری در فیسبوک' }}"><a href="https://www.facebook.com/sharer/sharer.php?u={{ url('view_tablo', {'id': tablo.id})|url_encode }}" target="_blank"></a></div>
+						<div class="tablo_twitter_share tablo_share_button top_tooltip" title="{{ 'به اشتراک گذاری در توییتر' }}"><a href="http://twitter.com/home?status={{ (tablo.title ~ ' از ' ~ tablo.user.fullname ~ '\n' ~ 'در ' ~ url('view_tablo', {'id': tablo.id}))|url_encode }}" target="_blank"></a></div>
+						<div class="tablo_pinterest_share tablo_share_button top_tooltip" title="{{ 'به اشتراک گذاری در پینترست' }}"><a href="http://pinterest.com/pin/create/link/?url={{ url('view_tablo', {'id': tablo.id})|url_encode }}&media={{ app.request.uriForPath(media_asset(tablo.user.image, 'large'))|url_encode }}&description={{ (tablo.title ~ ' از ' ~ tablo.user.fullname)|url_encode }}" target="_blank"></a></div>
+					</div>
+					<div style="display: none;">{{ render(controller('TablozMainBundle:Default:tellFriend', {'tablo': tablo})) }}</div>
+				</div>
+			</div>
+		</div>
+		<div id="main_tablo_container">
+			<div id="main_tablo_image_container" style="background-image: url('{{ media_asset(tablo.image, 'x_large') }}');">
+				
+			</div>
+			<div id="main_tablo_info">
+				<div id="main_tablo_info_user_title">
+					<img alt="{{ tablo.user.fullname }}" src="{{ media_asset(tablo.user.image, 'medium') }}" style="height: 50px; margin: 20px 50px 20px 20px; vertical-align: middle;">
+					<div style="display: inline-block; vertical-align: middle;">
+						<h4>{{ tablo.title }}</h4>
+						<a href="{{ path('user_portfolio', {'username': tablo.user.username}) }}" class="tablo_info_user_link">{{ tablo.user.fullname }}</a>
+					</div>
+				</div>
+				{% if app.user %}
+					<div class="tablo_favorite_container">
+						<div style="{{ is_fav_user ? '' : 'display: none;' }}" class="tablo_favorite transition2 top_tooltip" title="{{ 'حذف از علاقه مندی ها' }}" ></div>
+						<div style="{{ is_fav_user ? 'display: none;' : '' }}" class="tablo_not_favorite transition2 top_tooltip" title="{{ 'افزودن به علاقه مندی ها' }}" ></div>
+					</div>
+				{% endif %}
+				<div class="tablo_fullscreen_container" style="float: left;">
+					<div class="tablo_fullscreen transition2 top_tooltip" title="{{ 'نمایش تمام صفحه' }}"></div>
+					<div class="tablo_fullscreen_collapse transition2 top_tooltip" title="{{ 'نمایش عادی' }}" style="display: none;"></div>
+				</div>
+				<div class="tablo_share_container">
+					<div class="tablo_share transition2"></div>
+					<div class="tablo_share_buttons transition2">
+						<div class="tablo_mail_share tablo_share_button top_tooltip" title="{{ 'به اشتراک گذاری با ایمیل' }}"></div>
+						<div class="tablo_facebook_share tablo_share_button top_tooltip" title="{{ 'به اشتراک گذاری در فیسبوک' }}"><a href="https://www.facebook.com/sharer/sharer.php?u={{ url('view_tablo', {'id': tablo.id})|url_encode }}" target="_blank"></a></div>
+						<div class="tablo_twitter_share tablo_share_button top_tooltip" title="{{ 'به اشتراک گذاری در توییتر' }}"><a href="http://twitter.com/home?status={{ (tablo.title ~ ' از ' ~ tablo.user.fullname ~ '\n' ~ 'در ' ~ url('view_tablo', {'id': tablo.id}))|url_encode }}" target="_blank"></a></div>
+						<div class="tablo_pinterest_share tablo_share_button top_tooltip" title="{{ 'به اشتراک گذاری در پینترست' }}"><a href="http://pinterest.com/pin/create/link/?url={{ url('view_tablo', {'id': tablo.id})|url_encode }}&media={{ app.request.uriForPath(media_asset(tablo.user.image, 'large'))|url_encode }}&description={{ (tablo.title ~ ' از ' ~ tablo.user.fullname)|url_encode }}" target="_blank"></a></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<section id="tablo_info_section">
+		<div id="tablo_info_section_content">
+			<table id="tablo_info_table">
+				<tr>
+					<td>
+						<div><img alt="{{ tablo.user.fullname }}" src="{{ media_asset(tablo.user.image, 'medium') }}"></div>
+					</td>
+					<td style="padding: 0 30px;">
+						<h2>{{ tablo.title }}</h2>
+						<h4 style="display: inline-block;"><a href="{{ path('user_portfolio', {'username': tablo.user.username}) }}" class="tablo_info_user_link">{{ tablo.user.fullname }}</a></h4>
+						{{ render(controller('TablozUserBundle:Profile:userFollow', {'user': tablo.user})) }}
+					</td>
+				</tr>
+				<tr>
+					<td class="tablo_info_table_right_col"><span class="tablo_category_title">{{ 'دسته بندی' ~ ' : ' }}</span></td>
+					<td class="tablo_info_table_left_col"><a href="{{ path('tablos', {'category': tablo.category.descriptor}) }}">{{ tablo.category.title }}</a></td>
+				</tr>
+				<tr>
+					<td class="tablo_info_table_right_col"><span class="tablo_description_title">{{ 'توضیحات' ~ ' : ' }}</span></td>
+					<td class="tablo_info_table_left_col">{{ tablo.description|nl2br }}</td>
+				</tr>
+			</table>
+			<div id="tablo_fav_users_container">
+				<div id="tablo_fav_users_title"><h3>{{ 'علاقه مندان' }}<span style="font-size: 20px; margin-right: 10px;"> ( <span id="tablo_fav_users_count">{{ tablo.favoriteUsers|length }}</span>{{ ' نفر ' }} ) </span></h3></div>
+				<div style="margin: 20px 10px;">
+					{% for u in tablo.favoriteUsers %}
+						<a href="{{ path('user_portfolio', {'username': u.username}) }}">
+							<img alt="{{ u.fullname }}" src="{{ media_asset(u.image, 'medium') }}" title="{{ u.fullname }}" class="fav_user_image transition2 top_tooltip">
+						</a>
+					{% endfor %}
+				</div>
+				
+			</div>
+		</div>
+	</section>
+	<section id="tablo_comments_section">
+		<div id="tablo_comments_section_content">
+			<div>{{ render(controller('TablozMainBundle:Default:tabloComment', { 'tablo': tablo })) }}</div>
+		</div>
+	</section>
+	<section id="tablo_cart_section" style="text-align: left;">
+		<div id="tablo_cart_wall" style="position: fixed; top: 0; right: 0; height: 100%; width: 100%; direction: ltr; display: none;">
+			<div style="height: 100%; position: relative; display: inline-block;">
+				<img src="{{ asset('bundles/tablozmain/images/minimal_bg_c2.jpg') }}" style="display: block; height: 100%;">
+				<div style=" position: absolute; top: 5%; left: 14%; margin-top: 100px; height: 33%; width: 34%; overflow: hidden; text-align: center;">
+					<img src="{{ media_asset(tablo.image, 'medium') }}" style="box-shadow: -2px 2px 5px 0px rgba(0, 0, 0, 0.7);">
+				</div>
+			</div>
+		</div>
+		
+	</section>
 {% endblock %}

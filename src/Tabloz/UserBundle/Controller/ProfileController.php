@@ -216,6 +216,15 @@ class ProfileController extends BaseController
      * @Template()
      */
     public function userPortfolioAction(User $user){
+    	return array(
+    			'user' => $user,
+    			);
+    }
+
+    /**
+     * @Template()
+     */
+    public function userFollowAction(User $user){
     	$following = 0;
     	$util = $this->container->get('util');
     	if( $util->isAuthenticated() ){

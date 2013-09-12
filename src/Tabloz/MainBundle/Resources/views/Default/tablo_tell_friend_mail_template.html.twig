@@ -1,0 +1,43 @@
+<style>
+	.tablo_medium_title_link {
+	    color: #DDD;
+	    display: block;
+	    font-family: tahoma;
+	    font-size: 20px;
+	    padding: 20px 10px 10px;
+	    text-shadow: 3px 3px 3px #000;
+	}
+	.tablo_medium_copyright_link {
+	    color: #888;
+	    padding-right: 10px;
+	    text-shadow: 3px 3px 3px #000;
+	}
+</style>
+	<div style="margin:30px 50px 50px;">
+		<table>
+			<tr>
+				<td style="vertical-align: top;">
+					<div class="tablo_tell_friend_image_container">
+						<div class="tablo_medium_image_container">
+							<a href="{{ url('view_tablo', {'id': tablo.id}) }}">
+								<img style="display: block;" alt="{{ tablo.title ~ ' - ' ~ tablo.user.fullname }}" src="{{ media_asset(tablo.image, 'medium') }}" title="{{ '© ' ~ tablo.user.fullname }}">
+							</a>
+						</div>
+						<a href="{{ url('view_tablo', {'id': tablo.id}) }}" class="tablo_medium_title_link">
+								{{ tablo.title }}
+						</a>
+						<a href="{{ url('user_portfolio', {'username': tablo.user.username}) }}" class="tablo_medium_copyright_link transition2" >
+							{{ ' © ' ~ tablo.user.fullname }}
+						</a>
+					</div>
+				</td>
+				<td style="vertical-align: top;">
+					<div style="margin-right: 100px;">
+						<div style="color: #AAA;">{{ tell_friend.fromName }} : </div>
+						<div>{{ tell_friend.message }} : </div>
+					</div>
+				</td>
+			</tr>
+		</table>
+	
+	</div>

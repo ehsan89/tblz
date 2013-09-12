@@ -75,7 +75,46 @@ class TabloProvider extends ImageProvider
     	$referenceFile = $this->getReferenceFile($media);
     	 
     	foreach ($this->getFormats() as $format => $settings) {
-    		if (substr($format, 0, strlen($media->getContext())) == $media->getContext() || $format === 'admin') {
+    		if ($format === 'square-thumb') { //saving the square format thumbnail of the image
+    			//resize(MediaInterface $media, File $in, File $out, $format, array $settings)
+    			if (!isset($settings['width'])) {
+    				throw new \RuntimeException(sprintf('Width parameter is missing in context "%s" for provider "%s"', $media->getContext(), $media->getProviderName()));
+    			}
+    			
+    			$image = $this->adapter->load($in->getContent());
+    			$size  = $media->getBox();
+    			
+    			if (null != $settings['height']) {
+    				if ($size->getHeight() > $size->getWidth()) {
+    					$higher = $size->getHeight();
+    					$lower  = $size->getWidth();
+    				} else {
+    					$higher = $size->getWidth();
+    					$lower  = $size->getHeight();
+    				}
+    			
+    				$crop = $higher - $lower;
+    			
+    				if ($crop > 0) {
+    					$point = $higher == $size->getHeight() ? new Point(0, 0) : new Point($crop / 2, 0);
+    					$image->crop($point, new Box($lower, $lower));
+    					$size = $image->getSize();
+    				}
+    			}
+    			
+    			$settings['height'] = (int) ($settings['width'] * $size->getHeight() / $size->getWidth());
+    			
+    			if ($settings['height'] < $size->getHeight() && $settings['width'] < $size->getWidth()) {
+    				$content = $image
+    				->thumbnail(new Box($settings['width'], $settings['height']), $this->mode)
+    				->get($format, array('quality' => $settings['quality']));
+    			} else {
+    				$content = $image->get($format, array('quality' => $settings['quality']));
+    			}
+    			
+    			$out->setContent($content, $this->metadata->get($media, $out->getName()));
+    			
+    		} elseif (substr($format, 0, strlen($media->getContext())) == $media->getContext() || $format === 'admin') {
     			
     			/*$this->getResizer()->resize(
     					$media,
@@ -85,7 +124,7 @@ class TabloProvider extends ImageProvider
     					$settings
     			);*/
     			
-//resize resize(MediaInterface $media, File $in, File $out, $format, array $settings)
+				//resize(MediaInterface $media, File $in, File $out, $format, array $settings)
     			if (!isset($settings['width'])) {
     				throw new \RuntimeException(sprintf('Width parameter is missing in context "%s" for provider "%s"', $media->getContext(), $media->getProviderName()));
     			}

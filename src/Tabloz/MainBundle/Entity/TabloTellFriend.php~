@@ -1,0 +1,70 @@
+<?php
+
+namespace Tabloz\MainBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Gedmo\Mapping\Annotation as Gedmo;
+
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="tablo_tell_friend")
+ */
+class TabloTellFriend
+{
+    /**
+     * @ORM\Id
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    protected $id;
+    
+    /**
+     * @ORM\Column(type="string", nullable=false)
+     */
+    private $from_name;
+    
+    /**
+     * @ORM\Column(type="string", nullable=false)
+     * @Assert\Email()
+     */
+    private $from_email;
+    
+    /**
+     * @ORM\Column(type="string", nullable=false)
+     * @Assert\Email()
+     */
+    private $to_email;
+    
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $message;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Tablo", inversedBy="tell_friends")
+     * @ORM\JoinColumn(name="tablo_id", referencedColumnName="id")
+     */
+    protected $tablo;
+    
+    /**
+     * @ORM\Column(type="datetime")
+     * @Gedmo\Timestampable(on="create")
+     */
+    private $created_at;
+
+    public function __construct()
+    {
+        // your own logic
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+}

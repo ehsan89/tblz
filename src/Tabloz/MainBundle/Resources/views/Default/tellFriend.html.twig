@@ -1,0 +1,78 @@
+<script type="text/javascript">
+	jQuery(document).ready(function(){
+		jQuery( "#tablo_tell_friend" ).dialog({
+			autoOpen: false,
+			modal: true,
+			width: "auto",
+			show: {
+		        effect: "drop",
+		        direction: "left"
+		      },
+            hide: "fade",
+            close: function() {
+                jQuery(".tablo_tell_friend_form_container .form_success_message, .tablo_tell_friend_form_container .form_error_container").remove();
+            }
+		});
+	});
+</script>
+<div id="tablo_tell_friend" title="{{ 'به اشتراک گذاری با ایمیل' }}">
+	<script type="text/javascript">
+		jQuery(document).ready(function(){
+			jQuery("#tablo_tell_friend_form").on('submit', function(){
+				jQuery("#tablo_tell_friend_submit").hide();
+				jQuery("#tablo_tell_friend_submit_spinner").fadeIn();
+				jQuery.post(jQuery("#tablo_tell_friend_form").attr("action"), jQuery("#tablo_tell_friend_form").serialize(),
+					function(response) {
+						jQuery("#tablo_tell_friend").html(jQuery(response).filter("#tablo_tell_friend").html());
+						jQuery(".tablo_tell_friend_form_container .form_error_container, .tablo_tell_friend_form_container .form_success_message").fadeIn('slow');
+					}
+				);
+				return false;
+			});
+		});
+	</script>
+	
+	<div id="tablo_tell_friend_container" class="transition2 clearfix" style="margin:30px 50px 50px;">
+		<table>
+			<tr>
+				<td style="vertical-align: top;">
+					<div class="tablo_tell_friend_image_container">
+						<div class="tablo_medium_image_container">
+							<img class="tablo_medium_image" alt="{{ tablo.title ~ ' - ' ~ tablo.user.fullname }}" src="{{ media_asset(tablo.image, 'medium') }}" title="{{ '© ' ~ tablo.user.fullname }}">
+						</div>
+						<a href="{{ path('view_tablo', {'id': tablo.id}) }}" class="tablo_medium_title_link" style="color: #DDD !important; padding: 20px 10px 10px;">
+								{{ tablo.title }}
+						</a>
+						<a href="{{ path('user_portfolio', {'username': tablo.user.username}) }}" class="tablo_medium_copyright_link transition2" style="color: #888 !important; padding-right: 10px;" >
+							{{ ' © ' ~ tablo.user.fullname }}
+						</a>
+					</div>
+				</td>
+				<td style="vertical-align: top;">
+					<div class="tablo_tell_friend_form_container" style="margin-right: 100px;">
+						{{ form_start(form, {'action': path('tablo_tell_friend', {'id': tablo.id}), 'method': 'POST', 'attr': {'id': 'tablo_tell_friend_form'}}) }}
+							{% if not form.vars.valid %}
+								<div id="tablo_tell_friend_form_error_container" class="form_error_container" style="display: none;">{{ form_errors(form) }}</div>
+							{% endif %}
+							{% if (success) %}
+								<div class="form_success_message" style="display: none;">{{ 'ایمیل با موفقیت ارسال شد.' }}</div>
+							{% endif %}
+							{% if (not app.user)  %}
+								{{ form_row(form.from_name) }}
+								{{ form_row(form.from_email) }}
+							{% endif %}
+							{{ form_row(form.to_email) }}
+							{{ form_row(form.message) }}
+							
+							<div id="tablo_tell_friend_submit_container" style="margin: 20px 0;">
+								<input id="tablo_tell_friend_submit" type="submit" value="{{ 'ارسال' }}"/>
+								<span id="tablo_tell_friend_submit_spinner" style="display: none; margin: 0 30px; line-height: 35px;"><img src="{{ asset('public/images/spinner24.gif') }}" style="vertical-align: middle;" /></span>
+							</div>
+						{{ form_end(form) }}
+					</div>
+				</td>
+			</tr>
+		</table>
+	
+	</div>
+</div>
