@@ -1,0 +1,4 @@
+factory_blog:
+    resource: "@FactoryBlogBundle/Controller"
+    type:     annotation
+    

@@ -1,0 +1,12 @@
+<h4 style="margin-bottom: 20px;">{{ 'پربازدیدترین پست ها' }}</h4>
+<div id="popular_blog_posts_wrapper">
+	{% for post in popular_posts %}
+		<div class="popular_blog_post_item transition2 clearfix">
+			<a href="{{ path('blog_post', {'id': post.id}) }}" class="popular_blog_post_image_link">
+				<div class="popular_blog_post_image" style="background-image: url('{{ media_asset(post.image, 'small') }}');" title="{{ post.title }}"></div>
+			</a>
+			<a class="popular_blog_post_title_link" href="{{ path('blog_post', {'id': post.id}) }}">{{ post.title | truncate(50) }}</a><br>
+			<span class="popular_blog_post_date">{{ post.createdAt | jalali_date_formatted }}</span>
+		</div>
+	{% endfor %}
+</div>

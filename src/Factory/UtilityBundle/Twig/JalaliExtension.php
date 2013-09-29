@@ -12,6 +12,10 @@ class JalaliExtension extends \Twig_Extension
 				'jalali_date_time' => new \Twig_Filter_Method($this, 'jalaliDateTimeFilter'),
 				'jalali_date_formatted' => new \Twig_Filter_Method($this, 'jalaliDateFormattedFilter'),
 				'jalali_date_time_formatted' => new \Twig_Filter_Method($this, 'jalaliDateTimeFormattedFilter'),
+				'jalali_day' => new \Twig_Filter_Method($this, 'jalaliDayFilter'),
+				'jalali_month' => new \Twig_Filter_Method($this, 'jalaliMonthFilter'),
+				'jalali_month_formatted' => new \Twig_Filter_Method($this, 'jalaliMonthFormattedFilter'),
+				'jalali_year' => new \Twig_Filter_Method($this, 'jalaliYearFilter'),
 		);
 	}
 
@@ -34,9 +38,9 @@ class JalaliExtension extends \Twig_Extension
 		$current_year = date('Y');
 		$timestamp_year = date('Y', $timestamp);
 		if ($timestamp_year == $current_year) {
-			return DateUtil::date("l F j", $timestamp);
+			return DateUtil::date("l j F", $timestamp);
 		} else {
-			return DateUtil::date("F j Y", $timestamp);
+			return DateUtil::date("j F Y", $timestamp);
 		}
 	}
 
@@ -51,6 +55,34 @@ class JalaliExtension extends \Twig_Extension
 		} else {
 			return DateUtil::date("j F Y، G:i", $timestamp);
 		}
+	}
+
+	public function jalaliDayFilter($gdate)
+	{
+		$gdate = is_string($gdate) ? $gdate : $gdate->format('Y-m-d');
+		$timestamp = strtotime($gdate);
+		return DateUtil::date("d", $timestamp, false);
+	}
+
+	public function jalaliMonthFilter($gdate)
+	{
+		$gdate = is_string($gdate) ? $gdate : $gdate->format('Y-m-d');
+		$timestamp = strtotime($gdate);
+		return DateUtil::date("m", $timestamp, false);
+	}
+
+	public function jalaliMonthFormattedFilter($gdate)
+	{
+		$gdate = is_string($gdate) ? $gdate : $gdate->format('Y-m-d');
+		$timestamp = strtotime($gdate);
+		return DateUtil::date("F", $timestamp, false);
+	}
+
+	public function jalaliYearFilter($gdate)
+	{
+		$gdate = is_string($gdate) ? $gdate : $gdate->format('Y-m-d');
+		$timestamp = strtotime($gdate);
+		return DateUtil::date("Y", $timestamp, false);
 	}
 
 	public function getName()

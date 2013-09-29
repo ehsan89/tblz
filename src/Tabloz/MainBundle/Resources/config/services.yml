@@ -10,8 +10,13 @@ services:
      sonata.admin.tablo_category:
         class: Tabloz\MainBundle\Admin\TabloCategoryAdmin
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "Tablo Categories", label: "Tablo Category" }
+            - { name: sonata.admin, manager_type: orm, group: "Tablos", label: "Tablo Category" }
         arguments: [ null, Tabloz\MainBundle\Entity\TabloCategory, SonataAdminBundle:CRUD ]
+     sonata.admin.tablo_collection:
+        class: Tabloz\MainBundle\Admin\TabloCollectionAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Tablos", label: "Tablo Collection" }
+        arguments: [ null, Tabloz\MainBundle\Entity\TabloCollection, SonataAdminBundle:CRUD ]
 #    tabloz_main.example:
 #        class: %tabloz_main.example.class%
 #        arguments: [@service_id, "plain_value", %parameter%]

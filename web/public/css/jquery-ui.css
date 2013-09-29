@@ -1273,6 +1273,11 @@ body .ui-tooltip {
     margin: 0.1em 0 0.1em 16px !important;
 }
 
+.ui-dialog .ui-dialog-content {
+	padding: 1em 2em;
+	color: inherit;
+}
+
 .ui-widget {
     font-size: inherit !important;
 }
@@ -1294,11 +1299,4 @@ body .ui-tooltip {
 
 .ui-icon-closethick {
     background: url(../images/icons/close16.png) no-repeat !important;
-}
-
-.ui-widget-overlay {
-    -webkit-transition: all 1s linear;
-    -moz-transition: all 1s linear;
-    -o-transition: all 1s linear;
-    transition: all 1s linear;
 }

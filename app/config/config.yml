@@ -2,6 +2,7 @@ imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
     - { resource: @FactoryUtilityBundle/Resources/config/services.yml }
+    - { resource: @FactoryBlogBundle/Resources/config/services.yml }
     - { resource: @ApplicationSonataMediaBundle/Resources/config/services.yml }
     - { resource: @TablozMainBundle/Resources/config/services.yml }
 
@@ -30,6 +31,8 @@ twig:
     form:
         resources:
             - 'FactoryUtilityBundle:Form:fields.html.twig'
+            - 'SonataAdminBundle:Form:silex_form_div_layout.html.twig'
+            - 'SonataFormatterBundle:Form:formatter.html.twig'
 
 # Assetic Configuration
 assetic:
@@ -136,8 +139,10 @@ sonata_admin:
     # title_logo: /bundles/sonataadmin/logo_title.png
     templates:
         # default global templates
-        layout:  SonataAdminBundle::standard_layout.html.twig
+        layout:  SonataAdminBundle::layout.html.twig
+#        layout:  SonataAdminBundle::standard_layout.html.twig
         ajax:    SonataAdminBundle::ajax_layout.html.twig
+        short_object_description: ApplicationSonataMediaBundle:Helper:short-object-description.html.twig
 
         # default actions templates, should extend a global templates
         list:    SonataAdminBundle:CRUD:list.html.twig
@@ -198,6 +203,14 @@ sonata_media:
                 medium:   { width: 100 , quality: 100}
                 big:   { width: 250 , quality: 100}
                 
+        blog_post:
+            providers:
+                - sonata.media.provider.image
+            formats:
+                small: { width: 200 , quality: 70}
+                medium:   { width: 400 , quality: 100}
+                big:   { width: 700 , quality: 100}
+                
         tablo:
             providers:
                 - sonata.media.provider.tablo
@@ -220,4 +233,36 @@ sonata_media:
         image:
             resizer: sonata.media.resizer.square
             
-        
+sonata_formatter:
+    formatters:
+        markdown:
+            service: sonata.formatter.text.markdown
+            extensions:
+                - sonata.formatter.twig.control_flow
+                - sonata.formatter.twig.gist
+                - sonata.media.formatter.twig
+
+        text:
+            service: sonata.formatter.text.text
+            extensions:
+                - sonata.formatter.twig.control_flow
+                - sonata.formatter.twig.gist
+                - sonata.media.formatter.twig
+
+        rawhtml:
+            service: sonata.formatter.text.raw
+            extensions:
+                - sonata.formatter.twig.control_flow
+                - sonata.formatter.twig.gist
+                - sonata.media.formatter.twig
+
+        richhtml:
+            service: sonata.formatter.text.raw
+            extensions:
+                - sonata.formatter.twig.control_flow
+                - sonata.formatter.twig.gist
+                - sonata.media.formatter.twig
+
+        twig:
+            service: sonata.formatter.text.twigengine
+            extensions: [] # Twig formatter cannot have extensions       

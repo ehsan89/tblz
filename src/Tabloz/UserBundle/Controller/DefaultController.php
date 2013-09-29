@@ -2,6 +2,10 @@
 
 namespace Tabloz\UserBundle\Controller;
 
+use Tabloz\MainBundle\Entity\TabloCollectionRepository;
+
+use Tabloz\MainBundle\Entity\TabloCollection;
+
 use Tabloz\UserBundle\Form\Type\TabloType;
 use Tabloz\MainBundle\Entity\Tablo;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -134,6 +138,25 @@ class DefaultController extends Controller
     }
 
     /**
+     * @Route("/tablo/{id}/delete", name="delete_tablo", requirements={"id" = "\d+"})
+     * @ParamConverter("tablo", class="TablozMainBundle:Tablo")
+     */
+    public function deleteTabloAction(Tablo $tablo){
+    	$util = $this->container->get('util');
+    	$user = $util->getCurrentUser();
+    	
+    	if ($user != $tablo->getUser()) {
+    		throw new AccessDeniedException();
+    	}
+
+    	$em = $this->getDoctrine()->getManager();
+		$em->remove($tablo);
+		$em->flush();
+		
+    	return $this->redirect($this->generateUrl('manage_works'));
+    }
+
+    /**
      * @Route("/manage_works", name="manage_works")
      * @Template()
      *
@@ -180,5 +203,108 @@ class DefaultController extends Controller
 		}
 		
 		return new Response('fail');
+    }
+    
+    /**
+     * @Route("/collection/new", name="new_tablo_collection")
+     * @Template()
+     *
+     * @param Request $request
+     */
+    public function newTabloCollectionAction(Request $request)
+    {
+    	// just setup a fresh $task object (remove the dummy data)
+    	$collection = new TabloCollection();
+    
+    	$form = $this->createFormBuilder($collection)
+    	->add('title', null, array('attr' => array('placeholder' => 'عنوان مجموعه جدید')))
+    	->add('private', null, array('required' => false))
+    	->getForm();
+    
+    	$form->handleRequest($request);
+    
+    	if ($form->isValid()) {
+		    $em = $this->getDoctrine()->getManager();
+	    	$util = $this->container->get('util');
+	    	$user = $util->getCurrentUser();
+		    $collection->setUser($user);
+		    $em->persist($collection);
+		    $em->flush();
+    
+    		return array('form' => $form->createView(), 'collection' => $collection);
+    	}
+    
+    	return array('form' => $form->createView());
+    }
+    
+    /**
+     * @Route("/tablo/{id}/add_to_collection", name="add_tablo_to_collection", requirements={"id" = "\d+"})
+     * @ParamConverter("tablo", class="TablozMainBundle:Tablo")
+     * @Template()
+     *
+     * @param Request $request
+     */
+    public function addTabloToCollectionAction(Tablo $tablo, Request $request)
+    {
+    	// just setup a fresh $task object (remove the dummy data)
+    	$collection = new TabloCollection();
+    
+    	$form = $this->createFormBuilder($tablo)
+    	->add('tablo_collections', null, array('expanded' => true, 'query_builder' => function(TabloCollectionRepository $er) {
+			    return $er->createQueryBuilder('c')
+			    ->where('c.enable = 1')->orderBy('c.created_at', 'DESC');
+			}))
+    	->getForm();
+    
+    	$form->handleRequest($request);
+    
+    	if ($form->isValid()) {
+		    $em = $this->getDoctrine()->getManager();
+		    $em->persist($tablo);
+		    $em->flush();
+    	}
+    
+    	return array('form' => $form->createView(), 'tablo' => $tablo);
+    }
+
+    /**
+     * @Route("/manage_collections", name="manage_collections")
+     * @Template()
+     *
+     * @param Request $request
+     */
+    public function manageCollectionsAction(Request $request){
+    	$util = $this->container->get('util');
+    	$user = $util->getCurrentUser();
+    	
+    	$collections = $this->getDoctrine()
+        ->getRepository('TablozMainBundle:TabloCollection')
+        ->findBy(
+        		array('user'=> $user),
+        		array('id' => 'DESC')
+        );
+    	
+    	return array(
+    			'collections' => $collections
+    			);
+    }
+
+    /**
+     * @Route("/tablo_collection/{id}/delete", name="delete_tablo_collection", requirements={"id" = "\d+"})
+     * @ParamConverter("tablo_collection", class="TablozMainBundle:TabloCollection")
+     */
+    public function deleteTabloCollectionAction(TabloCollection $tablo_collection){
+    	$util = $this->container->get('util');
+    	$user = $util->getCurrentUser();
+    	
+    	if ($user != $tablo_collection->getUser()) {
+    		throw new AccessDeniedException();
+    	}
+
+    	$em = $this->getDoctrine()->getManager();
+		$em->remove($tablo_collection);
+		$em->flush();
+		
+    	return new Response('delete success');
     }
 }

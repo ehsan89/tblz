@@ -1,0 +1,38 @@
+<script type="text/javascript">
+	
+	var delete_tablo_url = '';
+	
+	function openDeleteTabloDialog(url){
+		delete_tablo_url = url;
+		jQuery('#delete_tablo_dialog').dialog('open');
+		
+	}
+	
+	function deleteTablo(){
+		window.location = delete_tablo_url;
+	}
+
+	jQuery(document).ready(function(){
+		jQuery( "#delete_tablo_dialog" ).dialog({
+			width: 500,
+			show: {
+		        effect: "drop",
+		        direction: "down"
+		      },
+            hide: "fade",
+            close: function() {
+            }
+		});
+	});
+
+</script>
+
+<div style="display: none;">
+	<div id="delete_tablo_dialog" title="{{ 'حذف اثر' }}">
+		<div>{{ 'با حذف این اثر تمامی نظرات، علاقه مندی ها و آمارهای مرتبط با این اثر نیز حذف شده و قابل بازیابی نخواهد بود. آیا مایل به حذف این اثر هستید؟' }}</div>
+		<div style="margin: 20px 0 10px;">
+			<input id="tablo_delete_confirm" type="button" value="{{ 'حذف' }}" class="tablo_delete_button grey_button" onclick="deleteTablo();">
+			<input id="tablo_delete_cancel" type="button" value="{{ 'انصراف' }}" class="dark_grey_button" onclick="jQuery('#delete_tablo_dialog').dialog('close');">
+		</div>
+	</div>
+</div>

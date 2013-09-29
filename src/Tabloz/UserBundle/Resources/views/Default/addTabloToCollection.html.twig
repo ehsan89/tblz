@@ -1,0 +1,11 @@
+<div id="add_tablo_to_collection_form_container_{{ tablo.id }}">
+	{{ form_start(form, {'action': path('add_tablo_to_collection', {'id': tablo.id}), 'method': 'POST', 'attr': {'class': 'add_tablo_to_collection_form'}}) }}
+		<div class="form_tablo_collections_container">
+			{{ form_widget(form.tablo_collections) }}
+		</div>
+		<div class="add_tablo_to_collection_submit_container" style="margin: 20px 0;">
+			<input class="add_tablo_to_collection_submit" type="submit" value="{{ 'ذخیره' }}" onclick="addTabloToCollection({{ tablo.id }}); return false;"/>
+			<span class="add_tablo_to_collection_submit_spinner submit_spinner" style="display: none;"></span>
+		</div>
+	{{ form_end(form) }}
+</div>

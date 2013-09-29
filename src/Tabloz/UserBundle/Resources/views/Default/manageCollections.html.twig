@@ -1,0 +1,102 @@
+
+{% extends '::base.html.twig' %}
+
+{% block title %}{{ 'tabloz.com | مدیریت مجموعه ها' }}{% endblock %}
+
+{# {% block stylesheets %}#}
+{# 	{{ parent() }}#}
+{# 	{% stylesheets filter='cssrewrite' 'bundles/tablozuser/css/profile.css' %}#}
+		
+{# 	{% endstylesheets %}#}
+{# {% endblock %}#}
+
+
+{% block stylesheets %}
+	{{ parent() }}
+    {% stylesheets filter='cssrewrite' 
+    				'bundles/tablozuser/css/profile.css' 
+    				'bundles/tablozuser/css/manage_works.css' %}
+    	<link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block content %}	
+
+<script type="text/javascript">
+
+	
+	jQuery(document).ready(function(){
+		
+		jQuery(".tablo_box_private").on("click", function(){
+			var tablo_id = jQuery(this).closest('.tablo_box').data('id');
+			var tablo_private = jQuery(this).hasClass("tablo_box_private_off")?1:0;
+			jQuery(this).toggleClass("tablo_box_private_off");
+			
+			jQuery.ajax({
+			    type: 'POST',
+			    data: { id: tablo_id, private: tablo_private },
+			    url: "{{ path('toggle_tablo_private') }}",
+			    success: function(){
+			    },
+			    error: function(){
+			       jQuery(this).toggleClass("tablo_box_private_off");
+			    }
+			});
+			
+			return false;
+		});
+
+		jQuery('#tablo_collection_list').on('click', '.tablo_collection_list_item', function(){
+			jQuery('.tablo_collection_list_item').removeClass('tablo_collection_list_item_selected');
+			jQuery(this).addClass('tablo_collection_list_item_selected');
+			var collection_id = jQuery(this).data('id');
+			jQuery('.tablo_collection_content').removeClass('tablo_collection_content_visible');
+			jQuery('.tablo_collection_content[data-id="'+collection_id+'"]').addClass('tablo_collection_content_visible');
+		});
+
+
+	});
+</script>
+
+<h1>{{ 'مدیریت مجموعه ها' }}</h1>
+		
+<section>
+	<table style="width: 100%;">
+		<tr>
+			<td style="width: 30%; border-left: 1px solid #333; vertical-align: top;">
+				<ul id="tablo_collection_list" class="transition2">
+					{% for collection in collections %}
+						<li class="tablo_collection_list_item {{ loop.first?'tablo_collection_list_item_selected':'' }}" data-id="{{ collection.id }}">
+							<span class="tablo_collection_list_item_title">{{ collection.title|truncate(50) }}</span>
+							<span class="tablo_collection_list_item_delete" onclick="openDeleteTabloCollectionDialog({{ collection.id }}, '{{ path('delete_tablo_collection', {'id': collection.id}) }}'); return false;" title="{{ 'حذف' }}"></span>
+						</li>
+					{% endfor %}
+			
+				</ul>
+			</td>
+			<td style="vertical-align: top;">
+				<div id="tablo_collections_content_container">
+					{% for collection in collections %}
+						<div class="tablo_collection_content {{ loop.first?'tablo_collection_content_visible':'' }} transition2" data-id="{{ collection.id }}" >
+							<div class="tablo_collection_empty" style="{{ (collection.tablos.count == 0)?'':'display:none;' }}">
+								{{ 'اثری در این مجموعه موجود نمی باشد.' }}
+							</div>
+							{% for tablo in collection.tablos %}
+								{{ include('TablozUserBundle:Default:tablo_box.html.twig', {'tablo':tablo}) }}
+							{% endfor %}
+						</div>
+					{% endfor %}
+				</div>
+			</td>
+		</tr>
+	</table>
+	
+	{{ include('TablozUserBundle:Default:tablo_add_to_collection_dialog.html.twig') }}
+	{{ include('TablozUserBundle:Default:tablo_delete_dialog.html.twig') }}
+	{{ include('TablozUserBundle:Default:tablo_collection_delete_dialog.html.twig') }}
+	
+</section>
+	
+
+
+{% endblock %}

@@ -7,8 +7,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Tabloz\MainBundle\Entity\TabloRepository")
  * @ORM\Table(name="tablo")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Tablo
 {
@@ -45,7 +46,7 @@ class Tablo
     protected $user;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Application\Sonata\MediaBundle\Entity\Media")
+     * @ORM\ManyToOne(targetEntity="Application\Sonata\MediaBundle\Entity\Media", cascade={"remove"})
      */
     private $image;
     
@@ -72,12 +73,22 @@ class Tablo
     /**
      * @ORM\Column(type="integer")
      */
+    private $favorite_count = 0;
+    
+    /**
+     * @ORM\Column(type="integer")
+     */
     private $comment_count = 0;
     
     /**
      * @ORM\Column(type="integer")
      */
     private $buy_count = 0;
+    
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $published_at;
     
     /**
      * @ORM\Column(type="datetime")
@@ -92,20 +103,26 @@ class Tablo
     private $updated_at;
     
     /**
-     * @ORM\OneToMany(targetEntity="Tabloz\MainBundle\Entity\TabloComment", mappedBy="tablo")
+     * @ORM\OneToMany(targetEntity="Tabloz\MainBundle\Entity\TabloComment", mappedBy="tablo", cascade={"remove"})
      */
     protected $comments;
-    
-    /**
-     * @ORM\OneToMany(targetEntity="Tabloz\MainBundle\Entity\TabloTellFriend", mappedBy="tablo")
-     */
-    protected $tell_firends;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Tabloz\UserBundle\Entity\User", inversedBy="favorite_tablos")
+     * @ORM\ManyToMany(targetEntity="Tabloz\UserBundle\Entity\User", inversedBy="favorite_tablos", cascade={"remove"})
      * @ORM\JoinTable(name="user_favorite_tablo")
      **/
     protected $favorite_users;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="Tabloz\MainBundle\Entity\TabloCollection", inversedBy="tablos")
+     * @ORM\JoinTable(name="tablo_collection_tablo")
+     **/
+    protected $tablo_collections;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Tabloz\MainBundle\Entity\TabloTellFriend", mappedBy="tablo", cascade={"remove"})
+     */
+    protected $tell_firends;
     
 
     public function __construct()
@@ -502,5 +519,85 @@ class Tablo
     public function getFavoriteCount()
     {
     	return count($this->favorite_users);
+    }
+
+    /**
+     * Add tell_firends
+     *
+     * @param \Tabloz\MainBundle\Entity\TabloTellFriend $tellFirends
+     * @return Tablo
+     */
+    public function addTellFirend(\Tabloz\MainBundle\Entity\TabloTellFriend $tellFirends)
+    {
+        $this->tell_firends[] = $tellFirends;
+    
+        return $this;
+    }
+
+    /**
+     * Remove tell_firends
+     *
+     * @param \Tabloz\MainBundle\Entity\TabloTellFriend $tellFirends
+     */
+    public function removeTellFirend(\Tabloz\MainBundle\Entity\TabloTellFriend $tellFirends)
+    {
+        $this->tell_firends->removeElement($tellFirends);
+    }
+
+    /**
+     * Get tell_firends
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getTellFirends()
+    {
+        return $this->tell_firends;
+    }
+
+    /**
+     * Set favorite_count
+     *
+     * @param integer $favoriteCount
+     * @return Tablo
+     */
+    public function setFavoriteCount($favoriteCount)
+    {
+        $this->favorite_count = $favoriteCount;
+    
+        return $this;
+    }
+
+    /**
+     * Set published_at
+     *
+     * @param \DateTime $publishedAt
+     * @return Tablo
+     */
+    public function setPublishedAt($publishedAt)
+    {
+        $this->published_at = $publishedAt;
+    
+        return $this;
+    }
+
+    /**
+     * Get published_at
+     *
+     * @return \DateTime 
+     */
+    public function getPublishedAt()
+    {
+        return $this->published_at;
+    }
+
+    /**
+     * Update the published_at with changing the private to false
+     * 
+     * @ORM\PostPersist
+     */
+    public function updatePublishedAt() {
+    	if (!$this->private && !$this->published_at) {
+    		$this->published_at = $this->updated_at;
+    	}
     }
 }

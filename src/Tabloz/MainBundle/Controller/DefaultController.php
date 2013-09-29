@@ -30,6 +30,14 @@ class DefaultController extends Controller
 	 * @Template()
 	 */
 	public function homeAction(Request $request) {
+		$repository = $this->getDoctrine()->getRepository('TablozMainBundle:Tablo');
+    	$latest_tablos = $repository->getLatestTablos(5);
+    	$latest_popular_tablos = $repository->getLatestPopularTablos(5);
+    	
+    	return array(
+    			'latest_tablos' => $latest_tablos,
+    			'latest_popular_tablos' => $latest_popular_tablos
+    			);
 
 	}
 
@@ -41,22 +49,19 @@ class DefaultController extends Controller
 	 */
 	public function tablosAction(Request $request) {
 		$category = $request->query->get('category');
+		$order = $request->query->get('order');
 
 		$repository = $this->getDoctrine()->getRepository('TablozMainBundle:TabloCategory');
 		$categories = $repository->createQueryBuilder('c')
 		->where('c.enable = 1')
 		->orderBy('c.title', 'DESC')
 		->getQuery()->getResult();
-		
+
+		$category = $category?$category:'all';
+		$order = $order?$order:'latest';
 		$repository = $this->getDoctrine()->getRepository('TablozMainBundle:Tablo');
-		$query = $repository->createQueryBuilder('t');
-		if ($category && $category != 'all') {
-			$query->innerJoin('t.category', 'tc', 'WITH', 'tc.descriptor = :descriptor')->setParameter('descriptor', $category);
-		}
-    	$query = $query->getQuery();
-    	 
-    	$tablos = $query->getResult();
-    	
+		$tablos = $repository->getTablos($category, $order, 20);
+
     	return array(
     			'tablos' => $tablos,
     			'categories' => $categories

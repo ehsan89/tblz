@@ -11,7 +11,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Tabloz\UserBundle\Entity\UserRepository")
  * @ORM\Table(name="tabloz_user")
  */
 class User extends AbstractedUser
@@ -197,6 +197,16 @@ class User extends AbstractedUser
      * @ORM\OneToMany(targetEntity="Tabloz\UserBundle\Entity\UserFollow", mappedBy="followee")
      */
     protected $followees;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Factory\BlogBundle\Entity\BlogPost", mappedBy="user")
+     **/
+    protected $blog_posts;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Factory\BlogBundle\Entity\BlogPostComment", mappedBy="user")
+     */
+    protected $blog_post_comments;
     
 
     public function __construct()
@@ -595,6 +605,72 @@ class User extends AbstractedUser
     public function getFollowees()
     {
         return $this->followees;
+    }
+
+    /**
+     * Add blog_posts
+     *
+     * @param \Factory\BlogBundle\Entity\BlogPost $blog_posts
+     * @return User
+     */
+    public function addBlogPost(\Factory\BlogBundle\Entity\BlogPost $blog_posts)
+    {
+        $this->blog_posts[] = $blog_posts;
+
+        return $this;
+    }
+
+    /**
+     * Remove blog_posts
+     *
+     * @param \Factory\BlogBundle\Entity\BlogPost $blog_posts
+     */
+    public function removeBlogPost(\Factory\BlogBundle\Entity\BlogPost $blog_posts)
+    {
+        $this->blog_posts->removeElement($blog_posts);
+    }
+
+    /**
+     * Get blog_posts
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getBlogPosts()
+    {
+        return $this->blog_posts;
+    }
+
+    /**
+     * Add blog_post_comments
+     *
+     * @param \Factory\BlogBundle\Entity\BlogPostComment $blog_postComments
+     * @return User
+     */
+    public function addBlogPostComment(\Factory\BlogBundle\Entity\BlogPostComment $blog_postComments)
+    {
+        $this->blog_post_comments[] = $blog_postComments;
+
+        return $this;
+    }
+
+    /**
+     * Remove blog_post_comments
+     *
+     * @param \Factory\BlogBundle\Entity\BlogPostComment $blog_postComments
+     */
+    public function removeBlogPostComment(\Factory\BlogBundle\Entity\BlogPostComment $blog_postComments)
+    {
+        $this->blog_post_comments->removeElement($blog_postComments);
+    }
+
+    /**
+     * Get blog_post_comments
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getBlogPostComments()
+    {
+        return $this->blog_post_comments;
     }
     
     /**

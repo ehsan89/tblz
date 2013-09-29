@@ -47,7 +47,7 @@
     bottom: 0;
     opacity: 0.8;
     cursor: pointer;
-    background: url(../images/garbage.png) no-repeat center #444;
+    background: url(../images/icons/garbage16.png) no-repeat center #444;
 }
 
 #user_profile_image_delete_button:hover {
@@ -146,4 +146,12 @@
     opacity: 0.5;
     height: 100%;
 }
+
+.tablo_delete_button {
+	padding-right: 25px !important;
+	background-image: url(../images/icons/garbage16.png);
+	background-repeat: no-repeat;
+	background-position: right 10px center;
+}
+
 

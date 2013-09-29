@@ -1,0 +1,51 @@
+<script type="text/javascript">
+	jQuery(document).ready(function(){
+		jQuery(".top_tooltip").tooltip({
+		    position: { my: 'center bottom', at: 'center top-10', collision : 'none' },
+		    tooltipClass: 'top'
+		});
+	});
+</script>
+<table style="width: 100%; line-height: normal;">
+	<tr>
+		<td style="border-left: 1px solid #333;">
+			<h4>{{ 'کاربران' }}</h4>
+			{% if users|length == 0 %}
+				<div class="ajax_search_not_found">{{ 'موردی یافت نشد' }}</div>
+			{% endif %}
+			{% for user in users %}
+				<div class="ajax_search_result_user top_tooltip" title="{{ user.fullname }}">
+					<a href="{{ path('user_portfolio', {'username': user.username}) }}">
+						<img src="{{ media_asset(user.image, 'medium') }}" alt="{{ user.fullname }}">
+					</a>
+				</div>
+			{% endfor %}
+		</td>
+		<td style="border-left: 1px solid #333;">
+			<h4>{{ 'مجموعه ها' }}</h4>
+			{% if collections|length == 0 %}
+				<div class="ajax_search_not_found">{{ 'موردی یافت نشد' }}</div>
+			{% endif %}
+			{% for collection in collections %}
+				<div class="ajax_search_result_collection top_tooltip" title="{{ collection.title }}">
+					<a href="#">
+						<img src="{{ media_asset(collection.image, 'small') }}" alt="{{ collection.title }}">
+					</a>
+				</div>
+			{% endfor %}
+		</td>
+		<td>
+			<h4>{{ 'آثار' }}</h4>
+			{% if tablos|length == 0 %}
+				<div class="ajax_search_not_found">{{ 'موردی یافت نشد' }}</div>
+			{% endif %}
+			{% for tablo in tablos %}
+				<div class="ajax_search_result_tablo top_tooltip" title="{{ tablo.title }}">
+					<a href="{{ path('view_tablo', {'id': tablo.id}) }}">
+						<img src="{{ media_asset(tablo.image, 'square-thumb') }}" alt="{{ tablo.title }}">
+					</a>
+				</div>
+			{% endfor %}
+		</td>
+	</tr>
+</table>

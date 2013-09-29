@@ -1,0 +1,40 @@
+{% extends '::base.html.twig' %}
+
+{% block title %}{{ 'tabloz.com | ' ~ post.title }}{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	{% stylesheets filter='cssrewrite' 
+       				'bundles/factoryblog/css/*' %}
+		<link rel="stylesheet" href="{{ asset_url }}" />
+	{% endstylesheets %}
+{% endblock %}
+
+{% block content %}
+	
+	<div class="clearfix">
+		<h2 class="blog_post_title">{{ post.title }}</h2>
+		<aside id="blog_main_content">
+			
+			<div class="blog_post_item_wrapper transition2">
+				<div class="blog_post_item_container">
+					<img class="blog_post_image" alt="{{ post.title }}" src="{{ media_asset(post.image, 'big') }}" title="{{ post.title }}" style="margin: 0;">
+					<div>
+						<span class="blog_post_date" title="{{ 'تاریخ انتشار' }}">{{ post.createdAt | jalali_date_formatted }}</span>
+						<span class="blog_post_view_count" title="{{ 'تعداد بازدیدها' }}">{{ post.viewCount ~ ' ' ~ 'بازدید' }}</span>
+						<span class="blog_post_comment_count" title="{{ 'تعداد نظرات' }}">{{ post.commentCount ~ ' ' ~ 'نظر' }}</span>
+					</div>
+					<div>{{ post.content | raw }}</div>
+					
+					<div style="margin-top: 50px;">{{ render(controller('FactoryBlogBundle:Default:blogPostComment', { 'blog_post': post })) }}</div>
+				</div>
+			</div>
+				
+		</aside>
+		<aside id="blog_sidebar">
+			{{ render(controller('FactoryBlogBundle:Default:popularBlogPostsSidebar')) }}
+		</aside>
+		
+	</div>
+
+{% endblock %}

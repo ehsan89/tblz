@@ -17,7 +17,7 @@ class TabloAdmin extends Admin
 			->add('description')
 			->add('category')
 			->add('user')
-			->add('image', 'sonata_type_image_list', array(), array('link_parameters' => array('context' => 'tablo'), 'template' => 'ApplicationSonataMediaBundle:CRUD:edit_orm_many_to_one_image.html.twig'))
+			->add('image', 'sonata_type_model_list', array(), array('link_parameters' => array('context' => 'tablo')))
 			->add('curated', null, array('required' => false))
 			->add('enable', null, array('required' => false))
 		->end()

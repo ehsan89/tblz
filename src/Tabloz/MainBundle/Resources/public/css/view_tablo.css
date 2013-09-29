@@ -135,13 +135,13 @@
 	padding: 5px 30px;
 }
 
-.tablo_favorite_container, .tablo_share_container, .tablo_fullscreen_container {
+.tablo_favorite_container, .tablo_share_container, .tablo_fullscreen_container, .tablo_edit_container {
 	display: inline-block;
 	width: 90px;
 	height: 90px;
 }
 
-.tablo_favorite, .tablo_not_favorite, .tablo_share, .tablo_fullscreen, .tablo_fullscreen_collapse {
+.tablo_favorite, .tablo_not_favorite, .tablo_share, .tablo_fullscreen, .tablo_fullscreen_collapse, .tablo_edit {
 	opacity: 0.5;
 	cursor: pointer;
 	width: 30px;
@@ -157,7 +157,11 @@
 	background: url(../images/icons/heart-empty16.png) no-repeat center;
 }
 
-.tablo_favorite:hover, .tablo_not_favorite:hover, .tablo_share:hover, .tablo_fullscreen:hover, .tablo_fullscreen_collapse:hover {
+.tablo_edit {
+	background: url(../images/icons/data-edit16.png) no-repeat center;
+}
+
+.tablo_favorite:hover, .tablo_not_favorite:hover, .tablo_share:hover, .tablo_fullscreen:hover, .tablo_fullscreen_collapse:hover, .tablo_edit:hover {
 	opacity: 1;
 }
 
@@ -171,7 +175,7 @@
 	position: relative;
 	direction: ltr;
 	text-align: left;
-	margin-left: -50px;
+	margin-left: 20px;
 	width: auto;
 }
 
@@ -197,7 +201,7 @@
 }
 
 .tablo_share_container:hover .tablo_share_buttons {
-	width: 200px;
+	/*width: 200px;*/
 }
 
 .tablo_share_container:hover .tablo_share_button {
@@ -209,7 +213,7 @@
 	opacity: 1 !important;
 }
 
-.tablo_share_buttons a {
+.tablo_share_buttons a, .tablo_edit a {
 	display: block;
 	height: 100%;
 	width: 100%;
@@ -295,6 +299,7 @@ textarea#tablo_comment_content {
 .tablo_comment_submit_container_hidden {
 	margin-top: -20px;
 	opacity: 0;
+	visibility: hidden;
 }
 
 .tablo_comment {

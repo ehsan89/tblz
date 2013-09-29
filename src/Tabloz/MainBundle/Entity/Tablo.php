@@ -7,8 +7,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Tabloz\MainBundle\Entity\TabloRepository")
  * @ORM\Table(name="tablo")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Tablo
 {
@@ -45,7 +46,7 @@ class Tablo
     protected $user;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Application\Sonata\MediaBundle\Entity\Media")
+     * @ORM\ManyToOne(targetEntity="Application\Sonata\MediaBundle\Entity\Media", cascade={"remove"})
      */
     private $image;
     
@@ -72,12 +73,22 @@ class Tablo
     /**
      * @ORM\Column(type="integer")
      */
+    private $favorite_count = 0;
+    
+    /**
+     * @ORM\Column(type="integer")
+     */
     private $comment_count = 0;
     
     /**
      * @ORM\Column(type="integer")
      */
     private $buy_count = 0;
+    
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $published_at;
     
     /**
      * @ORM\Column(type="datetime")
@@ -92,18 +103,24 @@ class Tablo
     private $updated_at;
     
     /**
-     * @ORM\OneToMany(targetEntity="Tabloz\MainBundle\Entity\TabloComment", mappedBy="tablo")
+     * @ORM\OneToMany(targetEntity="Tabloz\MainBundle\Entity\TabloComment", mappedBy="tablo", cascade={"remove"})
      */
     protected $comments;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Tabloz\UserBundle\Entity\User", inversedBy="favorite_tablos")
+     * @ORM\ManyToMany(targetEntity="Tabloz\UserBundle\Entity\User", inversedBy="favorite_tablos", cascade={"remove"})
      * @ORM\JoinTable(name="user_favorite_tablo")
      **/
     protected $favorite_users;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="Tabloz\MainBundle\Entity\TabloCollection", inversedBy="tablos")
+     * @ORM\JoinTable(name="tablo_collection_tablo")
+     **/
+    protected $tablo_collections;
     
     /**
-     * @ORM\OneToMany(targetEntity="Tabloz\MainBundle\Entity\TabloTellFriend", mappedBy="tablo")
+     * @ORM\OneToMany(targetEntity="Tabloz\MainBundle\Entity\TabloTellFriend", mappedBy="tablo", cascade={"remove"})
      */
     protected $tell_firends;
     
@@ -535,5 +552,86 @@ class Tablo
     public function getTellFirends()
     {
         return $this->tell_firends;
+    }
+
+    /**
+     * Set favorite_count
+     *
+     * @param integer $favoriteCount
+     * @return Tablo
+     */
+    public function setFavoriteCount($favoriteCount)
+    {
+        $this->favorite_count = $favoriteCount;
+    
+        return $this;
+    }
+
+    /**
+     * Set published_at
+     *
+     * @param \DateTime $publishedAt
+     * @return Tablo
+     */
+    public function setPublishedAt($publishedAt)
+    {
+        $this->published_at = $publishedAt;
+    
+        return $this;
+    }
+
+    /**
+     * Get published_at
+     *
+     * @return \DateTime 
+     */
+    public function getPublishedAt()
+    {
+        return $this->published_at;
+    }
+
+    /**
+     * Update the published_at with changing the private to false
+     * 
+     * @ORM\PostPersist
+     */
+    public function updatePublishedAt() {
+    	if (!$this->private && !$this->published_at) {
+    		$this->published_at = $this->updated_at;
+    	}
+    }
+
+    /**
+     * Add tablo_collections
+     *
+     * @param \Tabloz\MainBundle\Entity\TabloCollection $tabloCollections
+     * @return Tablo
+     */
+    public function addTabloCollection(\Tabloz\MainBundle\Entity\TabloCollection $tabloCollections)
+    {
+    	$tabloCollections->addTablo($this); // synchronously updating inverse side
+        $this->tablo_collections[] = $tabloCollections;
+    
+        return $this;
+    }
+
+    /**
+     * Remove tablo_collections
+     *
+     * @param \Tabloz\MainBundle\Entity\TabloCollection $tabloCollections
+     */
+    public function removeTabloCollection(\Tabloz\MainBundle\Entity\TabloCollection $tabloCollections)
+    {
+        $this->tablo_collections->removeElement($tabloCollections);
+    }
+
+    /**
+     * Get tablo_collections
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getTabloCollections()
+    {
+        return $this->tablo_collections;
     }
 }

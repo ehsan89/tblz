@@ -43,6 +43,7 @@ class AppKernel extends Kernel
             new Tabloz\UserBundle\TablozUserBundle(),
             new Tabloz\MainBundle\TablozMainBundle(),
         	new Application\Sonata\MediaBundle\ApplicationSonataMediaBundle(),
+            new Factory\BlogBundle\FactoryBlogBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

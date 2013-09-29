@@ -9,7 +9,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Tabloz\MainBundle\Entity\TabloCollectionRepository")
  * @ORM\Table(name="tablo_collection")
  */
 class TabloCollection
@@ -24,7 +24,7 @@ class TabloCollection
     /**
      * @ORM\Column(type="string")
      *
-     * @Assert\NotBlank(message="عنوان دسته بندی را وارد کنید.")
+     * @Assert\NotBlank(message="عنوان مجموعه را وارد کنید.")
      */
     private $title;
     
@@ -39,6 +39,11 @@ class TabloCollection
     private $enable = true;
     
     /**
+     * @ORM\Column(type="boolean")
+     */
+    private $private = false;
+    
+    /**
      * @ORM\ManyToOne(targetEntity="Tabloz\UserBundle\Entity\User", inversedBy="tablo_collections")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
@@ -50,9 +55,21 @@ class TabloCollection
     private $image;
 
     /**
-     * @ORM\OneToMany(targetEntity="Tablo", mappedBy="collection")
-     */
+     * @ORM\ManyToMany(targetEntity="Tabloz\MainBundle\Entity\Tablo", mappedBy="tablo_collections")
+     **/
     protected $tablos;
+    
+    /**
+     * @ORM\Column(type="datetime")
+     * @Gedmo\Timestampable(on="create")
+     */
+    private $created_at;
+    
+    /**
+     * @ORM\Column(type="datetime")
+     * @Gedmo\Timestampable(on="update")
+     */
+    private $updated_at;
     
     public function __construct()
     {
@@ -60,6 +77,12 @@ class TabloCollection
     	$this->tablos = new ArrayCollection();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public function __toString(){
+    	return $this->title.'';
+    }
 
     /**
      * Get id
@@ -141,6 +164,29 @@ class TabloCollection
     }
 
     /**
+     * Set private
+     *
+     * @param boolean $private
+     * @return TabloCollection
+     */
+    public function setPrivate($private)
+    {
+        $this->private = $private;
+
+        return $this;
+    }
+
+    /**
+     * Get private
+     *
+     * @return boolean 
+     */
+    public function getPrivate()
+    {
+        return $this->private;
+    }
+
+    /**
      * Set user
      *
      * @param \Tabloz\UserBundle\Entity\User $user
@@ -187,6 +233,52 @@ class TabloCollection
     }
 
     /**
+     * Set created_at
+     *
+     * @param \DateTime $createdAt
+     * @return Tablo
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->created_at = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * Get created_at
+     *
+     * @return \DateTime 
+     */
+    public function getCreatedAt()
+    {
+        return $this->created_at;
+    }
+
+    /**
+     * Set updated_at
+     *
+     * @param \DateTime $updatedAt
+     * @return Tablo
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updated_at = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get updated_at
+     *
+     * @return \DateTime 
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updated_at;
+    }
+
+    /**
      * Add tablos
      *
      * @param \Tabloz\MainBundle\Entity\Tablo $tablos
@@ -195,7 +287,7 @@ class TabloCollection
     public function addTablo(\Tabloz\MainBundle\Entity\Tablo $tablos)
     {
         $this->tablos[] = $tablos;
-
+    
         return $this;
     }
 

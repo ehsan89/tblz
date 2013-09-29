@@ -1,20 +1,18 @@
-
 {% extends '::base.html.twig' %}
 
-{# {% block stylesheets %}#}
-{# 	{{ parent() }}#}
-{# 	{% stylesheets filter='cssrewrite' 'bundles/tablozuser/css/profile.css' %}#}
-		
-{# 	{% endstylesheets %}#}
-{# {% endblock %}#}
+{% block stylesheets %}
+	{{ parent() }}
+    {% stylesheets filter='cssrewrite' 
+    				'bundles/tablozuser/css/profile.css' 
+    				'bundles/tablozuser/css/new_works.css' %}
+    	<link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
 
 {% block content %}	
 
-<link rel="stylesheet" href="{{ asset('bundles/tablozuser/css/profile.css') }}" />
-<link rel="stylesheet" href="{{ asset('bundles/tablozuser/css/new_work.css') }}" />
 <script type="text/javascript">
 
-	
 	function saveTabloImage(){
 	    jQuery(".upload_thumbnail_caption").hide();
 	    jQuery("#tablo_form_container select").data("selectBox-selectBoxIt").disable();
@@ -26,11 +24,12 @@
 	    }); 
 	    return false;
 	}
-	
+
 	jQuery(document).ready(function(){
 
 		var select = jQuery("select").data("selectBox-selectBoxIt");
 		//select.disable();
+
 	});
 </script>
 
@@ -53,9 +52,12 @@
 						{{ form_row(form.category) }}
 	        			{{ form_rest(form) }}
 						<input id="tablo_submit" type="submit" value="{{ 'ذخیره' }}" onclick="saveTabloImage();" style="margin: 20px 0;"/>
+						<input id="tablo_delete" type="button" value="{{ 'حذف' }}" onclick="openDeleteTabloDialog('{{ path('delete_tablo', {'id': tablo.id}) }}'); return false;" style="margin: 20px 0;" class="tablo_delete_button grey_button"/>
 					</div>
 	        	</div>
 			</div>
+			
+			{{ include('TablozUserBundle:Default:tablo_delete_dialog.html.twig') }}
 			
 			<div class="clearfix"></div>
 			

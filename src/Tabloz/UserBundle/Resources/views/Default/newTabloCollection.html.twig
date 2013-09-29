@@ -1,0 +1,71 @@
+<script type="text/javascript">
+	jQuery(document).ready(function(){
+		// replaces the checkboxes and radio buttons
+		replaceCheckables();
+	});
+</script>
+
+{% if collection is defined %}
+    <li class="form_tablo_collection_item_hidden">
+		<label for="form_tablo_collections_{{ collection.id }}">
+			<input id="form_tablo_collections_{{ collection.id }}" type="checkbox" value="{{ collection.id }}" checked="checked" name="form[tablo_collections][]">
+			<span> {{ collection }} </span>
+		</label>
+	</li>
+{% else %}
+
+<script type="text/javascript">
+
+	jQuery(document).ready(function(){
+
+		var select = jQuery("select").data("selectBox-selectBoxIt");
+		//select.disable();
+
+		jQuery('#tablo_collection_form_title').on('focus', function(){
+			jQuery('#tablo_collection_private_container').removeClass('tablo_collection_private_container_hidden');
+		});
+
+
+		jQuery('#tablo_collection_form').on('submit', function(){
+			var form = jQuery(this);
+			form.find('#tablo_collection_submit_spinner').fadeIn();
+			form.find('#tablo_collection_submit').hide();
+			jQuery.post(form.attr('action'), form.serialize(), function(response){
+				var res = jQuery(response);
+				res.prependTo('.form_tablo_collections_container ul').each(function(){
+					//jQuery('.form_tablo_collections_container ul').prepend(response);alert(jQuery('#tablo_collection_dialog .form_tablo_collections_container ul').children(":first").html());
+					var last_item = jQuery(this);//jQuery('#tablo_collection_dialog .form_tablo_collections_container ul').children(":first");
+					last_item.find(':checkbox').prop('checked', true);
+					last_item.removeClass('form_tablo_collection_item_hidden').addClass('form_tablo_collection_selected');
+				});
+				form.find('#tablo_collection_submit_spinner').hide();
+				form.find('#tablo_collection_submit').show();
+			});
+			return false;
+		});
+
+	});
+</script>
+
+
+<div class="tablo_collection_form_container">
+
+    {{ form_start(form, {'action': path('new_tablo_collection'), 'method': 'POST', 'attr': {'id': 'tablo_collection_form'}}) }}
+
+    	<div id="tablo_collection_title_container">
+			{{ form_widget(form.title, { 'id': 'tablo_collection_form_title' }) }}
+			
+			<span id="add_tablo_to_collection_submit_container" style="margin-top: 20px;">
+				<input id="tablo_collection_submit" type="submit" value="{{ 'ثبت' }}"/>
+				<span id="tablo_collection_submit_spinner" class="submit_spinner" style="display: none;"></span>
+			</span>
+		</div>
+		<div id="tablo_collection_private_container" class="tablo_collection_private_container_hidden">
+			{{ form_widget(form.private) }}<span>{{ 'خصوصی' }}</span>
+		</div>
+	
+	{{ form_end(form) }}
+	
+</div>
+
+{% endif %}

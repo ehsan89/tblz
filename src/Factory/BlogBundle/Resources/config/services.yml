@@ -1,0 +1,12 @@
+parameters:
+#    factory_blog.example.class: Factory\BlogBundle\Example
+
+services:
+     sonata.admin.blog_post:
+        class: Factory\BlogBundle\Admin\BlogPostAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Blog", label: "Post" }
+        arguments: [ null, Factory\BlogBundle\Entity\BlogPost, SonataAdminBundle:CRUD ]
+#    factory_blog.example:
+#        class: %factory_blog.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

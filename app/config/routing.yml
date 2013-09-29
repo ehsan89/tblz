@@ -1,3 +1,7 @@
+factory_blog:
+    resource: "@FactoryBlogBundle/Resources/config/routing.yml"
+    prefix:   /
+
 tabloz_main:
     resource: "@TablozMainBundle/Resources/config/routing.yml"
     prefix:   /

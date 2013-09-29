@@ -4,7 +4,15 @@
 		jQuery("#inline_login_form_container #login_form_error_container").hide();
 		jQuery("#inline_login_form_container").dialog("open");
 	}
-	
+
+	function closeSearch(){
+		search_canceled = true;
+		jQuery("#main_header_search_results_container").removeClass('main_header_search_results_container_visible');
+		jQuery("#main_header_search_results_spinner").removeClass('main_header_search_results_spinner_visible');
+		jQuery("#main_header_search_results").removeClass('main_header_search_results_visible');
+		jQuery("#main_header_search_input").removeClass('main_header_search_input_active');
+	}
+
 	jQuery(document).ready(function(){
 
     	// replaces the checkboxes and radio buttons
@@ -28,9 +36,25 @@
             position: { my: 'right center', at: 'left-10 center', collision : 'none' },
             tooltipClass: 'left'
         });
+
+		jQuery.extend(jQuery.ui.dialog.prototype.options, {
+			autoOpen: false,
+		    modal: true,
+	        open: function(){
+	            jQuery('.ui-widget-overlay').hide().fadeIn();
+	        },
+            beforeClose: function() {
+                jQuery('.ui-widget-overlay:first')
+                .clone()
+                .appendTo('body')
+                .show()
+                .fadeOut(function(){ 
+                    jQuery(this).remove(); 
+                });
+	        }
+		});
         
 		jQuery( "#inline_login_form_container" ).dialog({
-			autoOpen: false,
 			modal: true,
 			width: 450,
 			show: {
@@ -46,6 +70,40 @@
 			openLoginDialog();
 		});
 
+		var search_timeout = 0;
+		var search_canceled = false;
+		var search_text_length = jQuery("#main_header_search_input").val().length;
+		jQuery("#main_header_search_input").on('keyup', function(e){
+			if (e.keyCode == 27) closeSearch();
+			var new_search_text_length = jQuery("#main_header_search_input").val().length;
+			if (search_text_length != new_search_text_length){
+				search_text_length = new_search_text_length;
+				jQuery("#main_header_search_input").addClass('main_header_search_input_active');
+				clearTimeout(search_timeout);
+				if (jQuery(this).val().length >= 2 ) {
+					search_canceled = false;
+					search_timeout = setTimeout(function() {
+						// Do something after 0.5 seconds
+						jQuery('#main_header').removeClass('home_top_main_header');
+						jQuery("#main_header_search_results_container").addClass('main_header_search_results_container_visible');
+						jQuery("#main_header_search_results").removeClass('main_header_search_results_visible');
+						jQuery("#main_header_search_results_spinner").addClass('main_header_search_results_spinner_visible');
+						jQuery.post("{{ path('ajax_search') }}", {text: jQuery("#main_header_search_input").val()}, function(response){
+							if (!search_canceled) {
+								jQuery("#main_header_search_results_spinner").removeClass('main_header_search_results_spinner_visible');
+								jQuery("#main_header_search_results").html(response);
+								jQuery("#main_header_search_results").addClass('main_header_search_results_visible');
+							}
+						});
+					}, 1000);
+				}
+			}
+		});
+
+		jQuery("#main_header_search_results_close").on('click', function(){
+			closeSearch();
+		});
+
 	});
 
 </script>
@@ -54,6 +112,7 @@
 	<div id="main_header_top_logo"><a href="{{ path('tabloz_main_homepage') }}" style="height: 100%; width: 100%; display: block;"></a></div>
 	<nav id="main_header_nav" class="transition2">
 		<a href="{{ path('tablos') }}">{{ 'آثـــــــــار' }}</a>
+		<a href="{{ path('blog') }}">{{ 'بلاگ' }}</a>
 	</nav>
 	{% if (app.user) %}
 		<div id="user_menu_container" class="transition2">
@@ -69,17 +128,27 @@
 			</div>
 			<div id="user_drop_down_list">
 				<div class="main_header_user_fullname">{{ app.user.fullname }}</div>
-				<ul>
-					<li><a href="{{ path('sonata_user_profile_edit') }}">{{ 'تنظیمات' }}</a></li>
-					<li><a href="{{ path('manage_works') }}">{{ 'مدیریت آثار' }}</a></li>
-					<li><a href="{{ path('add_new_work') }}">{{ 'اثر جدید' }}</a></li>
-{# 					<li><a href="{{ path('user_statistics') }}">{{ 'آمار و گزارش ها' }}</a></li>#}
-					<li><a href="{{ path('fos_user_security_logout') }}">{{ 'خروج' }}</a></li>
-				</ul>
+				<nav>
+					<ul>
+						<li><a href="{{ path('sonata_user_profile_edit') }}">{{ 'تنظیمات' }}</a></li>
+						<li><a href="{{ path('manage_works') }}">{{ 'مدیریت آثار' }}</a></li>
+						<li><a href="{{ path('add_new_work') }}">{{ 'اثر جدید' }}</a></li>
+	{# 					<li><a href="{{ path('user_statistics') }}">{{ 'آمار و گزارش ها' }}</a></li>#}
+						<li><a href="{{ path('fos_user_security_logout') }}">{{ 'خروج' }}</a></li>
+					</ul>
+				</nav>
 			</div>
 		</div>
 	{% else %}
 		{% render url('tabloz_login_form') %}
 		<div id="top_login_register" class="transition2"><a href="#" class="login_link">{{ 'ورود' }}</a> | <a href="{{ path('fos_user_registration_register') }}">{{ 'عضویت' }}</a></div>
 	{% endif %}
+	<div id="main_header_search_container">
+		<input id="main_header_search_input" type="search" placeholder="{{ 'جستجو در آثار، مجموعه ها، هنرمندان...' }}">
+	</div>
 </header>
+<section id="main_header_search_results_container" class="transition2">
+	<div id="main_header_search_results_close"></div>
+	<span id="main_header_search_results_spinner"><img src="{{ asset('public/images/spinner24.gif') }}" style="vertical-align: middle; margin: 0 15px;" />{{ 'در حال جستجو...' }}</span>
+	<div id="main_header_search_results"></div>
+</section>

@@ -1,0 +1,57 @@
+<script type="text/javascript">
+	jQuery(document).ready(function(){
+		jQuery("#blog_post_comment_content").autosize();
+
+		jQuery("#blog_post_comment_content").on("focus", 
+	    	function(){
+				jQuery("#blog_post_comment_submit_container").removeClass("blog_post_comment_submit_container_hidden");
+			}
+		);
+
+		jQuery("#blog_post_comment_form").submit(function(){
+			if (jQuery.trim(jQuery("#blog_post_comment_content").val())) {
+				jQuery("#blog_post_comment_submit").hide();
+				jQuery("#blog_post_comment_form_submit_spinner").fadeIn();
+				jQuery.post(jQuery("#blog_post_comment_form").attr("action"), jQuery("#blog_post_comment_form").serialize(),
+					function(response) {
+						jQuery("#blog_post_comments_count").text(parseInt(jQuery("#blog_post_comments_count").text()) + 1);
+						jQuery("#blog_post_comment_content").val('');
+						jQuery(response).prependTo("#blog_post_comments_container").hide().show("highlight", 2000);
+						jQuery("#blog_post_comment_submit").show();
+						jQuery("#blog_post_comment_form_submit_spinner").hide();
+					}
+				);
+			}
+			return false;
+		});
+
+	});
+</script>
+
+<div style="width: 100%;">
+	<div id="blog_post_comments_title_container"><div id="blog_post_comments_title" style=""><h3>{{ 'نظرات' }}<span style="font-size: 20px; margin-right: 10px;"> ( <span id="blog_post_comments_count">{{ comments|length }}</span>{{ ' نظر ' }} ) </span></h3></div></div>
+	<div id="blog_post_comment_form_container" class="clearfix transition2">
+		{% if (app.user)  %}
+		{{ form_start(form, {'action': path('add_blog_post_comment', {'id': blog_post.id}), 'method': 'POST', 'attr': {'id': 'blog_post_comment_form'}}) }}
+{# <form>#}
+{# 		<form id="blog_post_comment_form" action="{{ path('add_blog_post_comment', {'id': blog_post.id}) }}" method="post"{{ form_enctype(form) }} class="transition2" >#}
+			<div id="blog_post_comment_content_container">
+				{{ form_widget(form.content) }}
+			</div>
+{# 			{{ form_rest(form) }}#}
+			<div id="blog_post_comment_submit_container" class="blog_post_comment_submit_container_hidden">
+				<input id="blog_post_comment_submit" type="submit" value="{{ 'ثبت' }}" class="mini_button"/>
+				<span id="blog_post_comment_form_submit_spinner" style="display: none; margin: 0 30px;"><img src="{{ asset('public/images/spinner24.gif') }}" style="vertical-align: middle;" /></span>
+			</div>
+{# 		</form>#}
+		{{ form_end(form) }}
+		{% else %}
+		<div class="comment_login_hint">{{ 'برای نظر دادن ابتدا ' }}<a href="#" class="login_link">{{ 'وارد سایت شوید.' }}</a></div>
+		{% endif %}
+	</div>
+	<div id="blog_post_comments_container" class="clearfix">
+		{% for comment in comments %}
+	        {{ include('FactoryBlogBundle:Default:blog_post_comment_view.html.twig', {'comment': comment}) }}
+	    {% endfor %}
+	</div>
+</div>

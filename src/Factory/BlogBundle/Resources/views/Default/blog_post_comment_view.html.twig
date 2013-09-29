@@ -1,0 +1,6 @@
+<div id="blog_post_comment_{{ comment.id }}" class="blog_post_comment clearfix">
+	<div class="blog_post_comment_user_thumbnail"><img src="{{ media_asset(comment.user.image, 'small') }}" ></div>
+	<div><a href="{{ path('user_portfolio', {'username': comment.user.username}) }}">{{ comment.user.getfullName }}</a></div>
+	<div style="font-size: 12px; padding-right: 70px;">{{ comment.content|nl2br }}</div>
+	<div style="float: left; color: #555; font-size: 10px;">{{ comment.getCreatedAt|jalali_date_time_formatted }}</div>
+</div>

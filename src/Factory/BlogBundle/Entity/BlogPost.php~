@@ -1,0 +1,99 @@
+<?php
+
+namespace Factory\BlogBundle\Entity;
+
+use Doctrine\Common\Collections\ArrayCollection;
+
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Gedmo\Mapping\Annotation as Gedmo;
+
+/**
+ * @ORM\Entity(repositoryClass="Factory\BlogBundle\Entity\BlogPostRepository")
+ * @ORM\Table(name="blog_post")
+ */
+class BlogPost
+{
+    /**
+     * @ORM\Id
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    protected $id;
+
+    /**
+     * @ORM\Column(type="string", length=1000)
+     *
+     * @Assert\NotBlank(message="عنوان پست را وارد کنید.")
+     * @Assert\Length(max="1000", maxMessage="عنوان طولانی است.")
+     */
+    private $title;
+    
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $abstract;
+    
+    /**
+     * @ORM\Column(type="text")
+     */
+    private $content;
+    
+    /**
+     * @ORM\Column(type="text")
+     */
+    private $raw_content;
+    
+    /**
+     * @ORM\Column(type="string")
+     */
+    private $content_formatter;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Application\Sonata\MediaBundle\Entity\Media")
+     */
+    private $image;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Tabloz\UserBundle\Entity\User", inversedBy="blog_posts")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     */
+    protected $user;
+    
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $enable = true;
+    
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $view_count = 0;
+    
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $comment_count = 0;
+    
+    /**
+     * @ORM\Column(type="datetime")
+     * @Gedmo\Timestampable(on="create")
+     */
+    private $created_at;
+    
+    /**
+     * @ORM\Column(type="datetime")
+     * @Gedmo\Timestampable(on="update")
+     */
+    private $updated_at;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Factory\BlogBundle\Entity\BlogPostComment", mappedBy="blog_post")
+     */
+    protected $comments;
+
+    public function __construct()
+    {
+        // your own logic
+    }
+}

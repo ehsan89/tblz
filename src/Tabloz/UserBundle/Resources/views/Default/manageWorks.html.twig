@@ -1,6 +1,8 @@
 
 {% extends '::base.html.twig' %}
 
+{% block title %}{{ 'tabloz.com | مدیریت آثار' }}{% endblock %}
+
 {# {% block stylesheets %}#}
 {# 	{{ parent() }}#}
 {# 	{% stylesheets filter='cssrewrite' 'bundles/tablozuser/css/profile.css' %}#}
@@ -26,9 +28,7 @@
 	jQuery(document).ready(function(){
 		
 		jQuery(".tablo_box_private").on("click", function(){
-			var tablo_id_str = jQuery(this).attr("id");
-			var tablo_id_arr = tablo_id_str.split('_');
-			var tablo_id = tablo_id_arr[3];
+			var tablo_id = jQuery(this).closest('.tablo_box').data('id');
 			var tablo_private = jQuery(this).hasClass("tablo_box_private_off")?1:0;
 			jQuery(this).toggleClass("tablo_box_private_off");
 			
@@ -50,31 +50,18 @@
 	});
 </script>
 
-<div class="manage_works_container">
-
-    <h1>{{ 'مدیریت آثار' }}</h1>
-
-			
-	<div id="tablo_form_container" style="margin: 0 5% 5%;">
-		{% for tablo in tablos %}
-		<div class="tablo_box transition2">
-			<a href="{{ path('edit_tablo', {'id': tablo.id}) }}">
-				<div class="tablo_box_image_container">
-					<div id="tablo_box_private_{{ tablo.id }}" class="tablo_box_private {{ tablo.private ? '' : 'tablo_box_private_off' }}" title="{{ 'خصوصی' }}"></div>
-					<img alt="{{ tablo.title }}" src="{{ media_asset(tablo.image, 'medium') }}">
-				</div>
-			</a>
-			<div class="tablo_box_info">
-				<span class="tablo_box_info_comments" title="{{ 'تعداد نظرات' }}">{{ tablo.commentCount }}</span>
-				<span class="tablo_box_info_sales" title="{{ 'تعداد فروش' }}">{{ tablo.buyCount }}</span>
-				<span class="tablo_box_info_favorites" title="{{ 'تعداد علاقه مندی ها' }}">{{ tablo.favoriteCount }}</span>
-				<span class="tablo_box_info_views" title="{{ 'تعداد مشاهده ها' }}">{{ tablo.viewCount }}</span>
-			</div>
-		</div>
-		{% endfor %}
-	</div>
+<h1>{{ 'مدیریت آثار' }}</h1>
+		
+<section>
+	{% for tablo in tablos %}
+		{{ include('TablozUserBundle:Default:tablo_box.html.twig', {'tablo':tablo}) }}
+	{% endfor %}
 	
-</div>
+	{{ include('TablozUserBundle:Default:tablo_add_to_collection_dialog.html.twig') }}
+	{{ include('TablozUserBundle:Default:tablo_delete_dialog.html.twig') }}
+	
+</section>
+	
 
 
 {% endblock %}

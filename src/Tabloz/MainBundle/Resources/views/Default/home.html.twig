@@ -4,11 +4,63 @@
 {% block stylesheets %}
 	{{ parent() }}
 	{% stylesheets filter='cssrewrite' 
-       				'bundles/tablozmain/css/*' %}
+       				'bundles/tablozmain/css/home.css' %}
 		<link rel="stylesheet" href="{{ asset_url }}" />
 	{% endstylesheets %}
 {% endblock %}
 
-{% block content %}
-	<h1>hello</h1>
+{% block content_section %}
+	
+	<script type="text/javascript">
+		function updateHomeMainHeader(){
+			if (jQuery(window).scrollTop() < 10 && !jQuery('#main_header_search_results_container').hasClass('main_header_search_results_container_visible')) {
+				jQuery('#main_header').addClass('home_top_main_header');
+			} else {
+				jQuery('#main_header').removeClass('home_top_main_header');
+			}
+		}
+
+		jQuery(document).ready(function(){
+			updateHomeMainHeader();
+
+			jQuery(window).scroll(function(){
+				updateHomeMainHeader();
+				var y = jQuery(window).scrollTop();
+				var height = jQuery('#home_top').height();
+				var position = 50 + parseFloat(	20 * y/height );
+			    jQuery('#home_top').css('background-position', '50% ' + position + '%');
+			});
+
+			jQuery("#main_header_search_input").on('keyup', function(e){
+				if (e.keyCode == 27) {
+					updateHomeMainHeader();
+				}
+			});
+
+			jQuery("#main_header_search_results_close").on('click', function(){
+				updateHomeMainHeader();
+			});
+		});
+	</script>
+	<section id="home_top"></section>
+	<section id="main">
+		<div id="content">
+			<section id="latest_tablos_section">
+				<h3 id="latest_tablos_title"><a href="{{ path('tablos', {'order': 'latest'}) }}" class="transition2">{{ 'جدیدترین آثار' }}</a></h3>
+				<div id="latest_tablos_container">
+					{% for tablo in latest_tablos %}
+						{{ include('TablozMainBundle:Default:tablo_medium.html.twig', { 'tablo': tablo }) }}
+					{% endfor %}
+				</div>
+			</section>
+			<section id="latest_popular_tablos_section" style="margin-top: 100px;">
+				<h3 id="latest_popular_tablos_title"><a href="{{ path('tablos', {'order': 'latest_popular'}) }}" class="transition2">{{ 'محبوب ترین آثار اخیر' }}</a></h3>
+				<div id="latest_popular_tablos_container">
+					{% for tablo in latest_popular_tablos %}
+						{{ include('TablozMainBundle:Default:tablo_medium.html.twig', { 'tablo': tablo }) }}
+					{% endfor %}
+				</div>
+			</section>
+		</div>
+	</section>
 {% endblock %}

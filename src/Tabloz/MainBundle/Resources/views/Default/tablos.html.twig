@@ -15,7 +15,7 @@
 	
 		jQuery(document).ready(function(){
 	
-			jQuery(".tablos_category_select").on("change", function(){
+			jQuery(".tablos_category_select, .tablos_order_select").on("change", function(){
 				jQuery(this).closest("form").submit();	
 			});
 
@@ -46,6 +46,13 @@
 							{% for category in categories %}
 								<option value="{{ category.descriptor }}" {{ (app.request.get('category') == category.descriptor) ? ' selected="selected" ' : '' }}>{{ category.title }}</option>
 							{% endfor %}
+						</select>
+					</span>
+					<span class="tablos_filter_select_container">
+						<select name="order" class="tablos_order_select">
+							<option value="latest" {{ (app.request.get('order') == 'latest') ? ' selected="selected" ' : '' }}>{{ 'جدیدترین ها' }}</option>
+							<option value="popular_all_time" {{ (app.request.get('order') == 'popular_all_time') ? ' selected="selected" ' : '' }}>{{ 'محبوب ترین ها' }}</option>
+							<option value="latest_popular" {{ (app.request.get('order') == 'latest_popular') ? ' selected="selected" ' : '' }}>{{ 'محبوب ترین های اخیر' }}</option>
 						</select>
 					</span>
 				</form>

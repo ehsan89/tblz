@@ -1,0 +1,25 @@
+<div class="tablo_box transition2" data-id="{{ tablo.id }}">
+	<a href="{{ path('edit_tablo', {'id': tablo.id}) }}">
+		<div class="tablo_box_image_container">
+			<div id="tablo_box_private_{{ tablo.id }}" class="tablo_box_private {{ tablo.private ? '' : 'tablo_box_private_off' }}" title="{{ 'خصوصی' }}"></div>
+			<div id="tablo_box_settings_{{ tablo.id }}" class="tablo_box_settings">
+				<div class="tablo_box_settings_menu" onclick="return false;">
+					<ul>
+						<li id="tablo_box_add_to_collection" class="tablo_box_settings_menu_item" onclick="openTabloCollectionDialog({{ tablo.id }}); return false;">{{ 'افزودن به مجموعه' }}</li>
+						<li id="tablo_box_delete" class="tablo_box_settings_menu_item" onclick="openDeleteTabloDialog('{{ path('delete_tablo', {'id': tablo.id}) }}'); return false;">{{ 'حذف' }}</li>
+					</ul>
+				</div>
+			</div>
+			<img alt="{{ tablo.title }}" src="{{ media_asset(tablo.image, 'medium') }}">
+		</div>
+	</a>
+	<div class="tablo_box_info">
+		<span class="tablo_box_info_comments" title="{{ 'تعداد نظرات' }}">{{ tablo.commentCount }}</span>
+		<span class="tablo_box_info_sales" title="{{ 'تعداد فروش' }}">{{ tablo.buyCount }}</span>
+		<span class="tablo_box_info_favorites" title="{{ 'تعداد علاقه مندی ها' }}">{{ tablo.favoriteCount }}</span>
+		<span class="tablo_box_info_views" title="{{ 'تعداد مشاهده ها' }}">{{ tablo.viewCount }}</span>
+	</div>
+	<div class="add_tablo_to_collection_form_container" style="display: none;">
+		{{ render(controller('TablozUserBundle:Default:addTabloToCollection', { 'tablo': tablo })) }}
+	</div>
+</div>

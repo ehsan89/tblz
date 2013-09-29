@@ -5,6 +5,7 @@ namespace Tabloz\UserBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 
 use Sonata\UserBundle\Entity\BaseUser as BaseUser;
+use Sonata\UserBundle\Model\User as AbstractedUser;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -13,7 +14,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @ORM\Entity
  * @ORM\Table(name="tabloz_user")
  */
-class User extends BaseUser
+class User extends AbstractedUser
 {
     /**
      * @ORM\Id
@@ -21,9 +22,110 @@ class User extends BaseUser
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
+
+    /**
+     * @ORM\Column(type="datetime", name="created_at")
+     */
+    protected $createdAt;
+
+
+    /**
+     * @ORM\Column(type="datetime", name="updated_at")
+     */
+    protected $updatedAt;
+    
+    /**
+     * @ORM\Column(type="string", name="two_step_code")
+     */
+    protected $twoStepVerificationCode;
+    
+    /**
+     * @ORM\Column(type="datetime", name="date_of_birth")
+     */
+    protected $dateOfBirth;
+    
+    /**
+     * @ORM\Column(type="string", length=64, nullable=true)
+     */
+    protected $firstname;
+    
+    /**
+     * @ORM\Column(type="string", length=64, nullable=true)
+     */
+    protected $lastname;
     
     /**
      * @ORM\Column(type="string", nullable=true)
+     */
+    protected $website;
+    
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $biography;
+    
+    /**
+     * @ORM\Column(type="string", length=1, nullable=true)
+     */
+    protected $gender = UserInterface::GENDER_UNKNOWN; // set the default to unknown
+    
+    /**
+     * @ORM\Column(type="string", length=64, nullable=true)
+     */
+    protected $phone;
+    
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    protected $token;
+
+    /**
+     * @ORM\Column(type="string", name="facebook_uid", nullable=true)
+     */
+    protected $facebookUid;
+
+    /**
+     * @ORM\Column(type="string", name="facebook_name", nullable=true)
+     */
+    protected $facebookName;
+
+    /**
+     * @ORM\Column(type="json", name="facebook_data", nullable=true)
+     */
+    protected $facebookData;
+
+    /**
+     * @ORM\Column(type="string", name="twitter_uid", nullable=true)
+     */
+    protected $twitterUid;
+
+    /**
+     * @ORM\Column(type="string", name="twitter_name", nullable=true)
+     */
+    protected $twitterName;
+
+    /**
+     * @ORM\Column(type="json", name="twitter_data", nullable=true)
+     */
+    protected $twitterData;
+
+    /**
+     * @ORM\Column(type="string", name="gplus_uid", nullable=true)
+     */
+    protected $gplusUid;
+
+    /**
+     * @ORM\Column(type="string", name="gplus_name", nullable=true)
+     */
+    protected $gplusName;
+
+    /**
+     * @ORM\Column(type="json", name="gplus_data", nullable=true)
+     */
+    protected $gplusData;
+    
+    /**
+     * @ORM\Column(type="string", length=64, nullable=true)
      */
     private $mobile;
     
@@ -33,7 +135,7 @@ class User extends BaseUser
     private $address;
     
     /**
-     * @ORM\Column(type="string", nullable=true)
+     * @ORM\Column(type="string", length=64, nullable=true)
      */
     private $postal_code;
     
@@ -493,5 +595,35 @@ class User extends BaseUser
     public function getFollowees()
     {
         return $this->followees;
+    }
+    
+    /**
+     * Set the default user image media
+     * 
+     * @ORM\PrePersist
+     */
+    public function setDefaultImage(){
+    	if (!$this->image){
+    		$mediaRepository = $this->getDoctrine()
+    		->getRepository('ApplicationSonataMediaBundle:Media');
+    		$this->image = $mediaRepository->findOneByName('default-user-image');
+    	}
+    }
+
+    /**
+     * Hook on pre-persist operations
+     */
+    public function prePersist()
+    {
+    	$this->createdAt = new \DateTime;
+    	$this->updatedAt = new \DateTime;
+    }
+    
+    /**
+     * Hook on pre-update operations
+     */
+    public function preUpdate()
+    {
+    	$this->updatedAt = new \DateTime;
     }
 }
