@@ -23,8 +23,25 @@
 		form.find('.add_tablo_to_collection_submit_spinner').fadeIn();
 		form.find('.add_tablo_to_collection_submit').hide();
 		jQuery.post(form.attr('action'), form.serialize(), function(response){
-			jQuery('#tablo_collection_dialog').dialog('close');
 			jQuery('#add_tablo_to_collection_form_container_' + tablo_id).replaceWith(response);
+
+			if (jQuery('#tablo_collections_content_container').length > 0){
+				var tablo_box = jQuery('<div>').append(jQuery('.tablo_box[data-id="'+tablo_id+'"]:first').clone()).html();
+				jQuery('.tablo_box[data-id="'+tablo_id+'"]').remove();
+				jQuery('#tablo_collection_dialog_form_container .form_tablo_collections_container li :checkbox').each(function(){
+					if (jQuery(this).is(':checked') && (jQuery('.tablo_collection_content[data-id="'+jQuery(this).val()+'"] .tablo_box[data-id="'+tablo_id+'"]').length == 0)) {
+						jQuery('.tablo_collection_content[data-id="'+jQuery(this).val()+'"] .tablo_collection_empty').hide();
+						jQuery('.tablo_collection_content[data-id="'+jQuery(this).val()+'"]').prepend(tablo_box);
+					}
+				});
+				jQuery('.tablo_collection_content').each(function(){
+					if (jQuery(this).find('.tablo_box').length == 0){
+						jQuery(this).find('.tablo_collection_empty').show();
+					}
+				});
+			}
+
+			jQuery('#tablo_collection_dialog').dialog('close');
 			form.find('.add_tablo_to_collection_submit_spinner').hide();
 			form.find('.add_tablo_to_collection_submit').show();
 		});

@@ -3,6 +3,9 @@
 	right: 0;
 	top: 100px;
 	z-index: 10;
+    -moz-box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.5);
+    -webkit-box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.5);
+	box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.5);
 }
 
 .tablo_sidebar_link {
@@ -118,9 +121,10 @@
 	float: right;
 	margin-left: 30px;
 }
-.tablo_info_user_link {
+
+.tablo_info_user_link, .tablo_info_category_link {
 	margin-left: 20px;
-	color: #888;
+	color: #AAA;
 }
 
 .tablo_info_user_link:hover {
@@ -129,6 +133,7 @@
 
 .tablo_info_table_right_col {
 	text-align: left;
+	color: #888;
 }
 
 .tablo_info_table_left_col {

@@ -1,0 +1,13 @@
+<div>{{ product.title }}</div>
+<div>{{ product.category }}</div>
+<div>{{ product.description }}</div>
+<div>{{ product.unitPrice }}</div>
+
+<div>
+	<form action="{{ path('add_to_cart') }}" method="get">
+		<input name="id" type="hidden" value="{{ product.id }}">
+		<input name="type" type="hidden" value="{{ 'Product' }}">
+		<input name="quantity" type="text">
+		<input type="submit" value="{{ 'افزودن به سبد خرید' }}">
+	</form>
+</div>

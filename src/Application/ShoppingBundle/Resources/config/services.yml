@@ -1,0 +1,34 @@
+parameters:
+#    application_shopping.example.class: Application\ShoppingBundle\Example
+
+services:
+     sonata.admin.account:
+        class: Application\ShoppingBundle\Admin\AccountAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Payments", label: "Account" }
+        arguments: [ null, Application\ShoppingBundle\Entity\Payment\Account, SonataAdminBundle:CRUD ]
+     sonata.admin.product:
+        class: Application\ShoppingBundle\Admin\ProductAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Products", label: "Product" }
+        arguments: [ null, Application\ShoppingBundle\Entity\Product\Product, SonataAdminBundle:CRUD ]
+     sonata.admin.product_category:
+        class: Application\ShoppingBundle\Admin\ProductCategoryAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Products", label: "Product Category" }
+        arguments: [ null, Application\ShoppingBundle\Entity\Product\ProductCategory, SonataAdminBundle:CRUD ]
+     sonata.admin.order:
+        class: Application\ShoppingBundle\Admin\OrderAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Orders", label: "Order" }
+        arguments: [ null, Application\ShoppingBundle\Entity\Order\Order, SonataAdminBundle:CRUD ]
+        calls:
+            - [ setTemplate, [edit, ApplicationShoppingBundle:OrderAdmin:edit.html.twig]]
+     sonata.admin.payment:
+        class: Application\ShoppingBundle\Admin\PaymentAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Payments", label: "Payment" }
+        arguments: [ null, Application\ShoppingBundle\Entity\Payment\Payment, SonataAdminBundle:CRUD ]
+#    application_shopping.example:
+#        class: %application_shopping.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

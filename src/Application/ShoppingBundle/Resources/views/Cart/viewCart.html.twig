@@ -1,0 +1,58 @@
+{% extends '::base.html.twig' %}
+
+
+{% block body %}
+	<script type="text/javascript">
+		jQuery(document).ready(function(){
+			var timeout;
+			jQuery('#cart_summary_container').on('input', '.cart_item_quantity_input', function(){
+				clearTimeout(timeout);
+				var input = jQuery(this);
+				timeout = setTimeout(function(){
+						jQuery.get('{{ path('change_cart_item_quantity') }}', { id: input.data('id'), quantity: input.val()}, 
+							function(response){
+								processing = false;
+								jQuery('#cart_summary_container').html(jQuery(response).filter('#cart_summary_container').html());
+						});
+				}, 2000);
+			});
+		});
+	</script>
+	
+	<div id="cart_summary_container">
+		{% if (cart and cart.items.count > 0) %}
+			<div>
+				<table>
+					<tr>
+						<th>{{ 'عنوان' }}</th>
+						<th>{{ 'نوع' }}</th>
+						<th>{{ 'قیمت واحد' }}</th>
+						<th>{{ 'تعداد' }}</th>
+						<th>{{ 'قیمت کل' }}</th>
+						<th>{{ 'عملیات' }}</th>
+					</tr>
+					{% for item in cart.items %}
+						<tr>
+							<td>{{ item.resource.getSellableName }}</td>
+							<td>{{ item.resource.category }}</td>
+							<td>{{ item.unitPrice }}</td>
+							<td><input class="cart_item_quantity_input" data-id="{{ item.id }}" value="{{ item.quantity }}"></td>
+							<td>{{ item.total }}</td>
+							<td><a href="{{ path('delete_from_cart', {'id': item.id}) }}">{{ 'حذف' }}</a></td>
+						</tr>
+					{% endfor %}
+				</table>
+				
+				<div>
+					<div>{{ 'جمع کل' }} : {{ cart.getTotal }}</div>
+				</div>
+				<div>
+					<a href="{{ path('checkout') }}">{{ 'پرداخت' }}</a>
+					<a href="{{ path('empty_cart') }}">{{ 'خالی کردن سبد خرید' }}</a>
+				</div>
+			</div>
+		{% else %}
+			<div>{{ 'سبد خرید خالی است.' }}</div>
+		{% endif %}
+	</div>
+{% endblock %}

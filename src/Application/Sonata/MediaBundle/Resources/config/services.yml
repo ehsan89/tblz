@@ -28,7 +28,22 @@ services:
             - @sonata.media.manager.media
         tags:
             - { name: twig.extension }
-        
+            
+     
+    sonata.media.security.tablo_strategy:
+        class: Application\Sonata\MediaBundle\Security\TabloDownloadStrategy
+        arguments: 
+            - @translator
+            - @service_container
+            - @tablo_repository
+            
+    tablo_repository:
+        class:            Tabloz\MainBundle\Entity\TabloRepository
+        factory_service:  doctrine.orm.entity_manager
+        factory_method:   getRepository
+        arguments: 
+            - TablozMainBundle:Tablo
+
 #    factory_utility.example:
 #        class: %factory_utility.example.class%
 #        arguments: [@service_id, "plain_value", %parameter%]

@@ -1,0 +1,3 @@
+application_shopping_homepage:
+    resource: "@ApplicationShoppingBundle/Controller"
+    type:     annotation

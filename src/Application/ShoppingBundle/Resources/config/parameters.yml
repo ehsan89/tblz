@@ -1,0 +1,6 @@
+# This file is the shopping parameters
+parameters:
+    shop_email: shop@tabloz.com
+    shop_technical_support_email: ehsan89@gmail.com
+    vat_percent: 6
+    allowed_order_cancel_hours: 48

@@ -21,6 +21,7 @@
 				jQuery('.tablo_collection_list_item:first').addClass('tablo_collection_list_item_selected');
 				jQuery('.tablo_collection_content:first').addClass('tablo_collection_content_visible');
 			}
+			jQuery('.form_tablo_collections_container :checkbox[value="'+delete_tablo_collection_id+'"]').closest('li').remove();
 		});
 	}
 

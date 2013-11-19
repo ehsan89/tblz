@@ -18,8 +18,8 @@
 			<div style="width: 100%; height: 100%; position: absolute; z-index: 1;" onclick="jQuery('#file_uploader_input').click();"></div>  
 		</div>
 		<div class="spinner" data-spinner="1" style="display: none; position: absolute; top: 45%; width: 100%; text-align: center;">
-			<span>{{ 'در حال بارگذاری...' }}</span>
-			<div class="uploader_progressbar"><div class="uploader_progressbar_overlay"></div></div>
+			<span>{{ 'در حال بارگذاری...' }} ( <span class="uploader_progress_percentage"></span>  ) </span>
+			<div class="uploader_progressbar_container"><div class="uploader_progressbar" style="width: 0;"><div class="uploader_progressbar_overlay"></div></div></div>
 		</div>
 		<div class="thumbnails" data-thumbnails="1" style="height: 100%; display: inline-block; float: right;">
 		{# We populate the list via an API call #}

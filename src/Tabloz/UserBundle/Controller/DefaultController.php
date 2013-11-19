@@ -141,7 +141,7 @@ class DefaultController extends Controller
      * @Route("/tablo/{id}/delete", name="delete_tablo", requirements={"id" = "\d+"})
      * @ParamConverter("tablo", class="TablozMainBundle:Tablo")
      */
-    public function deleteTabloAction(Tablo $tablo){
+    public function deleteTabloAction(Tablo $tablo, Request $request){
     	$util = $this->container->get('util');
     	$user = $util->getCurrentUser();
     	
@@ -152,6 +152,10 @@ class DefaultController extends Controller
     	$em = $this->getDoctrine()->getManager();
 		$em->remove($tablo);
 		$em->flush();
+		
+		if ($request->isXmlHttpRequest()) {
+			return new Response('delete success');
+		}
 		
     	return $this->redirect($this->generateUrl('manage_works'));
     }

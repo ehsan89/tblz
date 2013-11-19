@@ -304,19 +304,19 @@
 					</td>
 				</tr>
 				<tr>
-					<td class="tablo_info_table_right_col"><span class="tablo_category_title">{{ 'دسته بندی' ~ ' : ' }}</span></td>
-					<td class="tablo_info_table_left_col"><a href="{{ path('tablos', {'category': tablo.category.descriptor}) }}">{{ tablo.category.title }}</a></td>
+					<td class="tablo_info_table_right_col"><span>{{ 'دسته بندی' ~ ' : ' }}</span></td>
+					<td class="tablo_info_table_left_col"><a href="{{ path('tablos', {'category': tablo.category.descriptor}) }}" class="tablo_info_category_link">{{ tablo.category.title }}</a></td>
 				</tr>
 				<tr>
-					<td class="tablo_info_table_right_col"><span class="tablo_view_count_title">{{ 'تعداد بازدیدها' ~ ' : ' }}</span></td>
+					<td class="tablo_info_table_right_col"><span>{{ 'تعداد بازدیدها' ~ ' : ' }}</span></td>
 					<td class="tablo_info_table_left_col">{{ tablo.viewCount }}</td>
 				</tr>
 				<tr>
-					<td class="tablo_info_table_right_col"><span class="tablo_published_at_title">{{ 'تاریخ انتشار' ~ ' : ' }}</span></td>
+					<td class="tablo_info_table_right_col"><span>{{ 'تاریخ انتشار' ~ ' : ' }}</span></td>
 					<td class="tablo_info_table_left_col">{{ tablo.publishedAt | jalali_date_formatted }}</a></td>
 				</tr>
 				<tr>
-					<td class="tablo_info_table_right_col"><span class="tablo_description_title">{{ 'توضیحات' ~ ' : ' }}</span></td>
+					<td class="tablo_info_table_right_col"><span>{{ 'توضیحات' ~ ' : ' }}</span></td>
 					<td class="tablo_info_table_left_col">{{ tablo.description|nl2br }}</td>
 				</tr>
 			</table>

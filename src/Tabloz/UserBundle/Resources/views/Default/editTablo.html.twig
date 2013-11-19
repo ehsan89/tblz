@@ -42,7 +42,19 @@
 	<div style="width: 100%">
 	    <form id="edit_tablo_form" action="" method="POST" class="form-horizontal">
 	    
-	    	<div style="float: right;"><img src="{{ media_asset(tablo.image, 'large') }}" alt="{{ tablo.title }}" title="{{ tablo.title }}" /></div>
+	    	<div style="float: right; position: relative;">
+	    		<img src="{{ media_asset(tablo.image, 'large') }}" alt="{{ tablo.title }}" title="{{ tablo.title }}" style="display: block;"/>
+	    		<div id="tablo_download_overlay" class="transition2">
+		    		<div id="tablo_download_overlay_content">
+		    			<a href="{{ path('sonata_media_download', {'id': tablo.image|sonata_urlsafeid }) }}">	
+		    				<div class="button" style="display: inline-block; padding: 10px 20px;">
+				    			<img src="{{ asset('bundles/tablozuser/images/download32.png') }}" style="vertical-align: middle;">
+				    			<span style="padding-right: 15px; font-size: 25px; vertical-align: middle;">{{ 'دانلود فایل اصلی' }}</span>
+			    			</div>
+			    		</a>
+	    			</div>
+	    		</div>
+	    	</div>
 			
 			<div id="tablo_form_container" style="float: right; margin: 0 5% 5%;">
 				<div style="float: right; width: 100%;">

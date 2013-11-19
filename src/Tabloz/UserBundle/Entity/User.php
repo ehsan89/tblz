@@ -208,7 +208,17 @@ class User extends AbstractedUser
      */
     protected $blog_post_comments;
     
+    /**
+     * @ORM\OneToMany(targetEntity="Application\ShoppingBundle\Entity\Cart\Cart", mappedBy="user")
+     */
+    protected $carts;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Application\ShoppingBundle\Entity\Order\Order", mappedBy="user")
+     */
+    protected $orders;
 
+    
     public function __construct()
     {
         parent::__construct();

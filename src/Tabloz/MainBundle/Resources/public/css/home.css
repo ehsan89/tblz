@@ -1,7 +1,7 @@
 #home_top {
 	background: url(../images/home_top_bg.jpg) no-repeat center;
 	background-size: cover;
-	height: 400px;
+	height: 500px;
 	width: 100%;
 	position: fixed;
 	left: 0;
@@ -36,7 +36,7 @@
 }
 
 #main {
-	margin-top: 400px;
+	margin-top: 500px;
 }
 
 #content {

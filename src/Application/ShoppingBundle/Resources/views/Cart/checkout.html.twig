@@ -1,0 +1,18 @@
+{{ include('ApplicationShoppingBundle:Order:order_cart_items.html.twig', { 'cart': cart }) }}
+<div>{{ 'هزینه سفارش' }} : {{ cart.total }}</div>
+<div>{{ 'مالیات بر ارزش افزوده' }} : {{ cart.total * (vat_percent/100) }}</div>
+<div>{{ 'هزینه کل' }} : {{ cart.total * (1 + vat_percent/100) }}</div>
+
+{{ form_start(form, {'action': path('checkout'), 'method': 'POST'}) }}
+    {{ form_errors(form) }}
+
+    {{ form_row(form.name) }}
+    {{ form_row(form.email) }}
+    {{ form_row(form.phone) }}
+{#     {{ form_row(form.country) }}#}
+{#     {{ form_row(form.state) }}#}
+{#     {{ form_row(form.city) }}#}
+{#     {{ form_row(form.address) }}#}
+{#     {{ form_row(form.postal_code) }}#}
+    {{ form_row(form.account) }}
+{{ form_end(form) }}

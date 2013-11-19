@@ -9,16 +9,23 @@ use Doctrine\Common\Persistence\ObjectManager;
 class DateToJalaliDateTransformer implements DataTransformerInterface
 {
 	/**
-	 * @var date data type
+	 * @var string date data type
 	 */
 	private $type;
+	
+	/**
+	 * @var string date delimiter
+	 */
+	private $delimiter;
 
 	/**
 	 * @param string $type date type ('array' or 'text')
+	 * @param string $delimiter date delimiter
 	 */
-	public function __construct($type='array')
+	public function __construct($type='array', $delimiter='-')
 	{
 		$this->type = $type;
+		$this->delimiter = $delimiter;
 	}
 
 	/**
@@ -38,13 +45,13 @@ class DateToJalaliDateTransformer implements DataTransformerInterface
 		}
 
 		try {
-			$jdate = DateUtil::date('Y-m-d', strtotime($date->format("Y-m-d")), false);
+			$jdate = DateUtil::date('Y'.$this->delimiter.'m'.$this->delimiter.'d', strtotime($date->format("Y-m-d")), false);
 		} catch (\Exception $e) {
 			throw new TransformationFailedException($e->getMessage(), $e->getCode(), $e);
 		}
 		
 		if ($this->type == 'array'){
-			$jarray = explode('-', $jdate);
+			$jarray = explode($this->delimiter, $jdate);
 			return array('year' => $jarray[0], 'month' => ltrim($jarray[1], '0'), 'day' => ltrim($jarray[2], '0'));
 		} elseif ($this->type == 'text'){
 			return $jdate;
@@ -89,7 +96,7 @@ class DateToJalaliDateTransformer implements DataTransformerInterface
 				
 				$gdate_array = DateUtil::toGregorian($jdate['year'], $jdate['month'], $jdate['day']);
 			} else {
-				$jarray = explode('-', $jdate);
+				$jarray = explode($this->delimiter, $jdate);
 				$gdate_array = DateUtil::toGregorian($jarray[0], $jarray[1], $jarray[2]);
 			}
 

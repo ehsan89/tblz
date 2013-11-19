@@ -1,0 +1,4 @@
+# This file shows the parameters used in twig templates
+twig:
+  globals:
+    vat_percent: %vat_percent%

@@ -1,0 +1,200 @@
+<?php
+
+namespace Application\ShoppingBundle\Entity\Product;
+
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Gedmo\Mapping\Annotation as Gedmo;
+
+use Doctrine\Common\Collections\ArrayCollection;
+
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="product_category")
+ */
+class ProductCategory
+{
+    /**
+     * @ORM\Id
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    protected $id;
+    
+    /**
+     * @ORM\Column(type="string")
+     *
+     * @Assert\NotBlank(message="عنوان دسته بندی را وارد کنید.")
+     */
+    private $title;
+    
+    /**
+     * @ORM\Column(type="string")
+     *
+     * @Assert\NotBlank(message="توصیفگر دسته بندی را وارد کنید.")
+     */
+    private $descriptor;
+    
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $description;
+    
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $enable = true;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Product", mappedBy="category")
+     */
+    protected $products;
+    
+    public function __construct()
+    {
+        // your own logic
+    	$this->products = new ArrayCollection();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function __toString(){
+    	return $this->title.'';
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set title
+     *
+     * @param string $title
+     * @return ProductCategory
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+    
+        return $this;
+    }
+
+    /**
+     * Get title
+     *
+     * @return string 
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * Set descriptor
+     *
+     * @param string $descriptor
+     * @return ProductCategory
+     */
+    public function setDescriptor($descriptor)
+    {
+        $this->descriptor = $descriptor;
+    
+        return $this;
+    }
+
+    /**
+     * Get descriptor
+     *
+     * @return string 
+     */
+    public function getDescriptor()
+    {
+        return $this->descriptor;
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     * @return ProductCategory
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+    
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string 
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * Set enable
+     *
+     * @param boolean $enable
+     * @return ProductCategory
+     */
+    public function setEnable($enable)
+    {
+        $this->enable = $enable;
+    
+        return $this;
+    }
+
+    /**
+     * Get enable
+     *
+     * @return boolean 
+     */
+    public function getEnable()
+    {
+        return $this->enable;
+    }
+
+    /**
+     * Add products
+     *
+     * @param \Application\ShoppingBundle\Entity\Product\Product $products
+     * @return ProductCategory
+     */
+    public function addProduct(\Application\ShoppingBundle\Entity\Product\Product $products)
+    {
+        $this->products[] = $products;
+    
+        return $this;
+    }
+
+    /**
+     * Remove products
+     *
+     * @param \Application\ShoppingBundle\Entity\Product\Product $products
+     */
+    public function removeProduct(\Application\ShoppingBundle\Entity\Product\Product $products)
+    {
+        $this->products->removeElement($products);
+    }
+
+    /**
+     * Get products
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getProducts()
+    {
+        return $this->products;
+    }
+}

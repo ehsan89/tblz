@@ -1,0 +1,22 @@
+<div class="cart_items_container">
+	<table class="cart_items_table">
+		<tr>
+			<th>{{ 'محصول' }}</th>
+			<th>{{ 'نوع' }}</th>
+			<th>{{ 'قیمت واحد' }}</th>
+			<th>{{ 'تعداد' }}</th>
+			<th>{{ 'قیمت کل' }}</th>
+		</tr>
+
+		{% for item in cart.items %}
+			<tr>
+				<td>{{ include(item.resource.getCartView, { 'object': item.resource }) }}</td>
+				<td>{{ item.resource.category }}</td>
+				<td>{{ item.unitPrice }}</td>
+				<td>{{ item.quantity }}</td>
+				<td>{{ item.total }}</td>
+			</tr>
+		{% endfor %}
+		
+	</table>
+</div>

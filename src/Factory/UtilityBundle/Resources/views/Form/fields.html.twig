@@ -18,6 +18,12 @@
 
 {% block jalali_date_picker_widget %}
     {% spaceless %}
+{#     	<script src="{{ asset('bundles/factoryutility/js/jquery.ui.datepicker-cc.all.min.js') }}" type="text/javascript"></script>#}
+{#     	<script>#}
+{#     		jQuery(document).ready(function(){#}
+{# 				jQuery(".ui_datepicker").datepicker();#}
+{# 			});#}
+{# 		</script>#}
     	<input type="text" class="ui_datepicker" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
     	
     {% endspaceless %}

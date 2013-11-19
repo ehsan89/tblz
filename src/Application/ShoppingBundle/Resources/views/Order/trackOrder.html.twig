@@ -1,0 +1,28 @@
+{{ form(form) }}
+
+{% if order %}
+	<h2>{{ 'سفارش کد ' ~ order.code }}</h2>
+	<table>
+		<tr><th>{{ 'نام' }}</th><td>{{ order.name }}</td></tr>
+		<tr><th>{{ 'ایمیل' }}</th><td>{{ order.email }}</td></tr>
+		<tr><th>{{ 'تلفن' }}</th><td>{{ order.phone }}</td></tr>
+{# 		<tr><th>{{ 'کشور' }}</th><td>{{ order.country }}</td></tr>#}
+{# 		<tr><th>{{ 'استان' }}</th><td>{{ order.state }}</td></tr>#}
+{# 		<tr><th>{{ 'شهر' }}</th><td>{{ order.city }}</td></tr>#}
+{# 		<tr><th>{{ 'آدرس' }}</th><td>{{ order.address }}</td></tr>#}
+{# 		<tr><th>{{ 'کد پستی' }}</th><td>{{ order.postalCode }}</td></tr>#}
+		<tr><th>{{ 'پرداخت شده' }}</th><td>{{ order.isPaid() ? 'بله' : 'خیر' }}</td></tr>
+		<tr><th>{{ 'وضعیت سفارش' }}</th><td>{{ order.status }}</td></tr>
+		<tr><th>{{ 'زمان ثبت سفارش' }}</th><td>{{ order.createdAt | jalali_date }}</td></tr>
+		<tr><th>{{ 'مبلغ کل' }}</th><td>{{ order.total }}</td></tr>
+	</table>
+	<h2>{{ 'جزئیات سفارش' }}</h2>
+	{{ include('ApplicationShoppingBundle:Order:order_cart_items.html.twig', { 'cart': order.cart }) }}
+	
+{% else %}
+	{% for flashMessage in app.session.flashbag.get('notice') %}
+	    <div class="flash-notice">
+	        {{ flashMessage }}
+	    </div>
+	{% endfor %}
+{% endif %}

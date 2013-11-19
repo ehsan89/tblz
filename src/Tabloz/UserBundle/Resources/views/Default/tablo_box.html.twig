@@ -6,7 +6,7 @@
 				<div class="tablo_box_settings_menu" onclick="return false;">
 					<ul>
 						<li id="tablo_box_add_to_collection" class="tablo_box_settings_menu_item" onclick="openTabloCollectionDialog({{ tablo.id }}); return false;">{{ 'افزودن به مجموعه' }}</li>
-						<li id="tablo_box_delete" class="tablo_box_settings_menu_item" onclick="openDeleteTabloDialog('{{ path('delete_tablo', {'id': tablo.id}) }}'); return false;">{{ 'حذف' }}</li>
+						<li id="tablo_box_delete" class="tablo_box_settings_menu_item" onclick="openDeleteTabloDialog({{ tablo.id }}, '{{ path('delete_tablo', {'id': tablo.id}) }}'); return false;">{{ 'حذف' }}</li>
 					</ul>
 				</div>
 			</div>
