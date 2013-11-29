@@ -35,6 +35,13 @@ class ProductItem extends CartItem
     public function __construct()
     {
     }
+	
+	/**
+	 * Returns the view of the item in the cart (object parameter will be passed to this template)
+	 */
+	public function getCartView(){
+		return 'ApplicationShoppingBundle:Product:product_cart_view.html.twig';
+	}
     
     /**
      * Checks whether the given object is equal to this object

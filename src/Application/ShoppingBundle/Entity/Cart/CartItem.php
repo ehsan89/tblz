@@ -48,6 +48,13 @@ class CartItem
     {
         // your own logic
     }
+	
+	/**
+	 * Returns the view of the item in the cart (object parameter will be passed to this template)
+	 */
+	public function getCartView(){
+		return 'ApplicationShoppingBundle:Cart:cart_item_view.html.twig';
+	}
 
 
     /**

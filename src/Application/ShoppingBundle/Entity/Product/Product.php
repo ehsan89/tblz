@@ -112,13 +112,6 @@ class Product implements SellableInterface
     public function getSellableName(){
     	return $this->title.'';
     }
-	
-	/**
-	 * Returns the view of the item in the cart (object parameter will be passed to this template)
-	 */
-	public function getCartView(){
-		return 'ApplicationShoppingBundle:Product:product_cart_view.html.twig';
-	}
     
     /**
 	 * Check whether the item is in stock or not

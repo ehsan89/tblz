@@ -15,11 +15,6 @@ interface SellableInterface
 	public function getSellableName();
 	
 	/**
-	 * Returns the view of the item in the cart (object parameter will be passed to this template)
-	 */
-	public function getCartView();
-	
-	/**
 	 * Check whether the item is in stock or not
 	 */
 	public function isInStock();

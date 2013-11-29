@@ -48,7 +48,7 @@ class CartController extends Controller
 		$user= $util->getCurrentUser();
 		
 		if ($util->isAuthenticated()){
-			$order->setUser($user);
+			$cart->setUser($user);
 		}
 		
 		$create_function = 'create'.$item_type.'Item';
