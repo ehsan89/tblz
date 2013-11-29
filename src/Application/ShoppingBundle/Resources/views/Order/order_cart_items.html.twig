@@ -10,7 +10,7 @@
 
 		{% for item in cart.items %}
 			<tr>
-				<td>{{ include(item.getCartView, { 'object': item.resource }) }}</td>
+				<td>{{ include(item.getCartView, { 'object': item }) }}</td>
 				<td>{{ item.resource.category }}</td>
 				<td>{{ item.unitPrice }}</td>
 				<td>{{ item.quantity }}</td>
