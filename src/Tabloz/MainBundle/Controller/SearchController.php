@@ -39,6 +39,7 @@ class SearchController extends Controller
 		$users = $user_repository->search($text, 'latest', 6);
     	
     	return array(
+    			'text' => $text,
     			'tablos' => $tablos,
     			'collections' => $collections,
     			'users' => $users

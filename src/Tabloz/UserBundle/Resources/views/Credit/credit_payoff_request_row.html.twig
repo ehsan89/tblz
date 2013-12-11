@@ -1,0 +1,8 @@
+<tr>
+	<td>{{ request.createdAt | jalali_date_time_formatted }}</td>
+	<td>{{ request.credit }}</td>
+	<td>{{ request.debitCardNumber ~ ((request.debitCardNumber and request.bankAccountNumber)?' / ':'') ~ request.bankAccountNumber }}</td>
+	<td>{{ request.description }}</td>
+	<td>{{ request.status }}</td>
+	<td><a href="{{ path('cancel_credit_payoff_request', {'id' : request.id}) }}" class="cancel_credit_payoff_request_link transition2">{{ 'کنسل کردن' }}</a></td>
+</tr>

@@ -68,6 +68,17 @@ class Cart {
 	}
 
 	/**
+	 * Calculates and returns the cart total items count
+	 */
+	public function getTotalCount() {
+		$count = 0;
+		foreach ($this->items as $item){
+			$count += $item->getQuantity();
+		}
+		return $count;
+	}
+
+	/**
 	 * Get id
 	 *
 	 * @return integer 

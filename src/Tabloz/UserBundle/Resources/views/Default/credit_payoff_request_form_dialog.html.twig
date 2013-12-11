@@ -1,0 +1,85 @@
+<script type="text/javascript">
+	
+	var add_tablo_to_collection_url = '';
+	
+	function openTabloCollectionDialog(tablo_id){
+		var form_container_id = 'add_tablo_to_collection_form_container_' + tablo_id;
+		jQuery('#tablo_collection_dialog_form_container').html(jQuery('#' + form_container_id).html());
+		jQuery('#tablo_collection_dialog').dialog('open');
+		jQuery('#tablo_collection_dialog_form_container .form_tablo_collections_container li :checkbox').each(function(){
+			if (jQuery(this).is(':checked')) {
+				jQuery(this).closest('.form_tablo_collections_container li').addClass('form_tablo_collection_selected');
+			} else {
+				jQuery(this).closest('.form_tablo_collections_container li').removeClass('form_tablo_collection_selected');
+			}
+		});
+		replaceCheckables();
+		
+	}
+	
+	function addTabloToCollection(tablo_id){
+		var form_container = jQuery('#tablo_collection_dialog_form_container');
+		var form = form_container.find('form');
+		form.find('.add_tablo_to_collection_submit_spinner').fadeIn();
+		form.find('.add_tablo_to_collection_submit').hide();
+		jQuery.post(form.attr('action'), form.serialize(), function(response){
+			jQuery('#add_tablo_to_collection_form_container_' + tablo_id).replaceWith(response);
+
+			if (jQuery('#tablo_collections_content_container').length > 0){
+				var tablo_box = jQuery('<div>').append(jQuery('.tablo_box[data-id="'+tablo_id+'"]:first').clone()).html();
+				jQuery('.tablo_box[data-id="'+tablo_id+'"]').remove();
+				jQuery('#tablo_collection_dialog_form_container .form_tablo_collections_container li :checkbox').each(function(){
+					if (jQuery(this).is(':checked') && (jQuery('.tablo_collection_content[data-id="'+jQuery(this).val()+'"] .tablo_box[data-id="'+tablo_id+'"]').length == 0)) {
+						jQuery('.tablo_collection_content[data-id="'+jQuery(this).val()+'"] .tablo_collection_empty').hide();
+						jQuery('.tablo_collection_content[data-id="'+jQuery(this).val()+'"]').prepend(tablo_box);
+					}
+				});
+				jQuery('.tablo_collection_content').each(function(){
+					if (jQuery(this).find('.tablo_box').length == 0){
+						jQuery(this).find('.tablo_collection_empty').show();
+					}
+				});
+			}
+
+			jQuery('#tablo_collection_dialog').dialog('close');
+			form.find('.add_tablo_to_collection_submit_spinner').hide();
+			form.find('.add_tablo_to_collection_submit').show();
+		});
+	}
+
+	jQuery(document).ready(function(){
+		jQuery( "#tablo_collection_dialog" ).dialog({
+			width: 500,
+			show: {
+		        effect: "drop",
+		        direction: "down"
+		      },
+            hide: "fade",
+            close: function() {
+    			jQuery('#tablo_collection_private_container').addClass('tablo_collection_private_container_hidden');
+            }
+		});
+
+		jQuery('#tablo_collection_dialog_form_container').on('click', '.form_tablo_collections_container li', function(){
+			var checkbox = jQuery(this).find(':checkbox').prop('checked', !jQuery(this).find(':checkbox').is(':checked'));
+			if (checkbox.is(':checked')) {
+				jQuery(this).addClass('form_tablo_collection_selected');
+			} else {
+				jQuery(this).removeClass('form_tablo_collection_selected');
+			}
+		});
+	});
+
+</script>
+
+<div style="display: none;">
+	<div id="tablo_collection_dialog" title="{{ 'افزودن به مجموعه' }}">
+		<div>
+			{{ render(controller('TablozUserBundle:Default:newTabloCollection')) }}
+		</div>
+		<div style="margin-top: 20px;">
+			<div id="tablo_collection_dialog_form_container" class="transition2">
+			</div>
+		</div>
+	</div>
+</div>

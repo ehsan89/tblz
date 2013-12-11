@@ -1,58 +1,111 @@
-{% extends '::base.html.twig' %}
-
-
-{% block body %}
-	<script type="text/javascript">
-		jQuery(document).ready(function(){
-			var timeout;
-			jQuery('#cart_summary_container').on('input', '.cart_item_quantity_input', function(){
-				clearTimeout(timeout);
-				var input = jQuery(this);
-				timeout = setTimeout(function(){
-						jQuery.get('{{ path('change_cart_item_quantity') }}', { id: input.data('id'), quantity: input.val()}, 
-							function(response){
-								processing = false;
-								jQuery('#cart_summary_container').html(jQuery(response).filter('#cart_summary_container').html());
-						});
-				}, 2000);
-			});
+<script type="text/javascript">
+	jQuery(document).ready(function(){
+		var timeout;
+		jQuery('#cart_summary_container').on('input', '.cart_item_quantity_input', function(){
+			clearTimeout(timeout);
+			var input = jQuery(this);
+			timeout = setTimeout(function(){
+				input.siblings('.cart_item_quantity_loading').addClass('cart_item_quantity_loading_visible');
+				jQuery.get('{{ path('change_cart_item_quantity') }}', { id: input.data('id'), quantity: input.val()}, 
+					function(response){
+						processing = false;
+						jQuery('#cart_summary_container').html(jQuery(response).filter('#cart_summary_container').html());
+						//update the cart button
+						var cart_total_count = 0;
+						jQuery(response).find('.cart_item_quantity_input').each(function(){ cart_total_count += parseInt(jQuery(this).val());});
+						jQuery('#main_header_cart_button_count').text(cart_total_count);
+						if (cart_total_count == 0){
+							jQuery('#main_header_cart_button_count').removeClass('main_header_cart_button_count_visible');
+						}
+				});
+			}, 2000);
 		});
-	</script>
-	
-	<div id="cart_summary_container">
-		{% if (cart and cart.items.count > 0) %}
-			<div>
-				<table>
+		
+		jQuery('#cart_summary_container').on('click', '.cart_item_delete', function(){
+			var delete_button = jQuery(this);
+			delete_button.hide();
+			delete_button.siblings('.cart_item_delete_loading').fadeIn();
+			jQuery.get(delete_button.attr('href'), 
+				function(response){
+					delete_button.parents('.cart_item_row').hide('slow', function(){
+						jQuery('#cart_summary_container').html(jQuery(response).filter('#cart_summary_container').html());
+						//update the cart button
+						var cart_total_count = 0;
+						jQuery(response).find('.cart_item_quantity_input').each(function(){ cart_total_count += parseInt(jQuery(this).val());});
+						jQuery('#main_header_cart_button_count').text(cart_total_count);
+						if (cart_total_count == 0){
+							jQuery('#main_header_cart_button_count').removeClass('main_header_cart_button_count_visible');
+						}
+					});
+			});
+			return false;
+		});
+		jQuery('#cart_summary_container').on('click', '.empty_cart_button', function(){
+			closeCart();
+			jQuery('#main_header').removeClass('home_top_main_header');
+			jQuery("#main_header_cart_view_container").addClass('main_header_cart_view_container_visible');
+			jQuery("#main_header_cart_view").removeClass('main_header_cart_view_visible');
+			jQuery("#main_header_cart_view_spinner").addClass('main_header_cart_view_spinner_visible');
+			jQuery.get(jQuery(this).attr('href'), function(response){
+				jQuery("#main_header_cart_view_spinner").removeClass('main_header_cart_view_spinner_visible');
+				jQuery("#main_header_cart_view").html(response);
+				jQuery("#main_header_cart_view").addClass('main_header_cart_view_visible');
+				//update the cart button
+				var cart_total_count = 0;
+				jQuery(response).find('.cart_item_quantity_input').each(function(){ cart_total_count += parseInt(jQuery(this).val());});
+				jQuery('#main_header_cart_button_count').text(cart_total_count);
+				if (cart_total_count == 0){
+					jQuery('#main_header_cart_button_count').removeClass('main_header_cart_button_count_visible');
+				}
+			});
+			return false;
+		});
+	});
+</script>
+
+<div id="cart_summary_container">
+	{% if (cart and cart.items.count > 0) %}
+		<div class="transition2">
+			<table class="cart_summary_table">
+				<tbody>
 					<tr>
-						<th>{{ 'عنوان' }}</th>
-						<th>{{ 'نوع' }}</th>
-						<th>{{ 'قیمت واحد' }}</th>
+						<th style="text-align: right;">{{ 'عنوان' }}</th>
+						<th>{{ 'دسته بندی' }}</th>
+						<th>{{ 'قیمت واحد (ریال)' }}</th>
 						<th>{{ 'تعداد' }}</th>
-						<th>{{ 'قیمت کل' }}</th>
-						<th>{{ 'عملیات' }}</th>
+						<th>{{ 'قیمت کل (ریال)' }}</th>
+						<th>{{ 'حذف' }}</th>
 					</tr>
 					{% for item in cart.items %}
-						<tr>
-							<td>{{ item.resource.getSellableName }}</td>
+						<tr class="cart_item_row">
+							<td>{{ include(item.getCartView(), { 'object' : item}) }}</td>
 							<td>{{ item.resource.category }}</td>
 							<td>{{ item.unitPrice }}</td>
-							<td><input class="cart_item_quantity_input" data-id="{{ item.id }}" value="{{ item.quantity }}"></td>
+							<td class="cart_item_quantity_container">
+								<input class="cart_item_quantity_input" data-id="{{ item.id }}" value="{{ item.quantity }}" pattern="\d+">
+								<img class="cart_item_quantity_loading" alt="{{ 'در حال تغییر' }}" src="{{ asset('public/images/spinner24.gif') }}">
+							</td>
 							<td>{{ item.total }}</td>
-							<td><a href="{{ path('delete_from_cart', {'id': item.id}) }}">{{ 'حذف' }}</a></td>
+							<td class="cart_item_delete_container">
+								<a href="{{ path('delete_from_cart', {'id': item.id}) }}" class="cart_item_delete">
+									<img src="{{ asset('bundles/applicationshopping/images/icons/garbage16.png') }}" alt="{{ 'حذف' }}" title="{{ 'حذف' }}">
+								</a>
+								<img class="cart_item_delete_loading" alt="{{ 'در حال حذف' }}" src="{{ asset('public/images/spinner24.gif') }}" style="display: none;">
+							</td>
 						</tr>
 					{% endfor %}
-				</table>
-				
-				<div>
-					<div>{{ 'جمع کل' }} : {{ cart.getTotal }}</div>
-				</div>
-				<div>
-					<a href="{{ path('checkout') }}">{{ 'پرداخت' }}</a>
-					<a href="{{ path('empty_cart') }}">{{ 'خالی کردن سبد خرید' }}</a>
-				</div>
+				</tbody>
+			</table>
+			
+			<div class="cart_total_container">
+				<div>{{ 'جمع کل' }} : {{ cart.getTotal ~ ' ریال ' }}</div>
 			</div>
-		{% else %}
-			<div>{{ 'سبد خرید خالی است.' }}</div>
-		{% endif %}
-	</div>
-{% endblock %}
+			<div class="cart_button_container">
+				<a href="{{ path('checkout') }}" class="button">{{ 'پرداخت' }}</a>
+				<a href="{{ path('empty_cart') }}" class="empty_cart_button button grey_button">{{ 'خالی کردن سبد خرید' }}</a>
+			</div>
+		</div>
+	{% else %}
+		<div class="cart_empty">{{ 'سبد خرید خالی است.' }}</div>
+	{% endif %}
+</div>

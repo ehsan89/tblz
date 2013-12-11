@@ -1,0 +1,72 @@
+<?php
+
+namespace Application\ShoppingBundle\Entity\Tablo;
+
+use Application\ShoppingBundle\Entity\Cart\CartItem;
+
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Gedmo\Mapping\Annotation as Gedmo;
+
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="tablo_download_item")
+ * @ORM\HasLifecycleCallbacks
+ */
+class TabloDownloadItem extends CartItem
+{
+
+    /**
+     * @var integer
+     */
+    protected $id;
+
+    /**
+     * @var \Application\ShoppingBundle\Entity\Cart\Cart
+     */
+    protected $cart;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Tabloz\MainBundle\Entity\Tablo", inversedBy="tablo_download_items")
+     * @ORM\JoinColumn(name="tablo_id", nullable=false, referencedColumnName="id")
+     */
+    protected $resource;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Tabloz\MainBundle\Entity\DownloadType", inversedBy="tablo_download_items")
+     * @ORM\JoinColumn(name="download_type_id", nullable=false, referencedColumnName="id")
+     */
+    protected $download_type;
+    
+    /**
+     * @ORM\Column(type="string")
+     */
+    private $base_price = 0;
+
+    public function __construct()
+    {
+    }
+    
+    /**
+     * Checks whether the given object is equal to this object
+     * @param $object
+     * @return boolean
+     */
+    public function equals($object){
+    	if ( $object instanceof TabloDownloadItem && $object->getResource()->getId() == $this->resource->getId() && $object->getDownloadType()->getId() == $this->download_type->getId() ){
+    		return true;
+    	}
+    	return false;
+    }
+    
+    /**
+     * @ORM\PrePersist()
+     * @ORM\PreUpdate()
+     */
+    public function calculateTotal(){
+        $this->setBasePrice($this->download_type->getUnitPrice());
+        $this->setUnitPrice( ( ($this->resource->getDownloadMarkupPercent() + 100) * $this->getBasePrice() ) / 100 );
+        $this->setTotal($this->getQuantity() * $this->getUnitPrice());
+    }
+
+}

@@ -26,7 +26,6 @@ class TabloCategoryAdmin extends Admin
 		$datagridMapper
 		->add('title')
 		->add('descriptor')
-		->add('description')
 		->add('enable')
 		;
 	}
@@ -37,7 +36,7 @@ class TabloCategoryAdmin extends Admin
 		->addIdentifier('title')
 		->add('descriptor')
 		->add('description')
-		->add('enable')
+		->add('enable', 'boolean', array('editable' => true))
 		;
 	}
 

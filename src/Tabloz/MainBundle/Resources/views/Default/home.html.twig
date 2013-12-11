@@ -13,7 +13,9 @@
 	
 	<script type="text/javascript">
 		function updateHomeMainHeader(){
-			if (jQuery(window).scrollTop() < 10 && !jQuery('#main_header_search_results_container').hasClass('main_header_search_results_container_visible')) {
+			if (jQuery(window).scrollTop() < 10
+					 && !jQuery('#main_header_search_results_container').hasClass('main_header_search_results_container_visible')
+					 && !jQuery('#main_header_cart_view_container').hasClass('main_header_cart_view_container_visible')) {
 				jQuery('#main_header').addClass('home_top_main_header');
 			} else {
 				jQuery('#main_header').removeClass('home_top_main_header');
@@ -37,7 +39,7 @@
 				}
 			});
 
-			jQuery("#main_header_search_results_close").on('click', function(){
+			jQuery("#main_header_search_results_close, #main_header_cart_view_close").on('click', function(){
 				updateHomeMainHeader();
 			});
 		});

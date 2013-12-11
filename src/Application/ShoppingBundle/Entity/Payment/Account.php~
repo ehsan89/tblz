@@ -374,10 +374,10 @@ class Account
     /**
      * Add orders
      *
-     * @param \Application\ShoppingBundle\Entity\Payment\Order $orders
+     * @param \Application\ShoppingBundle\Entity\Order\Order $orders
      * @return Account
      */
-    public function addOrder(\Application\ShoppingBundle\Entity\Payment\Order $orders)
+    public function addOrder(\Application\ShoppingBundle\Entity\Order\Order $orders)
     {
         $this->orders[] = $orders;
     
@@ -387,9 +387,9 @@ class Account
     /**
      * Remove orders
      *
-     * @param \Application\ShoppingBundle\Entity\Payment\Order $orders
+     * @param \Application\ShoppingBundle\Entity\Order\Order $orders
      */
-    public function removeOrder(\Application\ShoppingBundle\Entity\Payment\Order $orders)
+    public function removeOrder(\Application\ShoppingBundle\Entity\Order\Order $orders)
     {
         $this->orders->removeElement($orders);
     }

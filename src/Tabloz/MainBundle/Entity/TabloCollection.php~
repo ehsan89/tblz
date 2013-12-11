@@ -55,7 +55,7 @@ class TabloCollection
     private $image;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Tabloz\MainBundle\Entity\Tablo", inversedBy="tablo_collections")
+     * @ORM\ManyToMany(targetEntity="Tabloz\MainBundle\Entity\Tablo", mappedBy="tablo_collections")
      **/
     protected $tablos;
     
@@ -276,5 +276,38 @@ class TabloCollection
     public function getUpdatedAt()
     {
         return $this->updated_at;
+    }
+
+    /**
+     * Add tablos
+     *
+     * @param \Tabloz\MainBundle\Entity\Tablo $tablos
+     * @return TabloCollection
+     */
+    public function addTablo(\Tabloz\MainBundle\Entity\Tablo $tablos)
+    {
+        $this->tablos[] = $tablos;
+    
+        return $this;
+    }
+
+    /**
+     * Remove tablos
+     *
+     * @param \Tabloz\MainBundle\Entity\Tablo $tablos
+     */
+    public function removeTablo(\Tabloz\MainBundle\Entity\Tablo $tablos)
+    {
+        $this->tablos->removeElement($tablos);
+    }
+
+    /**
+     * Get tablos
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getTablos()
+    {
+        return $this->tablos;
     }
 }

@@ -53,7 +53,7 @@ class ProductCategory
     public function __construct()
     {
         // your own logic
-    	$this->tablos = new ArrayCollection();
+    	$this->products = new ArrayCollection();
     }
 
     /**

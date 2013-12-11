@@ -3,8 +3,8 @@
 	right: 0;
 	top: 100px;
 	z-index: 10;
-    -moz-box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.5);
-    -webkit-box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.5);
+	-moz-box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.5);
+	-webkit-box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.5);
 	box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.5);
 }
 
@@ -92,7 +92,7 @@
 	/*background: url(../images/minimal_bg_b.jpg) repeat-x bottom #0D0D0D;*/
 }
 
-#tablo_cart_wall {
+#tablo_cart_wall_container {
 	background-image: url(../images/minimal_bg_b.jpg);
 	background-repeat: repeat-x;
 	background-size: auto 100%;
@@ -317,4 +317,83 @@ textarea#tablo_comment_content {
 .tablo_comment_user_thumbnail {
 	float: right;
 	margin-left: 20px;
+}
+
+#tablo_cart_wall_container {
+	position: fixed;
+	top: 0;
+	right: 0;
+	height: 100%;
+	width: 100%;
+}
+
+#tablo_cart_wall {
+	height: 100%;
+	position: relative;
+	display: inline-block;
+}
+
+#tablo_on_the_wall_container {
+	position: absolute;
+	top: 5%;
+	left: 14%;
+	margin-top: 100px;
+	height: 33%;
+	width: 34%;
+	overflow: hidden;
+	text-align: center;
+}
+
+#tablo_on_the_wall {
+	vertical-align: middle;
+	max-height: 97%;
+	box-shadow: -2px 2px 5px 0px rgba(0, 0, 0, 0.7);
+	-webkit-box-shadow: -2px 2px 5px 0px rgba(0, 0, 0, 0.7);
+	-moz-box-shadow: -2px 2px 5px 0px rgba(0, 0, 0, 0.7);
+}
+
+#tablo_on_the_wall_align_helper {
+	display: inline-block;
+	height: 60%;
+	vertical-align: middle;
+}
+
+#tablo_cart_content {
+	position: absolute;
+	right: 0;
+	top: 0;
+	padding: 140px 100px;
+	text-align: right;
+	color: #666;
+	text-shadow: -2px 2px 2px rgba(0, 0, 0, 0.2);
+}
+
+#tablo_cart_content .selectboxit {
+	border: 1px solid #666;
+}
+
+#tablo_cart_content .selectboxit-container {
+	color: #666;
+}
+
+#tablo_cart_content .selectboxit:hover, #tablo_cart_content .selectboxit:focus {
+	background-color: rgba(0, 0, 0, 0.1);
+	border-color: #333;
+}
+
+#tablo_print_price {
+	font-size: 15px;
+	padding: 0 20px;
+	color: #666;
+	vertical-align: middle;
+}
+
+#add_to_cart_button {
+	background-position: right 10px center;
+	background-repeat: no-repeat;
+}
+
+.add_to_cart_button_loading {
+	background-image: url(../images/spinner_green20.gif) !important;
+	padding-right: 45px !important;
 }

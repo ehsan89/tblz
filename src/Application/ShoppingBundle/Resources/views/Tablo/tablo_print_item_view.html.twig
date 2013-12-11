@@ -1,0 +1,13 @@
+<table style="text-align: right;" class="transition2">
+	<tr>
+		<td>
+			<a href="{{ path('view_tablo', {'id': object.resource.id}) }}" target="_blank">
+				<img class="tablo_print_item_image" alt="{{ object.resource.title ~ ' - ' ~ object.resource.user.fullname }}" src="{{ media_asset(object.resource.image, 'small') }}">
+			</a>
+		</td>
+		<td style="padding: 0 10px;">
+			{{ object.resource.getSellableName }}<br>
+			{{ object.printType.getTitleBySize(object.resource.image.width, object.resource.image.height) }}
+		</td>
+	</tr>
+</table>

@@ -2,6 +2,7 @@ parameters:
 #    tabloz_main.example.class: Tabloz\MainBundle\Example
 
 services:
+
      sonata.admin.tablo:
         class: Tabloz\MainBundle\Admin\TabloAdmin
         tags:
@@ -17,6 +18,23 @@ services:
         tags:
             - { name: sonata.admin, manager_type: orm, group: "Tablos", label: "Tablo Collection" }
         arguments: [ null, Tabloz\MainBundle\Entity\TabloCollection, SonataAdminBundle:CRUD ]
+        
+        
+     sonata.admin.print_type:
+        class: Tabloz\MainBundle\Admin\PrintTypeAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Tablos", label: "Print Type" }
+        arguments: [ null, Tabloz\MainBundle\Entity\PrintType, SonataAdminBundle:CRUD ]
+     sonata.admin.frame_type:
+        class: Tabloz\MainBundle\Admin\FrameTypeAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Tablos", label: "Frame Type" }
+        arguments: [ null, Tabloz\MainBundle\Entity\FrameType, SonataAdminBundle:CRUD ]
+     sonata.admin.download_type:
+        class: Tabloz\MainBundle\Admin\DownloadTypeAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Tablos", label: "Download Type" }
+        arguments: [ null, Tabloz\MainBundle\Entity\DownloadType, SonataAdminBundle:CRUD ]
 #    tabloz_main.example:
 #        class: %tabloz_main.example.class%
 #        arguments: [@service_id, "plain_value", %parameter%]

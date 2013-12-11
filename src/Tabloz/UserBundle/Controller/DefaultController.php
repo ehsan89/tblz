@@ -130,10 +130,18 @@ class DefaultController extends Controller
 				$em->flush();
 			}
 		}
+
+    	$print_type_repo = $this->getDoctrine()->getRepository('TablozMainBundle:PrintType');
+    	$print_types = $print_type_repo->findByEnable(true);
+
+    	$download_type_repo = $this->getDoctrine()->getRepository('TablozMainBundle:DownloadType');
+    	$download_types = $download_type_repo->findByEnable(true);
 		
     	return array(
     			'tablo' => $tablo,
-    			'form' => $form->createView()
+    			'form' => $form->createView(),
+    			'print_types' => $print_types,
+    			'download_types' => $download_types
     			);
     }
 

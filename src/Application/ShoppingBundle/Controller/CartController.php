@@ -17,6 +17,7 @@ use Application\ShoppingBundle\Entity\Cart\Cart;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -60,6 +61,10 @@ class CartController extends Controller
 		$em->flush();
 		
 		$session->set('cart_id', $cart->getId());
+		
+		if ($request->isXmlHttpRequest()) {
+			return new Response($cart->getTotalCount());
+		}
 		
 		return $this->redirect($this->generateUrl('view_cart'));
 		

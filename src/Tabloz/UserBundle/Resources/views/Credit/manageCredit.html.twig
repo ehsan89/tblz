@@ -1,0 +1,270 @@
+
+{% extends '::base.html.twig' %}
+
+{% block title %}{{ 'tabloz.com | مدیریت مالی' }}{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+    {% stylesheets filter='cssrewrite' 
+    				'bundles/tablozuser/css/profile.css' 
+    				'bundles/tablozuser/css/credit.css' %}
+    	<link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+	{% javascripts  'bundles/factoryutility/js/IntlDate.js'
+					'bundles/factoryutility/js/PersianDate.js'
+					'bundles/factoryutility/js/highcharts.js'
+					'bundles/factoryutility/js/highcharts-persian.js' %}
+		<script type="text/javascript" src="{{ asset_url }}"></script>
+	{% endjavascripts %}
+{% endblock %}
+
+{% block content %}	
+
+	<script type="text/javascript">
+	
+		
+		jQuery(document).ready(function(){
+			
+			jQuery(function () {
+
+				setPersianDefaults();
+				
+		        jQuery('#credit_balance_chart').highcharts({
+		            title: {
+		                text: 'تغییرات تراز مالی',
+		                x: -20, //center
+		                style: {
+		                    color: '#AAA',
+		                    font: '20px TablozLight'
+		                }
+		            },
+		            subtitle: {
+		                //text: 'Source: WorldClimate.com',
+		                x: -20
+		            },
+		            chart: {
+		                zoomType: 'x',
+		                resetZoomButton: {
+		                    theme: {
+		                        fill: '#444',
+		                        stroke: '#444',
+		                        r: 0,
+                                style: {
+                                    color: 'white',
+                                    fontFamily: 'BYekan',
+                                    direction: 'ltr'
+                                },
+		                        states: {
+		                            hover: {
+		                                fill: '#555',
+				                        stroke: '#555'
+		                            }
+		                        }
+		                    }
+		                },
+		                backgroundColor: '#151515',
+		                borderWidth: 0,
+		                plotBackgroundColor: '#151515',
+		                plotShadow: false,
+		                plotBorderWidth: 0,
+		                shadow: false
+		            },
+		            xAxis: {
+			            type: 'datetime',
+			            dateTimeLabelFormats: {
+			            	millisecond: '%H:%M:%S.%L',
+			            	second: '%H:%M:%S',
+			            	minute: '%H:%M',
+			            	hour: '%H:%M',
+			            	day: '%fd %fn',
+			            	week: '%fd %fn',
+			            	month: '%fn - %fy',
+			            	year: '%fY'
+			            },
+		                labels: {
+		                	overflow: 'justify',
+		                	/*formatter: function () {
+	                            var date = new Date(this.value);
+	                            var pdate = new PersianDate(date);
+	                            return pdate.toDateString();
+	                        },*/
+			                style: {
+			                    color: '#AAA',
+			                    font: '13px BYekan'
+			                }
+		                },
+		                gridLineColor: '#333'
+		            },
+		            yAxis: {
+		                title: {
+		                    text: 'تراز مالی (ریال)',
+			                style: {
+			                    color: '#AAA',
+			                    font: '13px BYekan'
+			                }
+		                },
+		                labels: {
+		                	useHTML: true,
+		                    formatter: function () {
+		                        return Highcharts.numberFormat(this.value,0);
+		                    },
+			                style: {
+			                    color: '#AAA',
+			                    font: '13px BYekan'
+			                }
+		                },
+		                gridLineColor: '#333',
+		                plotLines: [{
+		                    value: 0,
+		                    width: 1,
+		                    color: '#808080'
+		                }]
+		            },
+		            tooltip: {
+		                xDateFormat: '%fY/%fm/%fd',
+		            	useHTML: true,
+		                //headerFormat: '<div style="padding: 5px 10px;"><small>{point.x}</small><br>',
+		                pointFormat: '<div> {point.y:,.0f}  ریال </div>',
+		                //footerFormat: '</div>',
+		            	/*formatter: function() {
+		            		var pdate = new PersianDate(new Date(this.x));
+		                    return '<div style="padding: 5px 10px;"><small>' + pdate.toDateString() + '</small><br><div> {point.y:,.0f}  ریال </div></div>';
+		                },*/
+		                valueSuffix: 'ریال',
+		                backgroundColor: 'rgba(0, 0, 0, 0.9)',
+		                //borderColor: '#555555',
+		                borderRadius: 0,
+		                borderWidth: 0,
+		                style: {
+		                    color: '#AAA',
+		                    fontFamily: 'BYekan',
+			                fontWeight: 'normal'
+		                }
+		            },
+		            legend: {
+		                enabled: false
+		            },
+		            plotOptions: {
+		                series: {
+		                    step: 'left' // or 'center' or 'right'
+		                }
+		            },
+		            series: [{
+		                name: '',
+		                data: [
+		                       [Date.UTC(2012,  9, 27), 0   ],
+		                       [Date.UTC(2012, 10, 10), 0.6 ],
+		                       [Date.UTC(2012, 10, 18), 0.7 ],
+		                       [Date.UTC(2012, 11,  2), 0.8 ],
+		                       [Date.UTC(2012, 11,  9), 0.6 ],
+		                       [Date.UTC(2012, 11, 16), 0.6 ],
+		                       [Date.UTC(2012, 11, 28), 0.67],
+		                       [Date.UTC(2013,  0,  1), 0.81],
+		                       [Date.UTC(2013,  0,  8), 0.78],
+		                       [Date.UTC(2013,  0, 12), 0.98],
+		                       [Date.UTC(2013,  0, 27), 1.84],
+		                       [Date.UTC(2013,  1, 10), 0],
+		                       [Date.UTC(2013,  1, 18), 1.80],
+		                       [Date.UTC(2013,  1, 24), 1.92],
+		                       [Date.UTC(2013,  2,  4), 2.49],
+		                       [Date.UTC(2013,  2, 11), 2.79],
+		                       [Date.UTC(2013,  2, 15), 2.73],
+		                       [Date.UTC(2013,  2, 25), 2.61],
+		                       [Date.UTC(2013,  3,  2), 2.76],
+		                       [Date.UTC(2013,  3,  6), 2.82],
+		                       [Date.UTC(2013,  3, 13), 2.8 ],
+		                       [Date.UTC(2013,  4,  3), 2.1 ],
+		                       [Date.UTC(2013,  4, 26), 1.1 ],
+		                       [Date.UTC(2013,  5,  9), 0.25],
+		                       [Date.UTC(2013,  5, 12), 0   ],
+		                       [Date.UTC(2014,  1, 18), 1.80],
+		                       [Date.UTC(2014,  1, 24), 1.92],
+		                       [Date.UTC(2014,  2,  4), 2.49],
+		                       [Date.UTC(2014,  2, 11), 2.79],
+		                       [Date.UTC(2014,  2, 15), 2.73],
+		                       [Date.UTC(2014,  2, 25), 2.61],
+		                       [Date.UTC(2014,  3,  2), 2.76],
+		                       [Date.UTC(2014,  3,  6), 2.82],
+		                       [Date.UTC(2014,  3, 13), 2.8 ],
+		                       [Date.UTC(2014,  4,  3), 2.1 ],
+		                       [Date.UTC(2014,  4, 26), 1.1 ],
+		                       [Date.UTC(2014,  5,  9), 0.25],
+		                       [Date.UTC(2014,  5, 12), 0   ]
+		                ]
+		            }],
+		            credits: {
+		                enabled: false
+		            }
+		        });
+		    });
+		    
+			jQuery(".tablo_box_private").on("click", function(){
+				var tablo_id = jQuery(this).closest('.tablo_box').data('id');
+				var tablo_private = jQuery(this).hasClass("tablo_box_private_off")?1:0;
+				jQuery(this).toggleClass("tablo_box_private_off");
+				
+				jQuery.ajax({
+				    type: 'POST',
+				    data: { id: tablo_id, private: tablo_private },
+				    url: "{{ path('toggle_tablo_private') }}",
+				    success: function(){
+				    },
+				    error: function(){
+				       jQuery(this).toggleClass("tablo_box_private_off");
+				    }
+				});
+				
+				return false;
+			});
+	
+	
+		});
+	</script>
+	
+	<h1>{{ 'مدیریت مالی' }}</h1>
+			
+	<section>
+		{% if form.has('errors') %}
+			<div class="form_error_container">{{ form_errors(form) }}</div>
+		{% endif %}
+		<h3>
+			<span>{{ 'تراز مالی' }} : <span style="font-family: BYekan; padding: 0 10px;">{{ app.user.credit }}</span> {{ ' ریال ' }}</span>
+			{% if (app.user.credit > 0) %}
+				<input type="button" value="{{ 'درخواست تسویه حساب' }}" onclick="jQuery('#credit_payoff_request_dialog').dialog('open');">
+			{% endif %}
+		</h3>
+		
+		<div id="credit_balance_chart" style="width:100%; height:400px;"></div>
+		
+		<h3 style="margin: 80px 0 20px;">{{ 'درخواست های ثبت شده' }}</h3>
+		<table id="credit_payoff_requests_table">
+			<tr>
+				<th>{{ 'زمان درخواست' }}</th>
+				<th>{{ 'تراز مالی در زمان درخواست (ریال)' }}</th>
+				<th>{{ 'شماره کارت / شماره حساب بانکی' }}</th>
+				<th>{{ 'توضیحات' }}</th>
+				<th>{{ 'وضعیت درخواست' }}</th>
+				<th>{{ 'کنسل کردن درخواست' }}</th>
+			</tr>
+			{% for request in app.user.creditPayoffRequests %}
+				<tr>
+					<td>{{ request.createdAt | jalali_date_time_formatted }}</td>
+					<td>{{ request.credit }}</td>
+					<td>{{ request.debitCardNumber ~ ((request.debitCardNumber and request.bankAccountNumber)?' / ':'') ~ request.bankAccountNumber }}</td>
+					<td>{{ request.description }}</td>
+					<td>{{ request.status }}</td>
+					<td><a href="{{ path('cancel_credit_payoff_request', {'id' : request.id}) }}" class="cancel_credit_payoff_request_link transition2">{{ 'کنسل کردن' }}</a></td>
+				</tr>
+			{% endfor %}
+		</table>
+		
+		{{ include('TablozUserBundle:Credit:credit_payoff_request_dialog.html.twig', {'form' : form}) }}
+		
+	</section>
+		
+
+{% endblock %}

@@ -159,8 +159,9 @@ class Order
      */
     public function setDefaults()
     {
-    	$this->code = str_pad($this->getId(), 10, 0, STR_PAD_LEFT);
-    	$this->total = $this->cart->getTotal();
+    	//$this->code = str_pad($this->getId(), 10, 0, STR_PAD_LEFT);
+    	$this->code = uniqid();
+    	$this->total = $this->cart->getTotal() * (1 + $this->vat_percent/100);
     }
 
     /**
@@ -700,5 +701,28 @@ class Order
     public function getVatPercent()
     {
         return $this->vat_percent;
+    }
+
+    /**
+     * Set user
+     *
+     * @param \Tabloz\UserBundle\Entity\User $user
+     * @return Order
+     */
+    public function setUser(\Tabloz\UserBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+    
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \Tabloz\UserBundle\Entity\User 
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 }

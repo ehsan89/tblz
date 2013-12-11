@@ -239,6 +239,13 @@ sonata_media:
             formats:
                 small: { width: 100 , quality: 70}
                 medium:   { width: 200 , quality: 100}
+                
+        frame_type:
+            providers:
+                - sonata.media.provider.image
+            formats:
+                small: { width: 200 , quality: 70}
+                medium:   { width: 400 , quality: 100}
 
     cdn:
         server:

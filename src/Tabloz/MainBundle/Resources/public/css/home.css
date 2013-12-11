@@ -27,11 +27,11 @@
     color: #EEE;
 }
 
-.home_top_main_header #main_header_search_input {
+.home_top_main_header #main_header_search_input, .home_top_main_header #main_header_cart_button {
 	opacity: 1;
 }
 
-.home_top_main_header #main_header_search_input:hover {
+.home_top_main_header #main_header_search_input:hover, .home_top_main_header #main_header_cart_button:hover {
 	opacity: 0.8;
 }
 

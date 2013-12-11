@@ -11,7 +11,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @ORM\Table(name="cart_item")
  * @ORM\InheritanceType("JOINED")
  * @ORM\DiscriminatorColumn(name="discr", type="string")
- * @ORM\DiscriminatorMap({"product_item" = "Application\ShoppingBundle\Entity\Product\ProductItem"})
+ * @ORM\DiscriminatorMap({"product_item" = "Application\ShoppingBundle\Entity\Product\ProductItem", "tablo_download_item" = "Application\ShoppingBundle\Entity\Tablo\TabloDownloadItem", "tablo_print_item" = "Application\ShoppingBundle\Entity\Tablo\TabloPrintItem"})
  * @ORM\HasLifecycleCallbacks()
  */
 class CartItem
@@ -24,9 +24,14 @@ class CartItem
     protected $id;
     
     /**
+     * @ORM\Column(type="boolean")
+     */
+    private $unit_quantity = false;
+    
+    /**
      * @ORM\Column(type="integer")
      */
-    private $quantity = 0;
+    private $quantity = 1;
     
     /**
      * @ORM\Column(type="string")
@@ -97,7 +102,7 @@ class CartItem
      */
     public function incrementQuantity($q)
     {
-    	$this->quantity += $q;
+    	$this->setQuantity($this->quantity + $q);
     	return $this->quantity;
     }
     
@@ -170,5 +175,28 @@ class CartItem
     public function getCart()
     {
         return $this->cart;
+    }
+
+    /**
+     * Set unit_quantity
+     *
+     * @param boolean $unitQuantity
+     * @return CartItem
+     */
+    public function setUnitQuantity($unitQuantity)
+    {
+        $this->unit_quantity = $unitQuantity;
+    
+        return $this;
+    }
+
+    /**
+     * Get unit_quantity
+     *
+     * @return boolean 
+     */
+    public function getUnitQuantity()
+    {
+        return $this->unit_quantity;
     }
 }

@@ -39,6 +39,13 @@
 			jQuery('.tablo_fullscreen').show();
 			jQuery('.tablo_fullscreen_collapse').hide();
 		}
+	} 
+
+	function setTabloPrintSize(){
+		var print_height = jQuery("#print_type_select").find(':selected').data('height');
+		var print_price = jQuery("#print_type_select").find(':selected').data('price');
+		jQuery('#tablo_on_the_wall').height(print_height+'%');
+		jQuery('#tablo_print_price').text(print_price + ' ریال ');
 	}
 	
 	jQuery(document).ready(function(){
@@ -113,7 +120,7 @@
 					top: tablo_info_top - current_position,
 					bottom: current_position - tablo_info_top + 100
 				    });
-				jQuery('#tablo_cart_wall').hide();
+				jQuery('#tablo_cart_wall_container').hide();
 			} else if( current_position < (tablo_comments_top - 100) ) {
 				jQuery('#tablo_sidebar_info_link').addClass('tablo_sidebar_link_active'); 
 				jQuery('#tablo_sidebar_info_link').siblings('.tablo_sidebar_link').removeClass('tablo_sidebar_link_active'); 
@@ -123,7 +130,7 @@
 					top: 100,
 					bottom: 0
 				    });
-				jQuery('#tablo_cart_wall').hide();
+				jQuery('#tablo_cart_wall_container').hide();
 			} else if( current_position < (tablo_comments_bottom - 100) ) {
 				jQuery('#tablo_sidebar_comments_link').addClass('tablo_sidebar_link_active'); 
 				jQuery('#tablo_sidebar_comments_link').siblings('.tablo_sidebar_link').removeClass('tablo_sidebar_link_active'); 
@@ -134,7 +141,7 @@
 						bottom: current_position + document_height - tablo_comments_bottom 
 					    });
 				}
-				jQuery('#tablo_cart_wall').show();
+				jQuery('#tablo_cart_wall_container').show();
 			} else {
 				jQuery('#tablo_sidebar_cart_link').addClass('tablo_sidebar_link_active'); 
 				jQuery('#tablo_sidebar_cart_link').siblings('.tablo_sidebar_link').removeClass('tablo_sidebar_link_active');
@@ -143,7 +150,7 @@
 					top: 100 - document_height,
 					bottom: document_height
 				    });
-				jQuery('#tablo_cart_wall').show();
+				jQuery('#tablo_cart_wall_container').show();
 			}
 			last_scroll_position = current_position;
 		});
@@ -212,6 +219,13 @@
 			jQuery("#tablo_tell_friend").dialog("open");
 
 		});
+
+		setTabloPrintSize();
+		jQuery("#print_type_select").on("change", function() {
+			setTabloPrintSize();
+			var print_height = jQuery(this).find(':selected').data('height');
+			jQuery('#tablo_on_the_wall').height(print_height+'%');
+		});
 	});
 </script>
 	<section id="main">
@@ -219,12 +233,12 @@
 			<div id="tablo_sidebar_main_link" class="tablo_sidebar_link tablo_sidebar_link_active left_tooltip" title="{{ 'نمایش اثر' }}"></div>
 			<div id="tablo_sidebar_info_link" class="tablo_sidebar_link left_tooltip" title="{{ 'مشخصات اثر' }}"></div>
 			<div id="tablo_sidebar_comments_link" class="tablo_sidebar_link left_tooltip" title="{{ 'نظرات' }}"></div>
-			<div id="tablo_sidebar_cart_link" class="tablo_sidebar_link left_tooltip" title="{{ 'افرودن به سبد خرید' }}"></div>
+			<div id="tablo_sidebar_cart_link" class="tablo_sidebar_link left_tooltip" title="{{ 'خرید اثـــــر' }}"></div>
 		</nav>
 		<div id="fixed_side_tablo_container" class="side_tablo_container" style="display: none;">
 			<div class="info_tablo_image_container" style="background-image: url('{{ media_asset(tablo.image, 'x_large') }}');"></div>
 			<div class="info_tablo_bottom_bar clearfix">
-				<div class="tablo_share_container" style="margin-left: -50px;">
+				<div class="tablo_share_container" style="margin-left: -40px;">
 					<div class="tablo_share transition2"></div>
 					<div class="tablo_share_buttons transition2">
 						<div class="tablo_mail_share tablo_share_button top_tooltip" title="{{ 'به اشتراک گذاری با ایمیل' }}"></div>
@@ -339,14 +353,37 @@
 		</div>
 	</section>
 	<section id="tablo_cart_section" style="text-align: left;">
-		<div id="tablo_cart_wall" style="position: fixed; top: 0; right: 0; height: 100%; width: 100%; direction: ltr; display: none;">
-			<div style="height: 100%; position: relative; display: inline-block;">
+		<div id="tablo_cart_wall_container" style="display: none;">
+			<div id="tablo_cart_wall">
 				<img src="{{ asset('bundles/tablozmain/images/minimal_bg_c2.jpg') }}" style="display: block; height: 100%;">
-				<div style=" position: absolute; top: 5%; left: 14%; margin-top: 100px; height: 33%; width: 34%; overflow: hidden; text-align: center;">
-					<table style="width: 100%; height: 100%;"><tr><td><img src="{{ media_asset(tablo.image, 'medium') }}" style="box-shadow: -2px 2px 5px 0px rgba(0, 0, 0, 0.7);"></td></tr></table>
+				<div id="tablo_on_the_wall_container">
+					<div id="tablo_on_the_wall_align_helper"></div>
+					<img id="tablo_on_the_wall" class="transition2" src="{{ media_asset(tablo.image, 'medium') }}">
+				</div>
+			</div>
+			<div id="tablo_cart_content">
+				<div id="tablo_cart_title" style="margin-bottom: 30px;"><h3>{{ 'خرید اثــــــــر' }}</h3></div>
+				<div>
+					<form action="{{ path('add_to_cart') }}" method="get" class="add_to_cart_form">
+						<div>
+							<label for="print_type_select">{{ 'نوع و اندازه چاپ (سانتیمتر)' }}</label><br>
+							<select id="print_type_select" name="properties[print_type_id]">
+								{% for print_type in print_types %}
+									<option data-height="{{ print_type.getActualHeight(tablo.image.width, tablo.image.height) }}" data-price="{{ tablo.getPrintPrice(print_type) }}" value="{{ print_type.id }}" {{ loop.last?'selected="selected"':'' }}>{{ print_type.getTitleBySize(tablo.image.width, tablo.image.height) }}</option>
+								{% endfor %}
+							</select>
+							<span id="tablo_print_price"></span>
+							<input name="id" type="hidden" value="{{ tablo.id }}">
+							<input name="type" type="hidden" value="{{ 'TabloPrint' }}">
+						</div>
+						<div>
+							<label for="add_to_cart_quantity">{{ 'تعداد' }}</label><br>
+							<input id="add_to_cart_quantity" name="quantity" value="1" pattern="\d+" required="required" class="light_input">
+							<input id="add_to_cart_button" type="submit" value="{{ 'افزودن به سبد خرید' }}">
+						</div>
+					</form>
 				</div>
 			</div>
 		</div>
-		
 	</section>
 {% endblock %}

@@ -29,6 +29,12 @@ services:
         tags:
             - { name: sonata.admin, manager_type: orm, group: "Payments", label: "Payment" }
         arguments: [ null, Application\ShoppingBundle\Entity\Payment\Payment, SonataAdminBundle:CRUD ]
+        
+     shop.twig.shopping_extension:
+        class: Application\ShoppingBundle\Twig\ShoppingExtension
+        arguments: ["@doctrine", "@service_container" ]
+        tags:
+            - { name: twig.extension }
 #    application_shopping.example:
 #        class: %application_shopping.example.class%
 #        arguments: [@service_id, "plain_value", %parameter%]

@@ -104,10 +104,16 @@ class DefaultController extends Controller
 				}
 			}
     	}
+
+    	$print_type_repo = $this->getDoctrine()->getRepository('TablozMainBundle:PrintType');
+    	$print_types = $print_type_repo->findByEnable(true);
+    	//TODO: optimize the print sizes by the image size and dpi
+    	
 		return array(
 				'tablo' => $tablo,
 				'is_fav_user' => $is_fav_user,
-				'fav_users' => $fav_users
+				'fav_users' => $fav_users,
+				'print_types' => $print_types
 		);
 	}
 	

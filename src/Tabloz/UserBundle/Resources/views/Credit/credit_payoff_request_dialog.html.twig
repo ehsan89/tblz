@@ -1,0 +1,56 @@
+<script type="text/javascript">
+
+	var delete_tablo_id = '';
+	var delete_tablo_url = '';
+	
+	function openDeleteTabloDialog(id, url){
+		delete_tablo_id = id;
+		delete_tablo_url = url;
+		jQuery('#credit_payoff_request_dialog').dialog('open');
+		
+	}
+	
+	function deleteTablo(){
+		if (jQuery('.tablo_box[data-id="'+delete_tablo_id+'"]').length > 0){
+			jQuery('#tablo_delete_confirm').hide(0, function(){jQuery('.tablo_delete_confirm_spinner').fadeIn();});
+			jQuery.post(delete_tablo_url, function(){
+				jQuery('.tablo_box[data-id="'+delete_tablo_id+'"]').hide(function(){jQuery(this).remove();});
+				jQuery('.tablo_delete_confirm_spinner').fadeOut(function(){jQuery('#tablo_delete_confirm').show();});
+				jQuery('#credit_payoff_request_dialog').dialog('close');
+			});
+		} else {
+			// in edit tablo action
+			window.location = delete_tablo_url;
+		}
+	}
+
+	jQuery(document).ready(function(){
+		jQuery( "#credit_payoff_request_dialog" ).dialog({
+			width: 500,
+			show: {
+		        effect: "drop",
+		        direction: "down"
+		      },
+            hide: "fade",
+            close: function() {
+            }
+		});
+	});
+
+</script>
+
+<div style="display: none;">
+	<div id="credit_payoff_request_dialog" title="{{ 'درخواست تسویه حساب' }}">
+		<div>{{ 'برای ثبت درخواست تسویه حساب شماره کارت و یا شماره حساب بانکی خود را وارد کنید. به درخواست شما نهایتا تا یک هفته دیگر رسیدگی شده و مبلغ معادل تراز فعلی شما به کارت / حساب شما واریز خواهد شد.' }}</div>
+		<div style="margin: 20px 0 10px;">
+			{{ form_start(form, {'action': path('manage_credit'), 'method': 'POST'}) }}
+			    {{ form_row(form.debit_card_number) }}
+			    {{ form_row(form.bank_account_number) }}
+			    {{ form_row(form.description) }}
+				<input id="credit_payoff_request_submit" type="submit" value="{{ 'حذف' }}" class="tablo_delete_button grey_button">
+				<span class="tablo_delete_confirm_spinner submit_spinner" style="display: none;"></span>
+				<input type="button" value="{{ 'انصراف' }}" class="dark_grey_button" onclick="jQuery('#credit_payoff_request_dialog').dialog('close');">
+			{{ form_end(form) }}
+		</div>
+	</div>
+</div>

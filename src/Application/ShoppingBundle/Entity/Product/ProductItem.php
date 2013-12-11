@@ -40,7 +40,7 @@ class ProductItem extends CartItem
 	 * Returns the view of the item in the cart (object parameter will be passed to this template)
 	 */
 	public function getCartView(){
-		return 'ApplicationShoppingBundle:Product:product_cart_view.html.twig';
+		return 'ApplicationShoppingBundle:Product:product_item_view.html.twig';
 	}
     
     /**
@@ -60,8 +60,8 @@ class ProductItem extends CartItem
      * @ORM\PreUpdate()
      */
     public function calculateTotal(){
-        $this->setUnitPrice($this->getResource()->getUnitPrice());
-        $this->setTotal($this->getQuantity() * $this->resource->getUnitPrice());
+        $this->setUnitPrice($this->resource->getUnitPrice());
+        $this->setTotal($this->getQuantity() * $this->getUnitPrice());
     }
 
 

@@ -1,0 +1,28 @@
+.cancel_credit_payoff_request_link {
+	background: url(../images/icons/cancel16.png) no-repeat scroll right center;
+	padding: 5px 25px 5px 10px;
+	opacity: 0.6;
+}
+
+.cancel_credit_payoff_request_link:hover {
+	opacity: 1;
+}
+
+#credit_payoff_requests_table {
+	border-collapse: collapse;
+	width: 100%;
+}
+
+#credit_payoff_requests_table th {
+	color: #777;
+	border-bottom: 1px solid #777;
+	padding: 10px 20px;
+	font-weight: normal;
+}
+
+#credit_payoff_requests_table td {
+	padding: 10px 20px;
+	border-bottom: 1px solid #333;
+}
+
+

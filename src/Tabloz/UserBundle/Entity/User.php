@@ -28,7 +28,6 @@ class User extends AbstractedUser
      */
     protected $createdAt;
 
-
     /**
      * @ORM\Column(type="datetime", name="updated_at")
      */
@@ -125,6 +124,11 @@ class User extends AbstractedUser
     protected $gplusData;
     
     /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    protected $groups;
+    
+    /**
      * @ORM\Column(type="string", length=64, nullable=true)
      */
     private $mobile;
@@ -142,7 +146,7 @@ class User extends AbstractedUser
     /**
      * @var integer $credit
      *
-     * @ORM\Column(type="integer", length=4)
+     * @ORM\Column(type="integer")
      */
     private $credit = 0;
     
@@ -217,6 +221,11 @@ class User extends AbstractedUser
      * @ORM\OneToMany(targetEntity="Application\ShoppingBundle\Entity\Order\Order", mappedBy="user")
      */
     protected $orders;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Tabloz\UserBundle\Entity\CreditPayoffRequest", mappedBy="user")
+     */
+    protected $credit_payoff_requests;
 
     
     public function __construct()
@@ -711,5 +720,558 @@ class User extends AbstractedUser
     public function preUpdate()
     {
     	$this->updatedAt = new \DateTime;
+    }
+
+    /**
+     * Sets the creation date
+     *
+     * @param \DateTime|null $createdAt
+     */
+    public function setCreatedAt(\DateTime $createdAt = null)
+    {
+        $this->createdAt = $createdAt;
+    }
+
+    /**
+     * Returns the creation date
+     *
+     * @return \DateTime|null
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * Sets the last update date
+     *
+     * @param \DateTime|null $updatedAt
+     */
+    public function setUpdatedAt(\DateTime $updatedAt = null)
+    {
+        $this->updatedAt = $updatedAt;
+    }
+
+    /**
+     * Returns the last update date
+     *
+     * @return \DateTime|null
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * Set twoStepVerificationCode
+     *
+     * @param string $twoStepVerificationCode
+     * @return User
+     */
+    public function setTwoStepVerificationCode($twoStepVerificationCode)
+    {
+        $this->twoStepVerificationCode = $twoStepVerificationCode;
+    
+        return $this;
+    }
+
+    /**
+     * Get twoStepVerificationCode
+     *
+     * @return string 
+     */
+    public function getTwoStepVerificationCode()
+    {
+        return $this->twoStepVerificationCode;
+    }
+
+    /**
+     * Set dateOfBirth
+     *
+     * @param \DateTime $dateOfBirth
+     * @return User
+     */
+    public function setDateOfBirth($dateOfBirth)
+    {
+        $this->dateOfBirth = $dateOfBirth;
+    
+        return $this;
+    }
+
+    /**
+     * Get dateOfBirth
+     *
+     * @return \DateTime 
+     */
+    public function getDateOfBirth()
+    {
+        return $this->dateOfBirth;
+    }
+
+    /**
+     * Set firstname
+     *
+     * @param string $firstname
+     * @return User
+     */
+    public function setFirstname($firstname)
+    {
+        $this->firstname = $firstname;
+    
+        return $this;
+    }
+
+    /**
+     * Get firstname
+     *
+     * @return string 
+     */
+    public function getFirstname()
+    {
+        return $this->firstname;
+    }
+
+    /**
+     * Set lastname
+     *
+     * @param string $lastname
+     * @return User
+     */
+    public function setLastname($lastname)
+    {
+        $this->lastname = $lastname;
+    
+        return $this;
+    }
+
+    /**
+     * Get lastname
+     *
+     * @return string 
+     */
+    public function getLastname()
+    {
+        return $this->lastname;
+    }
+
+    /**
+     * Set website
+     *
+     * @param string $website
+     * @return User
+     */
+    public function setWebsite($website)
+    {
+        $this->website = $website;
+    
+        return $this;
+    }
+
+    /**
+     * Get website
+     *
+     * @return string 
+     */
+    public function getWebsite()
+    {
+        return $this->website;
+    }
+
+    /**
+     * Set biography
+     *
+     * @param string $biography
+     * @return User
+     */
+    public function setBiography($biography)
+    {
+        $this->biography = $biography;
+    
+        return $this;
+    }
+
+    /**
+     * Get biography
+     *
+     * @return string 
+     */
+    public function getBiography()
+    {
+        return $this->biography;
+    }
+
+    /**
+     * Set gender
+     *
+     * @param string $gender
+     * @return User
+     */
+    public function setGender($gender)
+    {
+        $this->gender = $gender;
+    
+        return $this;
+    }
+
+    /**
+     * Get gender
+     *
+     * @return string 
+     */
+    public function getGender()
+    {
+        return $this->gender;
+    }
+
+    /**
+     * Set phone
+     *
+     * @param string $phone
+     * @return User
+     */
+    public function setPhone($phone)
+    {
+        $this->phone = $phone;
+    
+        return $this;
+    }
+
+    /**
+     * Get phone
+     *
+     * @return string 
+     */
+    public function getPhone()
+    {
+        return $this->phone;
+    }
+
+    /**
+     * Set token
+     *
+     * @param string $token
+     * @return User
+     */
+    public function setToken($token)
+    {
+        $this->token = $token;
+    
+        return $this;
+    }
+
+    /**
+     * Get token
+     *
+     * @return string 
+     */
+    public function getToken()
+    {
+        return $this->token;
+    }
+
+    /**
+     * Set facebookUid
+     *
+     * @param string $facebookUid
+     * @return User
+     */
+    public function setFacebookUid($facebookUid)
+    {
+        $this->facebookUid = $facebookUid;
+    
+        return $this;
+    }
+
+    /**
+     * Get facebookUid
+     *
+     * @return string 
+     */
+    public function getFacebookUid()
+    {
+        return $this->facebookUid;
+    }
+
+    /**
+     * Set facebookName
+     *
+     * @param string $facebookName
+     * @return User
+     */
+    public function setFacebookName($facebookName)
+    {
+        $this->facebookName = $facebookName;
+    
+        return $this;
+    }
+
+    /**
+     * Get facebookName
+     *
+     * @return string 
+     */
+    public function getFacebookName()
+    {
+        return $this->facebookName;
+    }
+
+    /**
+     * Set facebookData
+     *
+     * @param json $facebookData
+     * @return User
+     */
+    public function setFacebookData($facebookData)
+    {
+        $this->facebookData = $facebookData;
+    
+        return $this;
+    }
+
+    /**
+     * Get facebookData
+     *
+     * @return json 
+     */
+    public function getFacebookData()
+    {
+        return $this->facebookData;
+    }
+
+    /**
+     * Set twitterUid
+     *
+     * @param string $twitterUid
+     * @return User
+     */
+    public function setTwitterUid($twitterUid)
+    {
+        $this->twitterUid = $twitterUid;
+    
+        return $this;
+    }
+
+    /**
+     * Get twitterUid
+     *
+     * @return string 
+     */
+    public function getTwitterUid()
+    {
+        return $this->twitterUid;
+    }
+
+    /**
+     * Set twitterName
+     *
+     * @param string $twitterName
+     * @return User
+     */
+    public function setTwitterName($twitterName)
+    {
+        $this->twitterName = $twitterName;
+    
+        return $this;
+    }
+
+    /**
+     * Get twitterName
+     *
+     * @return string 
+     */
+    public function getTwitterName()
+    {
+        return $this->twitterName;
+    }
+
+    /**
+     * Set twitterData
+     *
+     * @param json $twitterData
+     * @return User
+     */
+    public function setTwitterData($twitterData)
+    {
+        $this->twitterData = $twitterData;
+    
+        return $this;
+    }
+
+    /**
+     * Get twitterData
+     *
+     * @return json 
+     */
+    public function getTwitterData()
+    {
+        return $this->twitterData;
+    }
+
+    /**
+     * Set gplusUid
+     *
+     * @param string $gplusUid
+     * @return User
+     */
+    public function setGplusUid($gplusUid)
+    {
+        $this->gplusUid = $gplusUid;
+    
+        return $this;
+    }
+
+    /**
+     * Get gplusUid
+     *
+     * @return string 
+     */
+    public function getGplusUid()
+    {
+        return $this->gplusUid;
+    }
+
+    /**
+     * Set gplusName
+     *
+     * @param string $gplusName
+     * @return User
+     */
+    public function setGplusName($gplusName)
+    {
+        $this->gplusName = $gplusName;
+    
+        return $this;
+    }
+
+    /**
+     * Get gplusName
+     *
+     * @return string 
+     */
+    public function getGplusName()
+    {
+        return $this->gplusName;
+    }
+
+    /**
+     * Set gplusData
+     *
+     * @param json $gplusData
+     * @return User
+     */
+    public function setGplusData($gplusData)
+    {
+        $this->gplusData = $gplusData;
+    
+        return $this;
+    }
+
+    /**
+     * Get gplusData
+     *
+     * @return json 
+     */
+    public function getGplusData()
+    {
+        return $this->gplusData;
+    }
+
+    /**
+     * Add carts
+     *
+     * @param \Application\ShoppingBundle\Entity\Cart\Cart $carts
+     * @return User
+     */
+    public function addCart(\Application\ShoppingBundle\Entity\Cart\Cart $carts)
+    {
+        $this->carts[] = $carts;
+    
+        return $this;
+    }
+
+    /**
+     * Remove carts
+     *
+     * @param \Application\ShoppingBundle\Entity\Cart\Cart $carts
+     */
+    public function removeCart(\Application\ShoppingBundle\Entity\Cart\Cart $carts)
+    {
+        $this->carts->removeElement($carts);
+    }
+
+    /**
+     * Get carts
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getCarts()
+    {
+        return $this->carts;
+    }
+
+    /**
+     * Add orders
+     *
+     * @param \Application\ShoppingBundle\Entity\Order\Order $orders
+     * @return User
+     */
+    public function addOrder(\Application\ShoppingBundle\Entity\Order\Order $orders)
+    {
+        $this->orders[] = $orders;
+    
+        return $this;
+    }
+
+    /**
+     * Remove orders
+     *
+     * @param \Application\ShoppingBundle\Entity\Order\Order $orders
+     */
+    public function removeOrder(\Application\ShoppingBundle\Entity\Order\Order $orders)
+    {
+        $this->orders->removeElement($orders);
+    }
+
+    /**
+     * Get orders
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getOrders()
+    {
+        return $this->orders;
+    }
+
+    /**
+     * Add credit_payoff_requests
+     *
+     * @param \Tabloz\UserBundle\Entity\CreditPayoffRequest $creditPayoffRequests
+     * @return User
+     */
+    public function addCreditPayoffRequest(\Tabloz\UserBundle\Entity\CreditPayoffRequest $creditPayoffRequests)
+    {
+        $this->credit_payoff_requests[] = $creditPayoffRequests;
+    
+        return $this;
+    }
+
+    /**
+     * Remove credit_payoff_requests
+     *
+     * @param \Tabloz\UserBundle\Entity\CreditPayoffRequest $creditPayoffRequests
+     */
+    public function removeCreditPayoffRequest(\Tabloz\UserBundle\Entity\CreditPayoffRequest $creditPayoffRequests)
+    {
+        $this->credit_payoff_requests->removeElement($creditPayoffRequests);
+    }
+
+    /**
+     * Get credit_payoff_requests
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getCreditPayoffRequests()
+    {
+        return $this->credit_payoff_requests;
     }
 }

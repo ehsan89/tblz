@@ -24,9 +24,14 @@ class CartItem
     protected $id;
     
     /**
+     * @ORM\Column(type="boolean")
+     */
+    private $unit_quantity = false;
+    
+    /**
      * @ORM\Column(type="integer")
      */
-    private $quantity = 0;
+    private $quantity = 1;
     
     /**
      * @ORM\Column(type="string")
@@ -48,6 +53,13 @@ class CartItem
     {
         // your own logic
     }
+	
+	/**
+	 * Returns the view of the item in the cart (object parameter will be passed to this template)
+	 */
+	public function getCartView(){
+		return 'ApplicationShoppingBundle:Cart:cart_item_view.html.twig';
+	}
 
 
     /**
@@ -90,7 +102,7 @@ class CartItem
      */
     public function incrementQuantity($q)
     {
-    	$this->quantity += $q;
+    	$this->setQuantity($this->quantity + $q);
     	return $this->quantity;
     }
     

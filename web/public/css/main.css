@@ -296,6 +296,26 @@ textarea:hover, input:hover, select:hover {
      -moz-box-shadow: 0px 1px 4px 0px rgba(168, 168, 168, 0.9) inset;
      box-shadow: 0px 1px 4px 0px rgba(168, 168, 168, 0.9) inset;*/
 }
+textarea.light_input, input.light_input, select.light_input {
+	border-color: #666;
+	color: #666;
+}
+
+textarea.light_input:focus, input.light_input:focus, select.light_input:focus {
+    background-color: rgba(0, 0, 0, 0.1);
+    border-color: #333;
+    /*  background: rgba(238, 236, 240, 0.2);*/
+    /*    -webkit-box-shadow: 0px 1px 4px 0px rgba(168, 168, 168, 0.9) inset, 0 0 0 2px #4D90FE;
+     -moz-box-shadow: 0px 1px 4px 0px rgba(168, 168, 168, 0.9) inset, 0 0 0 2px #4D90FE;
+     box-shadow: 0px 1px 4px 0px rgba(168, 168, 168, 0.9) inset, 0 0 0 2px #4D90FE;*/
+}
+
+textarea.light_input:hover, input.light_input:hover, select.light_input:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+    /* -webkit-box-shadow: 0px 1px 4px 0px rgba(168, 168, 168, 0.9) inset;
+     -moz-box-shadow: 0px 1px 4px 0px rgba(168, 168, 168, 0.9) inset;
+     box-shadow: 0px 1px 4px 0px rgba(168, 168, 168, 0.9) inset;*/
+}
 
 input[type="email"], input[type="url"], input[type="password"] {
     direction: ltr;
@@ -318,6 +338,7 @@ input[type="submit"], input[type="button"], .button {
     background-color: #6BB598;
     border: 1px solid #6BB598;
     color: white;
+    text-decoration: none !important;
     /*-webkit-box-shadow: 0px 1px 4px 0px rgba(168, 168, 168, 0.6);
      -moz-box-shadow: 0px 1px 4px 0px rgba(168, 168, 168, 0.6);
      box-shadow: 0px 1px 4px 0px rgba(168, 168, 168, 0.6);*/
@@ -796,6 +817,11 @@ p#copyright {
     padding: 0 20px;
 }
 
+#main_header_cart_button_container {
+	float: left;
+    position: relative;
+}
+
 #main_header_search_input {
 	background: url(../images/icons/search24.png) no-repeat right 10px center;
 	border: none;
@@ -805,7 +831,34 @@ p#copyright {
     opacity: 0.6;
 }
 
-#main_header_search_input:hover {
+#main_header_cart_button {
+	background: url(../images/icons/cart24.png) no-repeat center;
+	border: none;
+    padding: 50px;
+    cursor: pointer;
+    opacity: 0.6;
+}
+
+#main_header_cart_button_count {
+	background: #F10000;
+	color: white;
+	border-radius: 50%;
+	font-family: BYekan;
+	font-size: 10px;
+	position: absolute;
+	top: 10px;
+	right: 25px;
+	line-height: 17px;
+	padding: 0px 7px;
+	opacity: 0;
+}
+
+.main_header_cart_button_count_visible {
+	top: 27px !important;
+	opacity: 1 !important;
+}
+
+#main_header_search_input:hover, #main_header_cart_button:hover {
 	opacity: 0.8;
 }
 
@@ -817,7 +870,7 @@ p#copyright {
     box-shadow: 0 3px 2px -2px #000;
 }
 
-#main_header_search_results_container {
+#main_header_search_results_container, #main_header_cart_view_container {
 	background: rgba(0, 0, 0, 0.9);
     position: fixed;
     top: 0px;
@@ -827,16 +880,16 @@ p#copyright {
     text-align: center;
 	opacity: 0;
 	visibility: hidden;
-	z-index: 1;
+	z-index: 15;
 }
 
-.main_header_search_results_container_visible {
+.main_header_search_results_container_visible, .main_header_cart_view_container_visible {
 	top: 100px !important;
 	opacity: 1 !important;
 	visibility: visible !important;
 }
 
-#main_header_search_results, #main_header_search_results_spinner {
+#main_header_search_results, #main_header_search_results_spinner, #main_header_cart_view, #main_header_cart_view_spinner {
 	/*background: rgba(0, 0, 0, 0.9);*/
     background: rgba(0, 0, 0, 0.8);
 	background: -webkit-linear-gradient(rgba(0, 0, 0, 0.91), #000);
@@ -860,20 +913,21 @@ p#copyright {
 	visibility: hidden;
 }
 
-#main_header_search_results_spinner {
+#main_header_search_results_spinner, #main_header_cart_view_spinner {
 	font-size: 15px;
 	font-family: tablozlight;
 	display: block;
 }
 
-#main_header_search_results {
+#main_header_search_results, #main_header_cart_view {
 	font-family: byekan;
 	font-size: 13px;
 	padding: 10px 0px 20px;
 	min-height: 100px;
+	line-height: normal;
 }
 
-.main_header_search_results_visible, .main_header_search_results_spinner_visible {
+.main_header_search_results_visible, .main_header_search_results_spinner_visible, .main_header_cart_view_visible, .main_header_cart_view_spinner_visible {
 	top: 0px !important;
 	opacity: 1 !important;
 	visibility: visible !important;
@@ -891,7 +945,7 @@ p#copyright {
 	margin-bottom: 20px;
 }
 
-#main_header_search_results_close {
+#main_header_search_results_close, #main_header_cart_view_close {
 	background: url(../images/icons/close16.png) no-repeat center;
 	width: 20px;
 	height: 20px;
@@ -904,11 +958,11 @@ p#copyright {
 	z-index: 1;
 }
 
-#main_header_search_results_close:hover {
+#main_header_search_results_close:hover, #main_header_cart_view_close:hover {
 	opacity: 1;
 }
 
-.ajax_search_not_found {
+.ajax_search_not_found, .cart_empty {
 	background: rgba(34, 34, 34, 0.9);
     opacity: 0.8;
     padding: 10px 20px;
@@ -917,6 +971,73 @@ p#copyright {
 .ajax_search_result_tablo, .ajax_search_result_collection, .ajax_search_result_user {
 	display: inline-block;
 	margin: 5px;
+}
+
+.cart_empty {
+	margin: 30px 10%;
+}
+
+.cart_summary_table {
+	margin: 20px 10%;
+	width: 80%;
+	border-collapse: collapse;
+}
+
+.cart_summary_table > tbody > tr > th {
+	padding: 10px 20px;
+	border-bottom: 1px solid #555;
+	color: #777;
+	font-weight: normal;
+}
+
+.cart_summary_table > tbody > tr > td {
+	padding: 10px;
+	border-bottom: 1px solid #222;
+}
+
+.cart_item_quantity_input, #add_to_cart_quantity {
+	width: 30px !important;
+	text-align: center;
+}
+
+.cart_item_quantity_loading {
+	vertical-align: middle;
+	padding: 0 10px;
+	opacity: 0;
+	visibility: hidden;
+	margin-right: -44px;
+}
+
+.cart_item_quantity_loading_visible {
+	opacity: 1;
+	visibility: visible;
+	margin-right: 0;
+}
+
+.cart_item_quantity_container {
+	min-width: 90px;
+}
+
+.cart_item_delete {
+	opacity: 0.6;
+}
+
+.cart_item_delete:hover {
+	opacity: 1;
+}
+
+.cart_total_container, .cart_button_container {
+	margin: 10px 10%;
+	text-align: left;
+	padding: 10px 0;
+}
+
+.tablo_print_item_image {
+	opacity: 0.8;
+}
+
+.tablo_print_item_image:hover {
+	opacity: 1;
 }
 
 .form_error_container {

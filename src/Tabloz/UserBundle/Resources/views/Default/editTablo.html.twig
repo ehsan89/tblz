@@ -25,10 +25,31 @@
 	    return false;
 	}
 
+	function setTabloPriceTable(){
+		var print_markup_percent = parseInt(jQuery('#tablo_print_markup_percent').val());
+		if (isFinite(String(print_markup_percent))){
+			jQuery('.tablo_print_unit_price').each(function(){
+				jQuery(this).text((print_markup_percent + 100) * parseInt(jQuery(this).siblings('.print_type_unit_price').text()) / 100);
+			});
+		}
+
+		var download_markup_percent = parseInt(jQuery('#tablo_download_markup_percent').val());
+		if (isFinite(String(download_markup_percent))){
+			jQuery('.tablo_download_unit_price').each(function(){
+				jQuery(this).text((download_markup_percent + 100) * parseInt(jQuery(this).siblings('.download_type_unit_price').text()) / 100);
+			});
+		}
+	}
+
 	jQuery(document).ready(function(){
 
 		var select = jQuery("select").data("selectBox-selectBoxIt");
 		//select.disable();
+
+		setTabloPriceTable();
+		jQuery('#tablo_print_markup_percent, #tablo_download_markup_percent').on('input', function(){
+			setTabloPriceTable();
+		});
 
 	});
 </script>
@@ -62,6 +83,57 @@
 						{{ form_row(form.title) }}
 						{{ form_row(form.description) }}
 						{{ form_row(form.category) }}
+						<div>
+							{% if ((print_types|length > 0) or (download_types|length)) %}
+								<h3 style="margin: 50px 0 20px;">{{ 'قیمت اثر' }}</h3>
+							{% endif %}
+							{% if (print_types|length > 0) %}
+								<div>
+							        {{ form_label(form.print_markup_percent) }}<br>
+							        {{ form_errors(form.print_markup_percent) }}
+							        {{ form_widget(form.print_markup_percent) }} <span style="font-size: 24px;">%</span>
+								</div>
+								<table id="tablo_print_price_table">
+									<tr>
+										<th>{{ 'نوع و اندازه چاپ (سانتیمتر)' }}</th>
+										<th>{{ 'قیمت پایه (ریال)' }}</th>
+										<th>{{ 'قیمت اثر (ریال)' }}</th>
+									</tr>
+									{% for print_type in print_types %}
+										<tr>
+											<td>{{ print_type.getTitleBySize(tablo.image.width, tablo.image.height) }}</td>
+											<td class="print_type_unit_price">{{ print_type.unitPrice }}</td>
+											<td class="tablo_print_unit_price"></td>
+										</tr>
+									{% endfor %}
+								</table>
+							{% else %}
+								<div style="display: none;">{{ form_widget(form.print_markup_percent) }}</div>
+							{% endif %}
+							{% if (download_types|length > 0) %}
+								<div>
+							        {{ form_label(form.download_markup_percent) }}<br>
+							        {{ form_errors(form.download_markup_percent) }}
+							        {{ form_widget(form.download_markup_percent) }} <span style="font-size: 24px;">%</span>
+								</div>
+								<table id="tablo_download_price_table">
+									<tr>
+										<th>{{ 'نوع و اندازه فایل' }}</th>
+										<th>{{ 'قیمت پایه (ریال)' }}</th>
+										<th>{{ 'قیمت اثر (ریال)' }}</th>
+									</tr>
+									{% for download_type in download_types %}
+										<tr>
+											<td>{{ download_type.getTitleBySize(tablo.image.width, tablo.image.height) }}</td>
+											<td class="download_type_unit_price">{{ download_type.unitPrice }}</td>
+											<td class="tablo_download_unit_price"></td>
+										</tr>
+									{% endfor %}
+								</table>
+							{% else %}
+								<div style="display: none;">{{ form_widget(form.download_markup_percent) }}</div>
+							{% endif %}
+						</div>
 	        			{{ form_rest(form) }}
 						<input id="tablo_submit" type="submit" value="{{ 'ذخیره' }}" onclick="saveTabloImage();" style="margin: 20px 0;"/>
 						<input id="tablo_delete" type="button" value="{{ 'حذف' }}" onclick="openDeleteTabloDialog('{{ path('delete_tablo', {'id': tablo.id}) }}'); return false;" style="margin: 20px 0;" class="tablo_delete_button grey_button"/>

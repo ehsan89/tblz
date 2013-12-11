@@ -13,6 +13,13 @@
 		jQuery("#main_header_search_input").removeClass('main_header_search_input_active');
 	}
 
+	function closeCart(){
+		jQuery("#main_header_cart_view_container").removeClass('main_header_cart_view_container_visible');
+		jQuery("#main_header_cart_view_spinner").removeClass('main_header_cart_view_spinner_visible');
+		jQuery("#main_header_cart_view").removeClass('main_header_cart_view_visible');
+		jQuery("#main_header_search_input").removeClass('main_header_search_input_active');
+	}
+
 	jQuery(document).ready(function(){
 
     	// replaces the checkboxes and radio buttons
@@ -74,6 +81,7 @@
 		var search_canceled = false;
 		var search_text_length = jQuery("#main_header_search_input").val().length;
 		jQuery("#main_header_search_input").on('keyup', function(e){
+			closeCart();
 			if (e.keyCode == 27) closeSearch();
 			var new_search_text_length = jQuery("#main_header_search_input").val().length;
 			if (search_text_length != new_search_text_length){
@@ -103,6 +111,39 @@
 		jQuery("#main_header_search_results_close").on('click', function(){
 			closeSearch();
 		});
+		
+		jQuery("#main_header_cart_button").on('click', function(e){
+			closeSearch();
+			jQuery('#main_header').removeClass('home_top_main_header');
+			jQuery("#main_header_cart_view_container").addClass('main_header_cart_view_container_visible');
+			jQuery("#main_header_cart_view").removeClass('main_header_cart_view_visible');
+			jQuery("#main_header_cart_view_spinner").addClass('main_header_cart_view_spinner_visible');
+			jQuery.get("{{ path('view_cart') }}", function(response){
+				jQuery("#main_header_cart_view_spinner").removeClass('main_header_cart_view_spinner_visible');
+				jQuery("#main_header_cart_view").html(response);
+				jQuery("#main_header_cart_view").addClass('main_header_cart_view_visible');
+			});
+		});
+		
+		jQuery("#main_header_cart_button, #main_header_cart_view_container").on('keyup', function(e){
+			if (e.keyCode == 27) closeCart();
+		});
+
+		jQuery("#main_header_cart_view_close").on('click', function(){
+			closeCart();
+		});
+
+		jQuery('.add_to_cart_form').on('submit', function(){
+			var submit_button = jQuery(this).find('#add_to_cart_button'); 
+			if (!submit_button.hasClass('add_to_cart_button_loading')){
+				submit_button.addClass('add_to_cart_button_loading');
+				jQuery.get(jQuery(this).attr('action'), jQuery(this).serialize(), function(response){
+					jQuery('#main_header_cart_button_count').text(response).addClass('main_header_cart_button_count_visible');
+					submit_button.removeClass('add_to_cart_button_loading');
+				});
+			}
+			return false;
+		});
 
 	});
 
@@ -131,6 +172,7 @@
 				<nav>
 					<ul>
 						<li><a href="{{ path('sonata_user_profile_edit') }}">{{ 'تنظیمات' }}</a></li>
+						<li><a href="{{ path('manage_credit') }}">{{ 'مدیریت مالی' }}</a></li>
 						<li><a href="{{ path('manage_collections') }}">{{ 'مدیریت مجموعه ها' }}</a></li>
 						<li><a href="{{ path('manage_works') }}">{{ 'مدیریت آثار' }}</a></li>
 						<li><a href="{{ path('add_new_work') }}">{{ 'اثر جدید' }}</a></li>
@@ -144,12 +186,22 @@
 		{% render url('tabloz_login_form') %}
 		<div id="top_login_register" class="transition2"><a href="#" class="login_link">{{ 'ورود' }}</a> | <a href="{{ path('fos_user_registration_register') }}">{{ 'عضویت' }}</a></div>
 	{% endif %}
+	<div id="main_header_cart_button_container" class="transition2">
+		{% set cart_items_count = cart_items_count() %}
+		<div id="main_header_cart_button_count" class="{{ (cart_items_count > 0)?'main_header_cart_button_count_visible':'' }}">{{ cart_items_count }}</div>
+		<div id="main_header_cart_button"></div>
+	</div>
 	<div id="main_header_search_container">
-		<input id="main_header_search_input" type="search" placeholder="{{ 'جستجو در آثار، مجموعه ها، هنرمندان...' }}">
+		<input id="main_header_search_input" type="text" placeholder="{{ 'جستجو در آثار، مجموعه ها، هنرمندان...' }}">
 	</div>
 </header>
 <section id="main_header_search_results_container" class="transition2">
 	<div id="main_header_search_results_close"></div>
 	<span id="main_header_search_results_spinner"><img src="{{ asset('public/images/spinner24.gif') }}" style="vertical-align: middle; margin: 0 15px;" />{{ 'در حال جستجو...' }}</span>
 	<div id="main_header_search_results"></div>
+</section>
+<section id="main_header_cart_view_container" class="transition2">
+	<div id="main_header_cart_view_close"></div>
+	<span id="main_header_cart_view_spinner"><img src="{{ asset('public/images/spinner24.gif') }}" style="vertical-align: middle; margin: 0 15px;" />{{ 'در حال بارگذاری...' }}</span>
+	<div id="main_header_cart_view"></div>
 </section>

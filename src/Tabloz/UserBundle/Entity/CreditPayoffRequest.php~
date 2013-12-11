@@ -1,0 +1,72 @@
+<?php
+
+namespace Tabloz\UserBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Gedmo\Mapping\Annotation as Gedmo;
+
+use Doctrine\Common\Collections\ArrayCollection;
+
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="credit_payoff_request")
+ */
+class CreditPayoffRequest
+{
+    /**
+     * @ORM\Id
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    protected $id;
+    
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $credit;
+
+	/**
+	 * @ORM\Column(type="text", nullable=true)
+	 */
+	private $description;
+
+	/**
+	 * @ORM\Column(type="string")
+	 */
+	private $debit_card_number;
+
+	/**
+	 * @ORM\Column(type="string")
+	 */
+	private $bank_account_number;
+
+	/**
+	 * @ORM\ManyToOne(targetEntity="Tabloz\UserBundle\Entity\User", inversedBy="credit_payoff_requests")
+	 * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+	 */
+	protected $user;
+
+	/**
+	 * @ORM\ManyToOne(targetEntity="CreditPayoffRequestStatus", inversedBy="requests")
+	 * @ORM\JoinColumn(name="status_id", referencedColumnName="id")
+	 */
+	protected $status;
+
+	/**
+	 * @ORM\Column(type="datetime")
+	 * @Gedmo\Timestampable(on="create")
+	 */
+	private $created_at;
+
+	/**
+	 * @ORM\Column(type="datetime")
+	 * @Gedmo\Timestampable(on="update")
+	 */
+	private $updated_at;
+    
+    public function __construct()
+    {
+        // your own logic
+    }
+}

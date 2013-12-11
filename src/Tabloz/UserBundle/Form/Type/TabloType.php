@@ -15,6 +15,8 @@ class TabloType extends AbstractType
 		$builder->add('description', 'textarea', array('label' => 'توضیحات', 'required' => false,
 								'attr' => array('placeholder' => 'توضیحات بیشتر را درباره این اثر بنویسید ...')));
 		$builder->add('category', null, array('label' => 'دسته بندی'));
+		$builder->add('print_markup_percent', null, array('label' => 'میزان سود  نسبت به قیمت پایه نسخه چاپ شده', 'data' => 100));
+		$builder->add('download_markup_percent', null, array('label' => 'میزان سود نسبت به قیمت پایه دانلود', 'data' => 100));
 	}
 	
 	public function setDefaultOptions(OptionsResolverInterface $resolver)
